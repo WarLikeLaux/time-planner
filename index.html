@@ -762,12 +762,18 @@
                                     <option value="09:00">09:00</option>
                                     <option value="09:30">09:30</option>
                                     <option value="10:00">10:00</option>
+                                    <option value="10:30">10:30</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="11:30">11:30</option>
+                                    <option value="12:00">12:00</option>
                                 </select>
                             </div>
                             <div>
                                 <label
                                     style="font-size: 11px; color: #6b7280; margin-bottom: 4px; display: block;">Сон</label>
                                 <select class="time-input" id="sleepTime" onchange="saveAndCalculate()">
+                                    <option value="20:00">20:00</option>
+                                    <option value="20:30">20:30</option>
                                     <option value="21:00">21:00</option>
                                     <option value="21:30">21:30</option>
                                     <option value="22:00">22:00</option>
@@ -777,6 +783,12 @@
                                     <option value="00:00">00:00</option>
                                     <option value="00:30">00:30</option>
                                     <option value="01:00">01:00</option>
+                                    <option value="01:30">01:30</option>
+                                    <option value="02:00">02:00</option>
+                                    <option value="02:30">02:30</option>
+                                    <option value="03:00">03:00</option>
+                                    <option value="03:30">03:30</option>
+                                    <option value="04:00">04:00</option>
                                 </select>
                             </div>
                         </div>
@@ -1174,9 +1186,14 @@
 
             const taskTime = maxWeekdayTasks * duration;
             if (taskTime > 0) {
-                schedule.push({ time: formatTime(currentTime), activity: `🏠 Домашние дела (${maxWeekdayTasks} задач)`, duration: taskTime });
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: `🏠 Домашние дела (${maxWeekdayTasks} ${declension(maxWeekdayTasks, ['задача', 'задачи', 'задач'])})`,
+                    duration: taskTime
+                });
                 currentTime += taskTime;
             }
+
 
             let bedTime = timeToDecimal(sleepTime);
             if (bedTime <= currentTime) {
@@ -1194,6 +1211,15 @@
             schedule.push({ time: formatTime(currentTime), activity: '🌙 Вечерний ритуал', duration: evening });
 
             document.getElementById('weekdaySchedule').innerHTML = generateScheduleHTML(schedule);
+        }
+
+        function declension(n, forms) {
+            n = Math.abs(n) % 100;
+            let n1 = n % 10;
+            if (n > 10 && n < 20) return forms[2];
+            if (n1 > 1 && n1 < 5) return forms[1];
+            if (n1 == 1) return forms[0];
+            return forms[2];
         }
 
         function generateWeekendSchedule(wakeTime, sleepTime) {
@@ -1228,15 +1254,20 @@
 
             const taskTime = weekendTasks * duration;
             if (taskTime > 0) {
-                schedule.push({ time: formatTime(currentTime), activity: `🏠 Домашние дела (${weekendTasks} задач)`, duration: taskTime });
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: `🏠 Домашние дела (${weekendTasks} ${declension(weekendTasks, ['задача', 'задачи', 'задач'])})`,
+                    duration: taskTime
+                });
                 currentTime += taskTime;
             }
+
 
             const lunchBreakTime = breaks / 14;
             schedule.push({ time: formatTime(currentTime), activity: '☕ Обед + перерыв', duration: lunchBreakTime });
             currentTime += lunchBreakTime;
 
-            schedule.push({ time: formatTime(currentTime), activity: '😎 Хобби/отдых', duration: 2 });
+            schedule.push({ time: formatTime(currentTime), activity: '😌 Свободное время', duration: 2 });
             currentTime += 2;
 
             schedule.push({ time: formatTime(currentTime), activity: '🍽️ Ужин', duration: breakfastTime });
@@ -1251,7 +1282,7 @@
             const freeTime = Math.max(0, freeTimeEnd - currentTime);
 
             if (freeTime > 0) {
-                schedule.push({ time: formatTime(currentTime), activity: '📺 Развлечения', duration: freeTime });
+                schedule.push({ time: formatTime(currentTime), activity: '😌 Свободное время', duration: freeTime });
                 currentTime = freeTimeEnd;
             }
 
