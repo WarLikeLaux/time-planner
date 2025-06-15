@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировщик времени программиста</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.5;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 0;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            height: calc(100vh - 70px);
+            overflow: hidden;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 520px 1fr;
+            gap: 24px;
+            height: 100%;
+        }
+
+        .controls-panel {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            background: #f8fafc;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .panel-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .controls-grid {
+            padding: 16px 20px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 16px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 36px;
+        }
+
+        .control-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .value-input {
+            width: 70px;
+            height: 30px;
+            padding: 0 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            transition: border-color 0.15s ease;
+        }
+
+        .value-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .time-input {
+            width: 100%;
+            height: 30px;
+            padding: 0 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .priority-section {
+            background: #fefce8;
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 12px 0;
+            grid-column: 1 / -1;
+        }
+
+        .priority-label {
+            color: #a16207;
+            font-weight: 600;
+        }
+
+        .results-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .status-good {
+            color: #059669;
+        }
+
+        .status-warning {
+            color: #d97706;
+        }
+
+        .status-danger {
+            color: #dc2626;
+        }
+
+        .content-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            background: #f8fafc;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-content {
+            padding: 16px 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .schedule-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border: none;
+            background: none;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s ease;
+        }
+
+        .tab-btn.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 16px 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 6px;
+            background: #f8fafc;
+            margin-bottom: 6px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .schedule-time {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .schedule-activity {
+            font-size: 13px;
+            color: #1e293b;
+        }
+
+        .weekly-distribution {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .day-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 6px;
+            text-align: center;
+        }
+
+        .day-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .day-tasks {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .weekend {
+            background: #fef3c7;
+            border-color: #fbbf24;
+        }
+
+        .alert {
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fbbf24;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .recommendations-toggle {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .toggle-header {
+            padding: 14px 16px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.15s ease;
+        }
+
+        .toggle-header:hover {
+            background: #f1f5f9;
+        }
+
+        .toggle-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-icon {
+            font-size: 12px;
+            color: #6b7280;
+            transition: transform 0.15s ease;
+        }
+
+        .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .toggle-content {
+            display: none;
+            padding: 16px;
+        }
+
+        .toggle-content.open {
+            display: block;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .tip-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .tip-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tip-list {
+            font-size: 12px;
+            color: #4b5563;
+            line-height: 1.5;
+            padding-left: 16px;
+        }
+
+        .tip-list li {
+            margin-bottom: 4px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .filter-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .task-item:hover {
+            background: #f1f5f9;
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+            background: #f0f9ff;
+        }
+
+        .task-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        .task-text.completed {
+            text-decoration: line-through;
+            color: #64748b;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .task-btn {
+            padding: 4px 8px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .task-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .task-btn.delete {
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+
+        .task-btn.delete:hover {
+            background: #fef2f2;
+        }
+
+        .day-schedule {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .day-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .day-schedule.weekend {
+            background: #fef3c7;
+            border-color: #fbbf24;
+        }
+
+        .day-schedule.sport-day {
+            background: #f0f9ff;
+            border-color: #0ea5e9;
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 480px 1fr;
+                gap: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .tips-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                height: auto;
+                padding: 16px;
+            }
+
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                height: auto;
+            }
+
+            .controls-panel {
+                height: auto;
+                order: 2;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .results-area {
+                order: 1;
+                height: auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .weekly-distribution {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 12px;
+            }
+
+            .header-content {
+                padding: 0 12px;
+            }
+
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .weekly-distribution {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .time-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>⏰ Планировщик времени программиста</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-layout">
+            <div class="controls-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Параметры планирования</div>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="input-group">
+                        <label class="input-label">💼 Работа (ч/нед)</label>
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="changeValue('work', -5)">−</button>
+                            <input type="number" class="value-input" id="work" value="40" min="0" max="80" step="5"
+                                oninput="saveAndCalculate()">
+                            <button class="control-btn" onclick="changeValue('work', 5)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">☕ Перерывы (ч/нед)</label>
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="changeValue('breaks', -1)">−</button>
+                            <input type="number" class="value-input" id="breaks" value="7" min="0" max="40"
+                                oninput="saveAndCalculate()">
+                            <button class="control-btn" onclick="changeValue('breaks', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">🍽️ Еда дома (ч/нед)</label>
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="changeValue('food', -1)">−</button>
+                            <input type="number" class="value-input" id="food" value="5" min="1" max="30"
+                                oninput="saveAndCalculate()">
+                            <button class="control-btn" onclick="changeValue('food', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">🏃 Спорт (ч/нед)</label>
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="changeValue('sport', -1)">−</button>
+                            <input type="number" class="value-input" id="sport" value="3" min="0" max="20"
+                                oninput="saveAndCalculate()">
+                            <button class="control-btn" onclick="changeValue('sport', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">📅 Дней спорта в неделю</label>
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="changeValue('sportDays', -1)">−</button>
+                            <input type="number" class="value-input" id="sportDays" value="3" min="1" max="7"
+                                oninput="saveAndCalculate()">
+                            <button class="control-btn" onclick="changeValue('sportDays', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">😴 Сон (ч/день)</label>
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="changeValue('sleep', -0.5)">−</button>
+                            <input type="number" class="value-input" id="sleep" value="9" min="4" max="12" step="0.5"
+                                oninput="saveAndCalculate()">
+                            <button class="control-btn" onclick="changeValue('sleep', 0.5)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">🌅 Утренний ритуал (ч/день)</label>
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="changeValue('morning', -0.5)">−</button>
+                            <input type="number" class="value-input" id="morning" value="1" min="0" max="3" step="0.5"
+                                oninput="saveAndCalculate()">
+                            <button class="control-btn" onclick="changeValue('morning', 0.5)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">🌙 Вечер + релакс (ч/день)</label>
+                        <div class="input-controls">
+                            <button class="control-btn" onclick="changeValue('evening', -0.5)">−</button>
+                            <input type="number" class="value-input" id="evening" value="1.5" min="0" max="4" step="0.5"
+                                oninput="saveAndCalculate()">
+                            <button class="control-btn" onclick="changeValue('evening', 0.5)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="grid-column: 1 / -1;">
+                        <label class="input-label">⏰ Режим дня</label>
+                        <div class="time-inputs">
+                            <div>
+                                <label
+                                    style="font-size: 11px; color: #6b7280; margin-bottom: 4px; display: block;">Подъем</label>
+                                <select class="time-input" id="wakeTime" onchange="saveAndCalculate()">
+                                    <option value="05:00">05:00</option>
+                                    <option value="05:30">05:30</option>
+                                    <option value="06:00">06:00</option>
+                                    <option value="06:30">06:30</option>
+                                    <option value="07:00" selected>07:00</option>
+                                    <option value="07:30">07:30</option>
+                                    <option value="08:00">08:00</option>
+                                    <option value="08:30">08:30</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="09:30">09:30</option>
+                                    <option value="10:00">10:00</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    style="font-size: 11px; color: #6b7280; margin-bottom: 4px; display: block;">Сон</label>
+                                <select class="time-input" id="sleepTime" onchange="saveAndCalculate()">
+                                    <option value="21:00">21:00</option>
+                                    <option value="21:30">21:30</option>
+                                    <option value="22:00">22:00</option>
+                                    <option value="22:30">22:30</option>
+                                    <option value="23:00" selected>23:00</option>
+                                    <option value="23:30">23:30</option>
+                                    <option value="00:00">00:00</option>
+                                    <option value="00:30">00:30</option>
+                                    <option value="01:00">01:00</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="priority-section">
+                        <div class="input-group">
+                            <label class="input-label priority-label">🎯 Задач в неделю</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('weeklyTasks', -1)">−</button>
+                                <input type="number" class="value-input" id="weeklyTasks" value="10" min="1" max="50"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('weeklyTasks', 1)">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label priority-label">⏱️ Часов на задачу</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('duration', -0.5)">−</button>
+                                <input type="number" class="value-input" id="duration" value="1.5" min="0.5" max="8"
+                                    step="0.5" oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('duration', 0.5)">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label priority-label">📝 Макс задач/день (будни)</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('maxWeekdayTasks', -1)">−</button>
+                                <input type="number" class="value-input" id="maxWeekdayTasks" value="2" min="0" max="10"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('maxWeekdayTasks', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-area">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="availableHours">-</div>
+                        <div class="stat-label">Свободных часов в неделю</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalNeeded">-</div>
+                        <div class="stat-label">Нужно на все задачи</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value" id="tasksPerDay">-</div>
+                        <div class="stat-label">Задач в день</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value" id="restHours">-</div>
+                        <div class="stat-label">Останется на отдых</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value" id="planStatus">-</div>
+                        <div class="stat-label">Статус плана</div>
+                    </div>
+                </div>
+
+                <div id="alerts"></div>
+
+                <div class="content-card" id="scheduleCard" style="display: none;">
+                    <div class="schedule-tabs">
+                        <button class="tab-btn active" onclick="switchTab('weekday')">Будни</button>
+                        <button class="tab-btn" onclick="switchTab('weekend')">Выходные</button>
+                        <button class="tab-btn" onclick="switchTab('weekly')">Неделя</button>
+                        <button class="tab-btn" onclick="switchTab('daily')">По дням</button>
+                        <button class="tab-btn" onclick="switchTab('tasks')">Задачи</button>
+                        <button class="tab-btn" onclick="switchTab('tips')">Советы</button>
+                    </div>
+
+                    <div id="weekdayTab" class="tab-content active">
+                        <div id="weekdaySchedule"></div>
+                    </div>
+
+                    <div id="weekendTab" class="tab-content">
+                        <div id="weekendSchedule"></div>
+                    </div>
+
+                    <div id="weeklyTab" class="tab-content">
+                        <div id="weeklyDistribution"></div>
+                    </div>
+
+                    <div id="dailyTab" class="tab-content">
+                        <div id="dailyBreakdown"></div>
+                    </div>
+
+                    <div id="tasksTab" class="tab-content">
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                                <input type="text" id="newTask" placeholder="Добавить новую задачу..."
+                                    style="flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px;"
+                                    onkeypress="handleTaskKeyPress(event)">
+                                <button onclick="addTask()"
+                                    style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;">Добавить</button>
+                            </div>
+                            <div style="display: flex; gap: 8px; font-size: 12px;">
+                                <button onclick="filterTasks('all')" class="filter-btn active"
+                                    data-filter="all">Все</button>
+                                <button onclick="filterTasks('pending')" class="filter-btn"
+                                    data-filter="pending">Активные</button>
+                                <button onclick="filterTasks('completed')" class="filter-btn"
+                                    data-filter="completed">Выполненные</button>
+                            </div>
+                        </div>
+                        <div id="tasksList"></div>
+                    </div>
+
+                    <div id="tipsTab" class="tab-content">
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <div class="tip-title">⏰ Отдых и восстановление</div>
+                                <ul class="tip-list">
+                                    <li>Минимум 1 час отдыха на каждые 4 часа активности</li>
+                                    <li>20-минутные перерывы каждые 90 минут работы</li>
+                                    <li>1 полный выходной день в неделю обязателен</li>
+                                    <li>Микросон 10-20 минут повышает продуктивность</li>
+                                </ul>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-title">🏠 Автоматизация быта</div>
+                                <ul class="tip-list">
+                                    <li>Посудомойка экономит 5-7 часов в неделю</li>
+                                    <li>Робот-пылесос: 2-3 часа в неделю</li>
+                                    <li>Доставка продуктов: 1-2 часа экономии</li>
+                                    <li>Batch cooking: экономия 4-5 часов</li>
+                                    <li>Умная стиральная машина с отложенным стартом</li>
+                                </ul>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-title">💡 Принципы эффективности</div>
+                                <ul class="tip-list">
+                                    <li>Правило 2 минут: если меньше 2 минут - делай сразу</li>
+                                    <li>Time boxing: выделяй конкретное время на задачи</li>
+                                    <li>Группировка задач по типу</li>
+                                    <li>Принцип 80/20: 20% задач дают 80% результата</li>
+                                    <li>Техника Помодоро: 25 мин работы + 5 мин отдыха</li>
+                                </ul>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-title">🧠 Работа с энергией</div>
+                                <ul class="tip-list">
+                                    <li>Сложные задачи планируй на пик энергии</li>
+                                    <li>После обеда энергия падает - планируй легкие дела</li>
+                                    <li>Утром мозг работает на 15% эффективнее</li>
+                                    <li>Каждые 90 минут нужен перерыв на восстановление</li>
+                                </ul>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-title">📱 Digital Detox</div>
+                                <ul class="tip-list">
+                                    <li>Уведомления только от важных приложений</li>
+                                    <li>Телефон в другой комнате во время работы</li>
+                                    <li>Batch-обработка почты 2-3 раза в день</li>
+                                    <li>1 час до сна без экранов</li>
+                                </ul>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-title">🎯 Планирование и цели</div>
+                                <ul class="tip-list">
+                                    <li>SMART цели: конкретные, измеримые, достижимые</li>
+                                    <li>Weekly Review: анализ прошедшей недели</li>
+                                    <li>MIT (Most Important Tasks): 3 главные задачи дня</li>
+                                    <li>Планирование на завтра с вечера</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadSettings() {
+            const defaults = {
+                work: 40, breaks: 7, food: 5, sport: 3, sportDays: 3, sleep: 9,
+                morning: 1, evening: 1.5, weeklyTasks: 10, duration: 1.5, maxWeekdayTasks: 2,
+                wakeTime: '07:00', sleepTime: '23:00'
+            };
+
+            for (const [key, defaultVal] of Object.entries(defaults)) {
+                const saved = localStorage.getItem(`planner_${key}`);
+                const value = saved !== null ? saved : defaultVal;
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = value;
+                }
+            }
+        }
+
+        function saveSettings() {
+            const fields = ['work', 'breaks', 'food', 'sport', 'sportDays', 'sleep', 'morning', 'evening', 'weeklyTasks', 'duration', 'maxWeekdayTasks', 'wakeTime', 'sleepTime'];
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element) {
+                    localStorage.setItem(`planner_${field}`, element.value);
+                }
+            });
+        }
+
+        function changeValue(fieldId, delta) {
+            const input = document.getElementById(fieldId);
+            const current = parseFloat(input.value) || 0;
+            const min = parseFloat(input.min) || 0;
+            const max = parseFloat(input.max) || 100;
+
+            const newValue = Math.max(min, Math.min(max, current + delta));
+            input.value = newValue;
+            saveAndCalculate();
+        }
+
+        function saveAndCalculate() {
+            saveSettings();
+            calculateTasks();
+            if (tasks.length > 0) {
+                saveTasks();
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function getSportDays() {
+            const sportDays = parseInt(document.getElementById('sportDays').value) || 0;
+            const days = [];
+
+            if (sportDays >= 1) days.push(1);
+            if (sportDays >= 2) days.push(3);
+            if (sportDays >= 3) days.push(5);
+            if (sportDays >= 4) days.push(2);
+            if (sportDays >= 5) days.push(4);
+            if (sportDays >= 6) days.push(6);
+            if (sportDays >= 7) days.push(0);
+
+            return days;
+        }
+
+        function calculateTasks() {
+            const work = parseFloat(document.getElementById('work').value) || 0;
+            const breaks = parseFloat(document.getElementById('breaks').value) || 0;
+            const food = parseFloat(document.getElementById('food').value) || 0;
+            const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const sleep = parseFloat(document.getElementById('sleep').value) || 0;
+            const morning = parseFloat(document.getElementById('morning').value) || 0;
+            const evening = parseFloat(document.getElementById('evening').value) || 0;
+            const weeklyTasksCount = parseFloat(document.getElementById('weeklyTasks').value) || 0;
+            const duration = parseFloat(document.getElementById('duration').value) || 0;
+            const maxWeekdayTasks = parseFloat(document.getElementById('maxWeekdayTasks').value) || 0;
+
+            const totalWeekHours = 168;
+            const sleepWeek = sleep * 7;
+            const morningWeek = morning * 7;
+            const eveningWeek = evening * 7;
+
+            const usedHours = work + breaks + food + sport + sleepWeek + morningWeek + eveningWeek;
+            const availableHours = totalWeekHours - usedHours;
+
+            const totalNeeded = weeklyTasksCount * duration;
+            const restHours = availableHours - totalNeeded;
+
+            const weekdayTasksPerDay = Math.min(maxWeekdayTasks, Math.floor(weeklyTasksCount / 7));
+            const totalWeekdayTasks = weekdayTasksPerDay * 5;
+            const remainingTasks = Math.max(0, weeklyTasksCount - totalWeekdayTasks);
+            const weekendTasksPerDay = Math.ceil(remainingTasks / 2);
+
+            const avgTasksPerDay = (weeklyTasksCount / 7).toFixed(1);
+
+            document.getElementById('availableHours').textContent = availableHours.toFixed(1);
+            document.getElementById('totalNeeded').textContent = totalNeeded.toFixed(1);
+            document.getElementById('tasksPerDay').textContent = avgTasksPerDay;
+            document.getElementById('restHours').textContent = restHours.toFixed(1);
+
+            let planStatus = '';
+            let statusClass = '';
+
+            if (availableHours < 0) {
+                planStatus = '❌ Невозможно';
+                statusClass = 'status-danger';
+            } else if (totalNeeded > availableHours) {
+                planStatus = '🔥 Не хватает времени';
+                statusClass = 'status-danger';
+            } else if (restHours < 5) {
+                planStatus = '⚠️ Очень напряженно';
+                statusClass = 'status-warning';
+            } else if (restHours < 10) {
+                planStatus = '💪 Напряженно';
+                statusClass = 'status-warning';
+            } else if (restHours < 20) {
+                planStatus = '✅ Хорошо';
+                statusClass = 'status-good';
+            } else {
+                planStatus = '😎 Много времени';
+                statusClass = 'status-good';
+            }
+
+            const statusElement = document.getElementById('planStatus');
+            statusElement.textContent = planStatus;
+            statusElement.className = `stat-value ${statusClass}`;
+
+            showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay);
+            generateSchedules();
+        }
+
+        function showAlerts(totalNeeded, availableHours, restHours, duration, tasks, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay) {
+            const alertsDiv = document.getElementById('alerts');
+            alertsDiv.innerHTML = '';
+
+            if (totalNeeded > availableHours) {
+                alertsDiv.innerHTML = '<div class="alert alert-warning">⚠️ Нужно ' + totalNeeded.toFixed(1) + ' ч, доступно ' + availableHours.toFixed(1) + ' ч. Уменьши количество задач или время на выполнение.</div>';
+            } else if (restHours < 5) {
+                alertsDiv.innerHTML = '<div class="alert alert-warning">⚠️ Критически мало времени на отдых (' + restHours.toFixed(1) + ' ч). Высокий риск выгорания!</div>';
+            } else if (weekendTasksPerDay > 4) {
+                alertsDiv.innerHTML = '<div class="alert alert-warning">⚠️ Слишком много задач на выходные (' + weekendTasksPerDay + '/день). Увеличь максимум задач в будни.</div>';
+            } else if (restHours > 25) {
+                alertsDiv.innerHTML = '<div class="alert alert-success">✅ Отличный баланс! У вас есть ' + restHours.toFixed(1) + ' часов свободного времени в неделю.</div>';
+            }
+        }
+
+        function generateSchedules() {
+            const wakeTime = document.getElementById('wakeTime').value;
+            const sleepTime = document.getElementById('sleepTime').value;
+
+            generateWeekdaySchedule(wakeTime, sleepTime);
+            generateWeekendSchedule(wakeTime, sleepTime);
+            generateWeeklyDistribution();
+            generateDailyBreakdown();
+
+            document.getElementById('scheduleCard').style.display = 'flex';
+        }
+
+        function timeToDecimal(time) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours + minutes / 60;
+        }
+
+        function generateWeekdaySchedule(wakeTime, sleepTime) {
+            let currentTime = timeToDecimal(wakeTime);
+            const schedule = [];
+            const morning = parseFloat(document.getElementById('morning').value) || 0;
+            const evening = parseFloat(document.getElementById('evening').value) || 0;
+            const food = parseFloat(document.getElementById('food').value) || 5;
+            const breaks = parseFloat(document.getElementById('breaks').value) || 7;
+            const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
+            const sportScheduleDays = getSportDays();
+            const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
+            const duration = parseFloat(document.getElementById('duration').value) || 1;
+
+            const isSportDay = sportScheduleDays.includes(1);
+
+            schedule.push({ time: formatTime(currentTime), activity: '🌅 Утренний ритуал', duration: morning });
+            currentTime += morning;
+
+            const breakfastTime = food / 14;
+            schedule.push({ time: formatTime(currentTime), activity: '🍽️ Завтрак', duration: breakfastTime });
+            currentTime += breakfastTime;
+
+            schedule.push({ time: formatTime(currentTime), activity: '💼 Работа (1-я половина)', duration: 4 });
+            currentTime += 4;
+
+            if (sport > 0 && isSportDay) {
+                const sportPerDay = sport / sportDays;
+                schedule.push({ time: formatTime(currentTime), activity: `🏃 Спорт`, duration: sportPerDay });
+                currentTime += sportPerDay;
+            }
+
+            const lunchBreakTime = breaks / 7;
+            schedule.push({ time: formatTime(currentTime), activity: '☕ Обед + перерыв', duration: lunchBreakTime });
+            currentTime += lunchBreakTime;
+
+            schedule.push({ time: formatTime(currentTime), activity: '💼 Работа (2-я половина)', duration: 4 });
+            currentTime += 4;
+
+            schedule.push({ time: formatTime(currentTime), activity: '🍽️ Ужин', duration: breakfastTime });
+            currentTime += breakfastTime;
+
+            const taskTime = maxWeekdayTasks * duration;
+            if (taskTime > 0) {
+                schedule.push({ time: formatTime(currentTime), activity: `🏠 Домашние дела (${maxWeekdayTasks} задач)`, duration: taskTime });
+                currentTime += taskTime;
+            }
+
+            let bedTime = timeToDecimal(sleepTime);
+            if (bedTime <= currentTime) {
+                bedTime += 24;
+            }
+
+            const freeTimeEnd = bedTime - evening;
+            const freeTime = freeTimeEnd - currentTime;
+
+            if (freeTime > 0) {
+                schedule.push({ time: formatTime(currentTime), activity: '😌 Свободное время', duration: freeTime });
+                currentTime = freeTimeEnd;
+            }
+
+            schedule.push({ time: formatTime(currentTime), activity: '🌙 Вечерний ритуал', duration: evening });
+
+            document.getElementById('weekdaySchedule').innerHTML = generateScheduleHTML(schedule);
+        }
+
+        function generateWeekendSchedule(wakeTime, sleepTime) {
+            let currentTime = timeToDecimal(wakeTime);
+            const schedule = [];
+            const morning = parseFloat(document.getElementById('morning').value) || 0;
+            const evening = parseFloat(document.getElementById('evening').value) || 0;
+            const food = parseFloat(document.getElementById('food').value) || 5;
+            const breaks = parseFloat(document.getElementById('breaks').value) || 7;
+            const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
+            const weeklyTasks = parseInt(document.getElementById('weeklyTasks').value) || 0;
+            const duration = parseFloat(document.getElementById('duration').value) || 1;
+            const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
+
+            const totalWeekdayTasks = maxWeekdayTasks * 5;
+            const remainingTasks = Math.max(0, weeklyTasks - totalWeekdayTasks);
+            const weekendTasks = Math.ceil(remainingTasks / 2);
+
+            schedule.push({ time: formatTime(currentTime), activity: '🌅 Утренний ритуал', duration: morning });
+            currentTime += morning;
+
+            const breakfastTime = food / 14;
+            schedule.push({ time: formatTime(currentTime), activity: '🍽️ Завтрак', duration: breakfastTime });
+            currentTime += breakfastTime;
+
+            if (sport > 0 && sportDays > 5) {
+                const sportPerDay = sport / sportDays;
+                schedule.push({ time: formatTime(currentTime), activity: `🏃 Спорт/прогулка`, duration: sportPerDay });
+                currentTime += sportPerDay;
+            }
+
+            const taskTime = weekendTasks * duration;
+            if (taskTime > 0) {
+                schedule.push({ time: formatTime(currentTime), activity: `🏠 Домашние дела (${weekendTasks} задач)`, duration: taskTime });
+                currentTime += taskTime;
+            }
+
+            const lunchBreakTime = breaks / 14;
+            schedule.push({ time: formatTime(currentTime), activity: '☕ Обед + перерыв', duration: lunchBreakTime });
+            currentTime += lunchBreakTime;
+
+            schedule.push({ time: formatTime(currentTime), activity: '😎 Хобби/отдых', duration: 2 });
+            currentTime += 2;
+
+            schedule.push({ time: formatTime(currentTime), activity: '🍽️ Ужин', duration: breakfastTime });
+            currentTime += breakfastTime;
+
+            let bedTime = timeToDecimal(sleepTime);
+            if (bedTime <= currentTime) {
+                bedTime += 24;
+            }
+
+            const freeTimeEnd = bedTime - evening;
+            const freeTime = Math.max(0, freeTimeEnd - currentTime);
+
+            if (freeTime > 0) {
+                schedule.push({ time: formatTime(currentTime), activity: '📺 Развлечения', duration: freeTime });
+                currentTime = freeTimeEnd;
+            }
+
+            schedule.push({ time: formatTime(currentTime), activity: '🌙 Вечерний ритуал', duration: evening });
+
+            document.getElementById('weekendSchedule').innerHTML = generateScheduleHTML(schedule);
+        }
+
+        function generateWeeklyDistribution() {
+            const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            const sportDays = parseInt(document.getElementById('sportDays').value) || 0;
+            const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const duration = parseFloat(document.getElementById('duration').value) || 1;
+            const weeklyTasks = parseInt(document.getElementById('weeklyTasks').value) || 0;
+            const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
+
+            const totalWeekdayTasks = maxWeekdayTasks * 5;
+            const remainingTasks = Math.max(0, weeklyTasks - totalWeekdayTasks);
+            const weekendTasksPerDay = Math.ceil(remainingTasks / 2);
+
+            let html = '<div class="weekly-distribution">';
+
+            for (let i = 0; i < 7; i++) {
+                const isWeekend = i >= 5;
+                const dayTasks = isWeekend ? weekendTasksPerDay : maxWeekdayTasks;
+                const cardClass = isWeekend ? 'day-card weekend' : 'day-card';
+
+                html += `
+                    <div class="${cardClass}">
+                        <div class="day-name">${weekdays[i]}</div>
+                        <div class="day-tasks">${dayTasks}</div>
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+
+            if (sport > 0) {
+                const sportPerDay = sport / sportDays;
+                const sportScheduleDays = getSportDays();
+                const sportDayNames = sportScheduleDays.map(dayIndex => weekdays[dayIndex]).join(', ');
+
+                html += `
+                    <div style="margin-top: 16px; padding: 12px; background: #f0f9ff; border-radius: 6px; border: 1px solid #bae6fd;">
+                        <div style="font-size: 13px; font-weight: 600; color: #0369a1; margin-bottom: 6px;">🏃 Спорт:</div>
+                        <div style="font-size: 12px; color: #0369a1;">
+                            ${sportDayNames}: по ${sportPerDay.toFixed(1)} часа
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 6px; border: 1px solid #fbbf24;">
+                    <div style="font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 6px;">🏠 Распределение задач:</div>
+                    <div style="font-size: 12px; color: #92400e;">
+                        Будни: максимум ${maxWeekdayTasks} задач/день (${(maxWeekdayTasks * duration).toFixed(1)}ч)<br>
+                        Выходные: ${weekendTasksPerDay} задач/день (${(weekendTasksPerDay * duration).toFixed(1)}ч)
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('weeklyDistribution').innerHTML = html;
+        }
+
+        function generateDailyBreakdown() {
+            const weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+            const shortDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
+            const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const duration = parseFloat(document.getElementById('duration').value) || 1;
+            const weeklyTasks = parseInt(document.getElementById('weeklyTasks').value) || 0;
+            const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
+
+            const sportScheduleDays = getSportDays();
+            const totalWeekdayTasks = maxWeekdayTasks * 5;
+            const remainingTasks = Math.max(0, weeklyTasks - totalWeekdayTasks);
+            const weekendTasksPerDay = Math.ceil(remainingTasks / 2);
+
+            let html = '';
+
+            for (let i = 0; i < 7; i++) {
+                const isWeekend = i >= 5;
+                const isSportDay = sportScheduleDays.includes(i);
+                const dayTasks = isWeekend ? weekendTasksPerDay : maxWeekdayTasks;
+                const sportTime = isSportDay && sport > 0 ? (sport / sportDays).toFixed(1) : 0;
+
+                let scheduleClass = 'day-schedule';
+                if (isWeekend) scheduleClass += ' weekend';
+                if (isSportDay) scheduleClass += ' sport-day';
+
+                html += `
+                    <div class="${scheduleClass}">
+                        <div class="day-title">
+                            ${weekdays[i]} (${shortDays[i]})
+                            ${isSportDay ? '🏃' : ''}
+                            ${isWeekend ? '😎' : '💼'}
+                        </div>
+                        <div style="font-size: 13px; color: #4b5563; line-height: 1.6;">
+                            🏠 Задач: ${dayTasks} (${(dayTasks * duration).toFixed(1)}ч)<br>
+                            ${sportTime > 0 ? `🏃 Спорт: ${sportTime}ч<br>` : ''}
+                            ${isWeekend ? '😎 Выходной - больше отдыха!' : '💼 Рабочий день'}
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('dailyBreakdown').innerHTML = html;
+        }
+
+        function generateScheduleHTML(schedule) {
+            let html = '';
+            schedule.forEach(item => {
+                const startTime = item.time;
+                const startDecimal = timeToDecimal(startTime);
+                const endDecimal = startDecimal + item.duration;
+                const endTime = formatTime(endDecimal);
+
+                html += `
+                    <div class="schedule-item">
+                        <span class="schedule-time">${startTime} - ${endTime}</span>
+                        <span class="schedule-activity">${item.activity}</span>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        function formatTime(decimalTime) {
+            let hours = Math.floor(decimalTime) % 24;
+            if (hours < 0) hours += 24;
+            const minutes = Math.round((decimalTime % 1) * 60);
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadSettings();
+            loadTasks();
+            calculateTasks();
+        });
+
+        let tasks = [];
+        let currentFilter = 'all';
+
+        function loadTasks() {
+            const saved = localStorage.getItem('planner_tasks');
+            try {
+                tasks = saved ? JSON.parse(saved) : [];
+                if (!Array.isArray(tasks)) {
+                    tasks = [];
+                }
+            } catch (e) {
+                console.warn('Ошибка загрузки задач:', e);
+                tasks = [];
+            }
+            renderTasks();
+        }
+
+        function saveTasks() {
+            try {
+                localStorage.setItem('planner_tasks', JSON.stringify(tasks));
+            } catch (e) {
+                console.warn('Ошибка сохранения задач:', e);
+            }
+        }
+
+        setInterval(() => {
+            if (tasks.length > 0) {
+                saveTasks();
+            }
+        }, 30000);
+
+        function addTask() {
+            const input = document.getElementById('newTask');
+            const text = input.value.trim();
+
+            if (text) {
+                const task = {
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+
+                tasks.unshift(task);
+                saveTasks();
+                renderTasks();
+                input.value = '';
+            }
+        }
+
+        function handleTaskKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+
+        function filterTasks(filter) {
+            currentFilter = filter;
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const container = document.getElementById('tasksList');
+
+            let filteredTasks = tasks;
+            if (currentFilter === 'pending') {
+                filteredTasks = tasks.filter(t => !t.completed);
+            } else if (currentFilter === 'completed') {
+                filteredTasks = tasks.filter(t => t.completed);
+            }
+
+            if (filteredTasks.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #64748b; padding: 40px; font-size: 14px;">Нет задач</div>';
+                return;
+            }
+
+            const html = filteredTasks.map(task => `
+                <div class="task-item ${task.completed ? 'completed' : ''}">
+                    <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} 
+                           onchange="toggleTask(${task.id})">
+                    <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
+                    <div class="task-actions">
+                        <button class="task-btn delete" onclick="deleteTask(${task.id})">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>
