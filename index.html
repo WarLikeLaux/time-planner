@@ -4,8 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Планировщик времени программиста</title>
+    <meta name="description" content="Programmer Time Planner - Optimize your daily schedule">
+    <title data-i18n="title">Планировщик времени программиста</title>
     <style>
+        :root {
+            --primary-color: #3b82f6;
+            --primary-dark: #2563eb;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.15s ease;
+        }
+
+        [data-theme='dark'] {
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --border-color: #334155;
+            --border-light: #475569;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,32 +52,65 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
             line-height: 1.5;
             height: 100vh;
             overflow-x: hidden;
+            transition: var(--transition);
         }
 
         .header {
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
             padding: 16px 0;
+            box-shadow: var(--shadow-sm);
         }
 
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .header h1 {
             font-size: 22px;
             font-weight: 600;
-            color: #0f172a;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .theme-toggle,
+        .lang-toggle {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover,
+        .lang-toggle:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: scale(1.05);
         }
 
         .container {
@@ -52,23 +123,24 @@
 
         .main-layout {
             display: grid;
-            grid-template-columns: 520px 1fr;
-            gap: 24px;
+            grid-template-columns: 480px 1fr;
+            gap: 20px;
             height: 100%;
         }
 
         .controls-panel {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
             overflow-y: auto;
             height: 100%;
+            box-shadow: var(--shadow-md);
         }
 
         .panel-header {
             padding: 16px 20px;
-            border-bottom: 1px solid #f1f5f9;
-            background: #f8fafc;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-tertiary);
             position: sticky;
             top: 0;
             z-index: 1;
@@ -77,7 +149,7 @@
         .panel-title {
             font-size: 15px;
             font-weight: 600;
-            color: #374151;
+            color: var(--text-primary);
         }
 
         .controls-grid {
@@ -93,10 +165,14 @@
             gap: 6px;
         }
 
+        .input-group.hidden {
+            display: none;
+        }
+
         .input-label {
             font-size: 13px;
             font-weight: 500;
-            color: #374151;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 6px;
@@ -112,39 +188,42 @@
         .control-btn {
             width: 30px;
             height: 30px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            background: white;
-            color: #6b7280;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .control-btn:hover {
-            border-color: #3b82f6;
-            color: #3b82f6;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: scale(1.1);
         }
 
         .value-input {
             width: 70px;
             height: 30px;
             padding: 0 8px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
             font-size: 13px;
             font-weight: 500;
             text-align: center;
-            transition: border-color 0.15s ease;
+            transition: var(--transition);
+            background: var(--bg-primary);
+            color: var(--text-primary);
         }
 
         .value-input:focus {
             outline: none;
-            border-color: #3b82f6;
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
@@ -154,28 +233,42 @@
             gap: 10px;
         }
 
+        .time-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            display: block;
+        }
+
         .time-input {
             width: 100%;
             height: 30px;
             padding: 0 8px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
             font-size: 12px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
         }
 
         .time-input:focus {
             outline: none;
-            border-color: #3b82f6;
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .priority-section {
-            background: #fefce8;
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
             border: 1px solid #fde047;
-            border-radius: 8px;
+            border-radius: var(--radius-md);
             padding: 14px;
             margin: 12px 0;
             grid-column: 1 / -1;
+        }
+
+        [data-theme='dark'] .priority-section {
+            background: linear-gradient(135deg, #422006 0%, #451a03 100%);
+            border-color: #92400e;
         }
 
         .priority-label {
@@ -183,112 +276,152 @@
             font-weight: 600;
         }
 
+        [data-theme='dark'] .priority-label {
+            color: #fbbf24;
+        }
+
         .results-area {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
             height: 100%;
-            overflow-y: auto;
+            overflow: hidden;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
         }
 
         .stat-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
             padding: 16px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            min-height: 120px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+        }
+
+        .stat-icon {
+            font-size: 20px;
+            margin-bottom: 6px;
+            display: block;
         }
 
         .stat-value {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 4px;
+            line-height: 1.2;
         }
 
         .stat-label {
             font-size: 12px;
-            color: #64748b;
+            color: var(--text-secondary);
             font-weight: 500;
+            line-height: 1.3;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
         .status-good {
-            color: #059669;
+            color: var(--success-color);
         }
 
         .status-warning {
-            color: #d97706;
+            color: var(--warning-color);
         }
 
         .status-danger {
-            color: #dc2626;
+            color: var(--danger-color);
+        }
+
+        .status-card.status-good::before {
+            background: linear-gradient(90deg, var(--success-color), #10b981);
+        }
+
+        .status-card.status-warning::before {
+            background: linear-gradient(90deg, var(--warning-color), #f59e0b);
+        }
+
+        .status-card.status-danger::before {
+            background: linear-gradient(90deg, var(--danger-color), #ef4444);
         }
 
         .content-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
             overflow: hidden;
             flex: 1;
             display: flex;
             flex-direction: column;
-        }
-
-        .card-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #f1f5f9;
-            background: #f8fafc;
-        }
-
-        .card-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #374151;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-content {
-            padding: 16px 20px;
-            flex: 1;
-            overflow-y: auto;
+            box-shadow: var(--shadow-md);
+            min-height: 0;
         }
 
         .schedule-tabs {
             display: flex;
-            border-bottom: 1px solid #e2e8f0;
-            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            overflow-x: auto;
+            flex-shrink: 0;
         }
 
         .tab-btn {
-            padding: 10px 16px;
+            padding: 12px 16px;
             border: none;
             background: none;
             font-size: 13px;
             font-weight: 500;
-            color: #6b7280;
+            color: var(--text-secondary);
             cursor: pointer;
             border-bottom: 2px solid transparent;
-            transition: all 0.15s ease;
+            transition: var(--transition);
+            white-space: nowrap;
         }
 
         .tab-btn.active {
-            color: #3b82f6;
-            border-bottom-color: #3b82f6;
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background: var(--bg-primary);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text-primary);
+            background: var(--bg-primary);
         }
 
         .tab-content {
             display: none;
-            padding: 16px 20px;
+            padding: 20px;
             overflow-y: auto;
             flex: 1;
+            min-height: 0;
         }
 
         .tab-content.active {
@@ -299,235 +432,211 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 14px;
-            border-radius: 6px;
-            background: #f8fafc;
-            margin-bottom: 6px;
-            border: 1px solid #f1f5f9;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+            margin-bottom: 8px;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .schedule-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
         }
 
         .schedule-time {
             font-size: 12px;
             font-weight: 600;
-            color: #475569;
+            color: var(--primary-color);
+            min-width: 100px;
         }
 
         .schedule-activity {
             font-size: 13px;
-            color: #1e293b;
+            color: var(--text-primary);
+            flex: 1;
+            margin-left: 16px;
         }
 
         .weekly-distribution {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-top: 12px;
+            gap: 12px;
+            margin-top: 16px;
         }
 
         .day-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 10px 6px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px 8px;
             text-align: center;
+            transition: var(--transition);
+        }
+
+        .day-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .day-name {
             font-size: 11px;
             font-weight: 600;
-            color: #6b7280;
-            margin-bottom: 4px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
         .day-tasks {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--text-primary);
         }
 
         .weekend {
-            background: #fef3c7;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
             border-color: #fbbf24;
         }
 
-        .alert {
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 12px;
+        [data-theme='dark'] .weekend {
+            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+            border-color: #92400e;
         }
 
-        .alert-warning {
-            background: #fef3c7;
-            color: #92400e;
-            border: 1px solid #fbbf24;
+        .task-management {
+            margin-bottom: 20px;
         }
 
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border: 1px solid #34d399;
-        }
-
-        .recommendations-toggle {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .toggle-header {
-            padding: 14px 16px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
-            cursor: pointer;
+        .task-input-section {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.15s ease;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
-        .toggle-header:hover {
-            background: #f1f5f9;
-        }
-
-        .toggle-title {
+        .task-input-section input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
             font-size: 14px;
-            font-weight: 600;
-            color: #374151;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .task-input-section input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .task-input-section button {
+            padding: 12px 24px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .task-input-section button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .task-filters {
             display: flex;
-            align-items: center;
             gap: 8px;
         }
 
-        .toggle-icon {
-            font-size: 12px;
-            color: #6b7280;
-            transition: transform 0.15s ease;
-        }
-
-        .toggle-icon.open {
-            transform: rotate(180deg);
-        }
-
-        .toggle-content {
-            display: none;
-            padding: 16px;
-        }
-
-        .toggle-content.open {
-            display: block;
-        }
-
-        .tips-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .tip-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 14px;
-        }
-
-        .tip-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .tip-list {
-            font-size: 12px;
-            color: #4b5563;
-            line-height: 1.5;
-            padding-left: 16px;
-        }
-
-        .tip-list li {
-            margin-bottom: 4px;
-        }
-
         .filter-btn {
-            padding: 6px 12px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            border-radius: 4px;
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
             font-size: 12px;
+            color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: var(--transition);
         }
 
         .filter-btn.active {
-            background: #3b82f6;
+            background: var(--primary-color);
             color: white;
-            border-color: #3b82f6;
+            border-color: var(--primary-color);
+        }
+
+        .filter-btn:hover:not(.active) {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
         }
 
         .task-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            transition: all 0.15s ease;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            transition: var(--transition);
         }
 
         .task-item:hover {
-            background: #f1f5f9;
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
         }
 
         .task-item.completed {
             opacity: 0.6;
-            background: #f0f9ff;
+            background: var(--bg-primary);
         }
 
         .task-checkbox {
             width: 18px;
             height: 18px;
             cursor: pointer;
+            accent-color: var(--primary-color);
         }
 
         .task-text {
             flex: 1;
             font-size: 14px;
-            color: #1e293b;
+            color: var(--text-primary);
+            line-height: 1.4;
         }
 
         .task-text.completed {
             text-decoration: line-through;
-            color: #64748b;
+            color: var(--text-muted);
         }
 
         .task-actions {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .task-btn {
-            padding: 4px 8px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            border-radius: 4px;
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
             font-size: 11px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: var(--transition);
+            color: var(--text-secondary);
         }
 
         .task-btn:hover {
-            background: #f1f5f9;
+            background: var(--bg-secondary);
         }
 
         .task-btn.delete {
-            color: #dc2626;
+            color: var(--danger-color);
             border-color: #fecaca;
         }
 
@@ -535,18 +644,27 @@
             background: #fef2f2;
         }
 
+        [data-theme='dark'] .task-btn.delete:hover {
+            background: #450a0a;
+        }
+
         .day-schedule {
-            margin-bottom: 20px;
-            padding: 16px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+
+        .day-schedule:hover {
+            box-shadow: var(--shadow-md);
         }
 
         .day-title {
             font-size: 16px;
             font-weight: 600;
-            color: #1e293b;
+            color: var(--text-primary);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
@@ -554,40 +672,401 @@
         }
 
         .day-schedule.weekend {
-            background: #fef3c7;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
             border-color: #fbbf24;
         }
 
         .day-schedule.sport-day {
-            background: #f0f9ff;
-            border-color: #0ea5e9;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: #3b82f6;
+        }
+
+        [data-theme='dark'] .day-schedule.weekend {
+            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+            border-color: #92400e;
+        }
+
+        [data-theme='dark'] .day-schedule.sport-day {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border-color: #3b82f6;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        .tip-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tip-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-list {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding-left: 20px;
+        }
+
+        .tip-list li {
+            margin-bottom: 8px;
+        }
+
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .pomodoro-timer {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .timer-display {
+            margin-bottom: 32px;
+        }
+
+        .timer-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .timer-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-bg {
+            fill: none;
+            stroke: var(--border-color);
+            stroke-width: 4;
+        }
+
+        .timer-progress {
+            fill: none;
+            stroke: var(--primary-color);
+            stroke-width: 4;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s ease;
+        }
+
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .timer-time {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .timer-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .timer-btn {
+            padding: 12px 24px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .timer-btn:hover {
+            background: var(--bg-secondary);
+            transform: translateY(-1px);
+        }
+
+        .timer-btn.primary {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .timer-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .timer-settings {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .setting-group {
+            text-align: center;
+        }
+
+        .setting-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .setting-group input {
+            width: 60px;
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .pomodoro-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .stat-item span:last-child {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .analytics-container {
+            padding: 20px 0;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .analytics-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            transition: var(--transition);
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .analytics-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .progress-chart {
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .efficiency-score {
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 85%, var(--border-color) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .score-circle span {
+            position: relative;
+            z-index: 1;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .score-details {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .time-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .breakdown-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .breakdown-color.work {
+            background: #3b82f6;
+        }
+
+        .breakdown-color.tasks {
+            background: #f59e0b;
+        }
+
+        .breakdown-color.rest {
+            background: #10b981;
+        }
+
+        .breakdown-color.sleep {
+            background: #8b5cf6;
+        }
+
+        .breakdown-item span:last-child {
+            margin-left: auto;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .alert-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .alert {
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            margin-bottom: 12px;
+            border: 1px solid;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            border-color: #fbbf24;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            border-color: #34d399;
+        }
+
+        [data-theme='dark'] .alert-warning {
+            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+            color: #fbbf24;
+            border-color: #92400e;
+        }
+
+        [data-theme='dark'] .alert-success {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+            color: #6ee7b7;
+            border-color: #059669;
         }
 
         @media (max-width: 1200px) {
             .main-layout {
-                grid-template-columns: 480px 1fr;
-                gap: 20px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .tips-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                height: auto;
-                padding: 16px;
-            }
-
-            .main-layout {
                 grid-template-columns: 1fr;
                 gap: 16px;
                 height: auto;
+            }
+
+            .container {
+                height: auto;
+                overflow: visible;
             }
 
             .controls-panel {
@@ -595,13 +1074,10 @@
                 order: 2;
             }
 
-            .controls-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
             .results-area {
                 order: 1;
                 height: auto;
+                overflow: visible;
             }
 
             .stats-grid {
@@ -613,11 +1089,16 @@
             }
 
             .tips-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .timer-settings {
                 grid-template-columns: 1fr;
+                gap: 12px;
             }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .container {
                 padding: 12px;
             }
@@ -645,6 +1126,40 @@
             .time-inputs {
                 grid-template-columns: 1fr;
             }
+
+            .schedule-tabs {
+                font-size: 12px;
+            }
+
+            .tab-btn {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .timer-circle {
+                width: 160px;
+                height: 160px;
+            }
+
+            .timer-time {
+                font-size: 24px;
+            }
+
+            .timer-controls {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .timer-btn {
+                width: 100%;
+            }
+
+            .alert-container {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
         }
     </style>
 </head>
@@ -652,7 +1167,11 @@
 <body>
     <div class="header">
         <div class="header-content">
-            <h1>⏰ Планировщик времени программиста</h1>
+            <h1 data-i18n="title">⏰ Планировщик времени программиста</h1>
+            <div class="header-controls">
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+                <button class="lang-toggle" onclick="toggleLanguage()" aria-label="Toggle language">EN</button>
+            </div>
         </div>
     </div>
 
@@ -660,117 +1179,104 @@
         <div class="main-layout">
             <div class="controls-panel">
                 <div class="panel-header">
-                    <div class="panel-title">Параметры планирования</div>
+                    <div class="panel-title" data-i18n="planningParams">Параметры планирования</div>
                 </div>
 
                 <div class="controls-grid">
                     <div class="input-group">
-                        <label class="input-label">💼 Работа (ч/нед)</label>
+                        <label class="input-label" data-i18n="workHours">💼 Работа (ч/нед)</label>
                         <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('work', -1)">−</button>
+                            <button class="control-btn" onclick="changeValue('work', -1)"
+                                aria-label="Decrease">−</button>
                             <input type="number" class="value-input" id="work" value="40" min="0" max="80" step="1"
                                 oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('work', 1)">+</button>
+                            <button class="control-btn" onclick="changeValue('work', 1)"
+                                aria-label="Increase">+</button>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label class="input-label">☕ Перерывы (ч/нед)</label>
+                        <label class="input-label" data-i18n="breakHours">☕ Перерывы (ч/нед)</label>
                         <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('breaks', -1)">−</button>
+                            <button class="control-btn" onclick="changeValue('breaks', -1)"
+                                aria-label="Decrease">−</button>
                             <input type="number" class="value-input" id="breaks" value="7" min="0" max="40"
                                 oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('breaks', 1)">+</button>
+                            <button class="control-btn" onclick="changeValue('breaks', 1)"
+                                aria-label="Increase">+</button>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label class="input-label">🍽️ Еда дома (ч/нед)</label>
+                        <label class="input-label" data-i18n="foodHours">🍽️ Еда дома (ч/нед)</label>
                         <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('food', -1)">−</button>
+                            <button class="control-btn" onclick="changeValue('food', -1)"
+                                aria-label="Decrease">−</button>
                             <input type="number" class="value-input" id="food" value="5" min="1" max="30"
                                 oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('food', 1)">+</button>
+                            <button class="control-btn" onclick="changeValue('food', 1)"
+                                aria-label="Increase">+</button>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label class="input-label">🏃 Спорт (ч/нед)</label>
+                        <label class="input-label" data-i18n="sportHours">🏃 Спорт (ч/нед)</label>
                         <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('sport', -1)">−</button>
+                            <button class="control-btn" onclick="changeValue('sport', -1)"
+                                aria-label="Decrease">−</button>
                             <input type="number" class="value-input" id="sport" value="3" min="0" max="20"
                                 oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('sport', 1)">+</button>
+                            <button class="control-btn" onclick="changeValue('sport', 1)"
+                                aria-label="Increase">+</button>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label class="input-label">📅 Дней спорта в неделю</label>
+                        <label class="input-label" data-i18n="sportDays">📅 Дней спорта в неделю</label>
                         <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('sportDays', -1)">−</button>
+                            <button class="control-btn" onclick="changeValue('sportDays', -1)"
+                                aria-label="Decrease">−</button>
                             <input type="number" class="value-input" id="sportDays" value="3" min="1" max="7"
                                 oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('sportDays', 1)">+</button>
+                            <button class="control-btn" onclick="changeValue('sportDays', 1)"
+                                aria-label="Increase">+</button>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label class="input-label">😴 Сон (ч/день)</label>
+                        <label class="input-label" data-i18n="morningRitual">🌅 Утренний ритуал (ч/день)</label>
                         <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('sleep', -0.5)">−</button>
-                            <input type="number" class="value-input" id="sleep" value="9" min="4" max="12" step="0.5"
-                                oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('sleep', 0.5)">+</button>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">🌅 Утренний ритуал (ч/день)</label>
-                        <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('morning', -0.5)">−</button>
+                            <button class="control-btn" onclick="changeValue('morning', -0.5)"
+                                aria-label="Decrease">−</button>
                             <input type="number" class="value-input" id="morning" value="1" min="0" max="3" step="0.5"
                                 oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('morning', 0.5)">+</button>
+                            <button class="control-btn" onclick="changeValue('morning', 0.5)"
+                                aria-label="Increase">+</button>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label class="input-label">🌙 Вечерний ритуал (ч/день)</label>
+                        <label class="input-label" data-i18n="eveningRitual">🌙 Вечерний ритуал (ч/день)</label>
                         <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('evening', -0.5)">−</button>
+                            <button class="control-btn" onclick="changeValue('evening', -0.5)"
+                                aria-label="Decrease">−</button>
                             <input type="number" class="value-input" id="evening" value="1.5" min="0" max="4" step="0.5"
                                 oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('evening', 0.5)">+</button>
+                            <button class="control-btn" onclick="changeValue('evening', 0.5)"
+                                aria-label="Increase">+</button>
                         </div>
+                    </div>
+
+                    <div class="input-group hidden">
+                        <label class="input-label" data-i18n="sleepHours">😴 Сон (ч/день)</label>
+                        <div class="sleep-value" id="sleepDisplay">8.0</div>
                     </div>
 
                     <div class="input-group" style="grid-column: 1 / -1;">
-                        <label class="input-label">⏰ Режим дня</label>
+                        <label class="input-label" data-i18n="dailySchedule">⏰ Режим дня</label>
                         <div class="time-inputs">
                             <div>
-                                <label
-                                    style="font-size: 11px; color: #6b7280; margin-bottom: 4px; display: block;">Подъем</label>
-                                <select class="time-input" id="wakeTime" onchange="saveAndCalculate()">
-                                    <option value="05:00">05:00</option>
-                                    <option value="05:30">05:30</option>
-                                    <option value="06:00">06:00</option>
-                                    <option value="06:30">06:30</option>
-                                    <option value="07:00" selected>07:00</option>
-                                    <option value="07:30">07:30</option>
-                                    <option value="08:00">08:00</option>
-                                    <option value="08:30">08:30</option>
-                                    <option value="09:00">09:00</option>
-                                    <option value="09:30">09:30</option>
-                                    <option value="10:00">10:00</option>
-                                    <option value="10:30">10:30</option>
-                                    <option value="11:00">11:00</option>
-                                    <option value="11:30">11:30</option>
-                                    <option value="12:00">12:00</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label
-                                    style="font-size: 11px; color: #6b7280; margin-bottom: 4px; display: block;">Сон</label>
+                                <label class="time-label" data-i18n="bedTime">Сон</label>
                                 <select class="time-input" id="sleepTime" onchange="saveAndCalculate()">
                                     <option value="20:00">20:00</option>
                                     <option value="20:30">20:30</option>
@@ -791,37 +1297,65 @@
                                     <option value="04:00">04:00</option>
                                 </select>
                             </div>
+                            <div>
+                                <label class="time-label" data-i18n="wakeUp">Подъем</label>
+                                <select class="time-input" id="wakeTime" onchange="saveAndCalculate()">
+                                    <option value="05:00">05:00</option>
+                                    <option value="05:30">05:30</option>
+                                    <option value="06:00">06:00</option>
+                                    <option value="06:30">06:30</option>
+                                    <option value="07:00" selected>07:00</option>
+                                    <option value="07:30">07:30</option>
+                                    <option value="08:00">08:00</option>
+                                    <option value="08:30">08:30</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="09:30">09:30</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="10:30">10:30</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="11:30">11:30</option>
+                                    <option value="12:00">12:00</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <div class="priority-section">
                         <div class="input-group">
-                            <label class="input-label priority-label">🎯 Задач в неделю</label>
+                            <label class="input-label priority-label" data-i18n="weeklyTasks">🎯 Задач в неделю</label>
                             <div class="input-controls">
-                                <button class="control-btn" onclick="changeValue('weeklyTasks', -1)">−</button>
+                                <button class="control-btn" onclick="changeValue('weeklyTasks', -1)"
+                                    aria-label="Decrease">−</button>
                                 <input type="number" class="value-input" id="weeklyTasks" value="10" min="1" max="50"
                                     oninput="saveAndCalculate()">
-                                <button class="control-btn" onclick="changeValue('weeklyTasks', 1)">+</button>
+                                <button class="control-btn" onclick="changeValue('weeklyTasks', 1)"
+                                    aria-label="Increase">+</button>
                             </div>
                         </div>
 
                         <div class="input-group">
-                            <label class="input-label priority-label">⏱️ Часов на задачу</label>
+                            <label class="input-label priority-label" data-i18n="taskDuration">⏱️ Часов на
+                                задачу</label>
                             <div class="input-controls">
-                                <button class="control-btn" onclick="changeValue('duration', -0.5)">−</button>
+                                <button class="control-btn" onclick="changeValue('duration', -0.5)"
+                                    aria-label="Decrease">−</button>
                                 <input type="number" class="value-input" id="duration" value="1.5" min="0.5" max="8"
                                     step="0.5" oninput="saveAndCalculate()">
-                                <button class="control-btn" onclick="changeValue('duration', 0.5)">+</button>
+                                <button class="control-btn" onclick="changeValue('duration', 0.5)"
+                                    aria-label="Increase">+</button>
                             </div>
                         </div>
 
                         <div class="input-group">
-                            <label class="input-label priority-label">📝 Макс задач/день (будни)</label>
+                            <label class="input-label priority-label" data-i18n="maxWeekdayTasks">📝 Макс задач/день
+                                (будни)</label>
                             <div class="input-controls">
-                                <button class="control-btn" onclick="changeValue('maxWeekdayTasks', -1)">−</button>
+                                <button class="control-btn" onclick="changeValue('maxWeekdayTasks', -1)"
+                                    aria-label="Decrease">−</button>
                                 <input type="number" class="value-input" id="maxWeekdayTasks" value="2" min="0" max="10"
                                     oninput="saveAndCalculate()">
-                                <button class="control-btn" onclick="changeValue('maxWeekdayTasks', 1)">+</button>
+                                <button class="control-btn" onclick="changeValue('maxWeekdayTasks', 1)"
+                                    aria-label="Increase">+</button>
                             </div>
                         </div>
                     </div>
@@ -831,41 +1365,42 @@
             <div class="results-area">
                 <div class="stats-grid">
                     <div class="stat-card">
+                        <div class="stat-icon">⏰</div>
                         <div class="stat-value" id="availableHours">-</div>
-                        <div class="stat-label">Свободных часов в неделю</div>
+                        <div class="stat-label" data-i18n="freeHoursWeek">Свободных часов в неделю</div>
                     </div>
 
                     <div class="stat-card">
+                        <div class="stat-icon">📊</div>
                         <div class="stat-value" id="totalNeeded">-</div>
-                        <div class="stat-label">Нужно на все задачи</div>
+                        <div class="stat-label" data-i18n="totalNeeded">Нужно на все задачи</div>
                     </div>
 
                     <div class="stat-card">
+                        <div class="stat-icon">📅</div>
                         <div class="stat-value" id="tasksPerDay">-</div>
-                        <div class="stat-label">Задач в день</div>
+                        <div class="stat-label" data-i18n="tasksPerDay">Задач в день</div>
                     </div>
 
                     <div class="stat-card">
+                        <div class="stat-icon">😌</div>
                         <div class="stat-value" id="restHours">-</div>
-                        <div class="stat-label">Останется на отдых</div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-value" id="planStatus">-</div>
-                        <div class="stat-label">Статус плана</div>
+                        <div class="stat-label" data-i18n="restHours">Останется на отдых</div>
                     </div>
                 </div>
 
-                <div id="alerts"></div>
-
                 <div class="content-card" id="scheduleCard" style="display: none;">
                     <div class="schedule-tabs">
-                        <button class="tab-btn active" onclick="switchTab('weekday')">Будни</button>
-                        <button class="tab-btn" onclick="switchTab('weekend')">Выходные</button>
-                        <button class="tab-btn" onclick="switchTab('weekly')">Неделя</button>
-                        <button class="tab-btn" onclick="switchTab('daily')">По дням</button>
-                        <button class="tab-btn" onclick="switchTab('tasks')">Задачи</button>
-                        <button class="tab-btn" onclick="switchTab('tips')">Советы</button>
+                        <button class="tab-btn active" onclick="switchTab('weekday')"
+                            data-i18n="weekdays">Будни</button>
+                        <button class="tab-btn" onclick="switchTab('weekend')" data-i18n="weekends">Выходные</button>
+                        <button class="tab-btn" onclick="switchTab('weekly')" data-i18n="weekly">Неделя</button>
+                        <button class="tab-btn" onclick="switchTab('daily')" data-i18n="daily">По дням</button>
+                        <button class="tab-btn" onclick="switchTab('tasks')" data-i18n="tasks">Задачи</button>
+                        <button class="tab-btn" onclick="switchTab('timer')" data-i18n="timer">Таймер</button>
+                        <button class="tab-btn" onclick="switchTab('analytics')"
+                            data-i18n="analytics">Аналитика</button>
+                        <button class="tab-btn" onclick="switchTab('tips')" data-i18n="tips">Советы</button>
                     </div>
 
                     <div id="weekdayTab" class="tab-content active">
@@ -885,87 +1420,192 @@
                     </div>
 
                     <div id="tasksTab" class="tab-content">
-                        <div style="margin-bottom: 16px;">
-                            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                                <input type="text" id="newTask" placeholder="Добавить новую задачу..."
-                                    style="flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px;"
-                                    onkeypress="handleTaskKeyPress(event)">
-                                <button onclick="addTask()"
-                                    style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;">Добавить</button>
+                        <div class="task-management">
+                            <div class="task-input-section">
+                                <input type="text" id="newTask" data-i18n="addNewTask"
+                                    placeholder="Добавить новую задачу..." onkeypress="handleTaskKeyPress(event)">
+                                <button onclick="addTask()" data-i18n="add">Добавить</button>
                             </div>
-                            <div style="display: flex; gap: 8px; font-size: 12px;">
-                                <button onclick="filterTasks('all')" class="filter-btn active"
-                                    data-filter="all">Все</button>
-                                <button onclick="filterTasks('pending')" class="filter-btn"
-                                    data-filter="pending">Активные</button>
-                                <button onclick="filterTasks('completed')" class="filter-btn"
-                                    data-filter="completed">Выполненные</button>
+                            <div class="task-filters">
+                                <button onclick="filterTasks('all')" class="filter-btn active" data-filter="all"
+                                    data-i18n="all">Все</button>
+                                <button onclick="filterTasks('pending')" class="filter-btn" data-filter="pending"
+                                    data-i18n="active">Активные</button>
+                                <button onclick="filterTasks('completed')" class="filter-btn" data-filter="completed"
+                                    data-i18n="completed">Выполненные</button>
                             </div>
                         </div>
                         <div id="tasksList"></div>
                     </div>
 
+                    <div id="timerTab" class="tab-content">
+                        <div class="timer-container">
+                            <div class="pomodoro-timer">
+                                <div class="timer-display">
+                                    <div class="timer-circle">
+                                        <svg class="timer-svg" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" class="timer-bg"></circle>
+                                            <circle cx="50" cy="50" r="45" class="timer-progress" id="timerProgress">
+                                            </circle>
+                                        </svg>
+                                        <div class="timer-text">
+                                            <div class="timer-time" id="timerTime">25:00</div>
+                                            <div class="timer-label" id="timerLabel" data-i18n="focusTime">Фокус</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="timer-controls">
+                                    <button class="timer-btn primary" id="timerStartBtn" onclick="toggleTimer()"
+                                        data-i18n="start">Старт</button>
+                                    <button class="timer-btn" onclick="resetTimer()" data-i18n="reset">Сброс</button>
+                                    <button class="timer-btn" onclick="skipTimer()" data-i18n="skip">Пропустить</button>
+                                </div>
+                                <div class="timer-settings">
+                                    <div class="setting-group">
+                                        <label data-i18n="focusDuration">Работа (мин)</label>
+                                        <input type="number" id="focusTime" value="25" min="1" max="60"
+                                            onchange="updateTimerSettings()">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label data-i18n="shortBreak">Короткий перерыв (мин)</label>
+                                        <input type="number" id="shortBreak" value="5" min="1" max="30"
+                                            onchange="updateTimerSettings()">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label data-i18n="longBreak">Длинный перерыв (мин)</label>
+                                        <input type="number" id="longBreak" value="15" min="1" max="60"
+                                            onchange="updateTimerSettings()">
+                                    </div>
+                                </div>
+                                <div class="pomodoro-stats">
+                                    <div class="stat-item">
+                                        <span data-i18n="completedPomodoros">Завершено сегодня:</span>
+                                        <span id="pomodoroCount">0</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span data-i18n="currentCycle">Текущий цикл:</span>
+                                        <span id="currentCycle">1/4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="analyticsTab" class="tab-content">
+                        <div class="analytics-container">
+                            <div class="analytics-grid">
+                                <div class="analytics-card">
+                                    <h3 data-i18n="weeklyProgress">Прогресс недели</h3>
+                                    <div class="progress-chart">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" id="weeklyProgress" style="width: 0%"></div>
+                                        </div>
+                                        <div class="progress-text">
+                                            <span id="weeklyProgressText">0/10 задач</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="analytics-card">
+                                    <h3 data-i18n="efficiencyScore">Эффективность</h3>
+                                    <div class="efficiency-score">
+                                        <div class="score-circle">
+                                            <span id="efficiencyPercent">85%</span>
+                                        </div>
+                                        <div class="score-details">
+                                            <div data-i18n="excellentPace">Отличный темп!</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="analytics-card">
+                                    <h3 data-i18n="timeDistribution">Распределение времени</h3>
+                                    <div class="time-breakdown">
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-color work"></span>
+                                            <span data-i18n="work">Работа</span>
+                                            <span id="workPercent">40%</span>
+                                        </div>
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-color tasks"></span>
+                                            <span data-i18n="houseTasks">Дом. задачи</span>
+                                            <span id="tasksPercent">15%</span>
+                                        </div>
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-color rest"></span>
+                                            <span data-i18n="rest">Отдых</span>
+                                            <span id="restPercent">25%</span>
+                                        </div>
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-color sleep"></span>
+                                            <span data-i18n="sleep">Сон</span>
+                                            <span id="sleepPercent">20%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="tipsTab" class="tab-content">
                         <div class="tips-grid">
                             <div class="tip-card">
-                                <div class="tip-title">⏰ Отдых и восстановление</div>
+                                <div class="tip-title" data-i18n="restAndRecovery">⏰ Отдых и восстановление</div>
                                 <ul class="tip-list">
-                                    <li>Минимум 1 час отдыха на каждые 4 часа активности</li>
-                                    <li>20-минутные перерывы каждые 90 минут работы</li>
-                                    <li>1 полный выходной день в неделю обязателен</li>
-                                    <li>Микросон 10-20 минут повышает продуктивность</li>
+                                    <li data-i18n="restTip1">Минимум 1 час отдыха на каждые 4 часа активности</li>
+                                    <li data-i18n="restTip2">20-минутные перерывы каждые 90 минут работы</li>
+                                    <li data-i18n="restTip3">1 полный выходной день в неделю обязателен</li>
+                                    <li data-i18n="restTip4">Микросон 10-20 минут повышает продуктивность</li>
                                 </ul>
                             </div>
 
                             <div class="tip-card">
-                                <div class="tip-title">🏠 Автоматизация быта</div>
+                                <div class="tip-title" data-i18n="homeAutomation">🏠 Автоматизация быта</div>
                                 <ul class="tip-list">
-                                    <li>Посудомойка экономит 5-7 часов в неделю</li>
-                                    <li>Робот-пылесос: 2-3 часа в неделю</li>
-                                    <li>Доставка продуктов: 1-2 часа экономии</li>
-                                    <li>Batch cooking: экономия 4-5 часов</li>
-                                    <li>Умная стиральная машина с отложенным стартом</li>
+                                    <li data-i18n="autoTip1">Посудомойка экономит 5-7 часов в неделю</li>
+                                    <li data-i18n="autoTip2">Робот-пылесос: 2-3 часа в неделю</li>
+                                    <li data-i18n="autoTip3">Доставка продуктов: 1-2 часа экономии</li>
+                                    <li data-i18n="autoTip4">Batch cooking: экономия 4-5 часов</li>
+                                    <li data-i18n="autoTip5">Умная стиральная машина с отложенным стартом</li>
                                 </ul>
                             </div>
 
                             <div class="tip-card">
-                                <div class="tip-title">💡 Принципы эффективности</div>
+                                <div class="tip-title" data-i18n="efficiencyPrinciples">💡 Принципы эффективности</div>
                                 <ul class="tip-list">
-                                    <li>Правило 2 минут: если меньше 2 минут - делай сразу</li>
-                                    <li>Time boxing: выделяй конкретное время на задачи</li>
-                                    <li>Группировка задач по типу</li>
-                                    <li>Принцип 80/20: 20% задач дают 80% результата</li>
-                                    <li>Техника Помодоро: 25 мин работы + 5 мин отдыха</li>
+                                    <li data-i18n="effTip1">Правило 2 минут: если меньше 2 минут - делай сразу</li>
+                                    <li data-i18n="effTip2">Time boxing: выделяй конкретное время на задачи</li>
+                                    <li data-i18n="effTip3">Группировка задач по типу</li>
+                                    <li data-i18n="effTip4">Принцип 80/20: 20% задач дают 80% результата</li>
+                                    <li data-i18n="effTip5">Техника Помодоро: 25 мин работы + 5 мин отдыха</li>
                                 </ul>
                             </div>
 
                             <div class="tip-card">
-                                <div class="tip-title">🧠 Работа с энергией</div>
+                                <div class="tip-title" data-i18n="energyManagement">🧠 Работа с энергией</div>
                                 <ul class="tip-list">
-                                    <li>Сложные задачи планируй на пик энергии</li>
-                                    <li>После обеда энергия падает - планируй легкие дела</li>
-                                    <li>Утром мозг работает на 15% эффективнее</li>
-                                    <li>Каждые 90 минут нужен перерыв на восстановление</li>
+                                    <li data-i18n="energyTip1">Сложные задачи планируй на пик энергии</li>
+                                    <li data-i18n="energyTip2">После обеда энергия падает - планируй легкие дела</li>
+                                    <li data-i18n="energyTip3">Утром мозг работает на 15% эффективнее</li>
+                                    <li data-i18n="energyTip4">Каждые 90 минут нужен перерыв на восстановление</li>
                                 </ul>
                             </div>
 
                             <div class="tip-card">
-                                <div class="tip-title">📱 Digital Detox</div>
+                                <div class="tip-title" data-i18n="digitalDetox">📱 Digital Detox</div>
                                 <ul class="tip-list">
-                                    <li>Уведомления только от важных приложений</li>
-                                    <li>Телефон в другой комнате во время работы</li>
-                                    <li>Batch-обработка почты 2-3 раза в день</li>
-                                    <li>1 час до сна без экранов</li>
+                                    <li data-i18n="digitalTip1">Уведомления только от важных приложений</li>
+                                    <li data-i18n="digitalTip2">Телефон в другой комнате во время работы</li>
+                                    <li data-i18n="digitalTip3">Batch-обработка почты 2-3 раза в день</li>
+                                    <li data-i18n="digitalTip4">1 час до сна без экранов</li>
                                 </ul>
                             </div>
 
                             <div class="tip-card">
-                                <div class="tip-title">🎯 Планирование и цели</div>
+                                <div class="tip-title" data-i18n="planningGoals">🎯 Планирование и цели</div>
                                 <ul class="tip-list">
-                                    <li>SMART цели: конкретные, измеримые, достижимые</li>
-                                    <li>Weekly Review: анализ прошедшей недели</li>
-                                    <li>MIT (Most Important Tasks): 3 главные задачи дня</li>
-                                    <li>Планирование на завтра с вечера</li>
+                                    <li data-i18n="planTip1">SMART цели: конкретные, измеримые, достижимые</li>
+                                    <li data-i18n="planTip2">Weekly Review: анализ прошедшей недели</li>
+                                    <li data-i18n="planTip3">MIT (Most Important Tasks): 3 главные задачи дня</li>
+                                    <li data-i18n="planTip4">Планирование на завтра с вечера</li>
                                 </ul>
                             </div>
                         </div>
@@ -975,12 +1615,282 @@
         </div>
     </div>
 
+    <div class="alert-container" id="alerts"></div>
+
     <script>
+        const translations = {
+            ru: {
+                title: '⏰ Планировщик времени программиста',
+                planningParams: 'Параметры планирования',
+                workHours: '💼 Работа (ч/нед)',
+                breakHours: '☕ Перерывы (ч/нед)',
+                foodHours: '🍽️ Еда дома (ч/нед)',
+                sportHours: '🏃 Спорт (ч/нед)',
+                sportDays: '📅 Дней спорта в неделю',
+                sleepHours: '😴 Сон (ч/день)',
+                morningRitual: '🌅 Утренний ритуал (ч/день)',
+                eveningRitual: '🌙 Вечерний ритуал (ч/день)',
+                dailySchedule: '⏰ Режим дня',
+                wakeUp: 'Подъем',
+                bedTime: 'Сон',
+                weeklyTasks: '🎯 Задач в неделю',
+                taskDuration: '⏱️ Часов на задачу',
+                maxWeekdayTasks: '📝 Макс задач/день (будни)',
+                freeHoursWeek: 'Свободных часов в неделю',
+                totalNeeded: 'Нужно на все задачи',
+                tasksPerDay: 'Задач в день',
+                restHours: 'Останется на отдых',
+                planStatus: 'Статус плана',
+                sleepQuality: 'Качество сна',
+                weekdays: 'Будни',
+                weekends: 'Выходные',
+                weekly: 'Неделя',
+                daily: 'По дням',
+                tasks: 'Задачи',
+                timer: 'Таймер',
+                analytics: 'Аналитика',
+                tips: 'Советы',
+                addNewTask: 'Добавить новую задачу...',
+                add: 'Добавить',
+                all: 'Все',
+                active: 'Активные',
+                completed: 'Выполненные',
+                focusTime: 'Фокус',
+                breakTime: 'Перерыв',
+                start: 'Старт',
+                pause: 'Пауза',
+                reset: 'Сброс',
+                skip: 'Пропустить',
+                focusDuration: 'Работа (мин)',
+                shortBreak: 'Короткий перерыв (мин)',
+                longBreak: 'Длинный перерыв (мин)',
+                completedPomodoros: 'Завершено сегодня:',
+                currentCycle: 'Текущий цикл:',
+                weeklyProgress: 'Прогресс недели',
+                efficiencyScore: 'Эффективность',
+                excellentPace: 'Отличный темп!',
+                timeDistribution: 'Распределение времени',
+                work: 'Работа',
+                houseTasks: 'Дом. задачи',
+                rest: 'Отдых',
+                sleep: 'Сон',
+                breakfast: 'Завтрак',
+                dinner: 'Ужин',
+                lunchBreak: 'Обед + перерыв',
+                workFirstHalf: 'Работа (1-я половина)',
+                workSecondHalf: 'Работа (2-я половина)',
+                sport: 'Спорт',
+                sportWalk: 'Спорт/прогулка',
+                freeTime: 'Свободное время',
+                taskDeclensions: 'задача,задачи,задач',
+                delete: 'Удалить',
+                noTasks: 'Нет задач',
+                restAndRecovery: '⏰ Отдых и восстановление',
+                homeAutomation: '🏠 Автоматизация быта',
+                efficiencyPrinciples: '💡 Принципы эффективности',
+                energyManagement: '🧠 Работа с энергией',
+                digitalDetox: '📱 Digital Detox',
+                planningGoals: '🎯 Планирование и цели',
+                restTip1: 'Минимум 1 час отдыха на каждые 4 часа активности',
+                restTip2: '20-минутные перерывы каждые 90 минут работы',
+                restTip3: '1 полный выходной день в неделю обязателен',
+                restTip4: 'Микросон 10-20 минут повышает продуктивность',
+                autoTip1: 'Посудомойка экономит 5-7 часов в неделю',
+                autoTip2: 'Робот-пылесос: 2-3 часа в неделю',
+                autoTip3: 'Доставка продуктов: 1-2 часа экономии',
+                autoTip4: 'Batch cooking: экономия 4-5 часов',
+                autoTip5: 'Умная стиральная машина с отложенным стартом',
+                effTip1: 'Правило 2 минут: если меньше 2 минут - делай сразу',
+                effTip2: 'Time boxing: выделяй конкретное время на задачи',
+                effTip3: 'Группировка задач по типу',
+                effTip4: 'Принцип 80/20: 20% задач дают 80% результата',
+                effTip5: 'Техника Помодоро: 25 мин работы + 5 мин отдыха',
+                energyTip1: 'Сложные задачи планируй на пик энергии',
+                energyTip2: 'После обеда энергия падает - планируй легкие дела',
+                energyTip3: 'Утром мозг работает на 15% эффективнее',
+                energyTip4: 'Каждые 90 минут нужен перерыв на восстановление',
+                digitalTip1: 'Уведомления только от важных приложений',
+                digitalTip2: 'Телефон в другой комнате во время работы',
+                digitalTip3: 'Batch-обработка почты 2-3 раза в день',
+                digitalTip4: '1 час до сна без экранов',
+                planTip1: 'SMART цели: конкретные, измеримые, достижимые',
+                planTip2: 'Weekly Review: анализ прошедшей недели',
+                planTip3: 'MIT (Most Important Tasks): 3 главные задачи дня',
+                planTip4: 'Планирование на завтра с вечера',
+            },
+            en: {
+                title: '⏰ Programmer Time Planner',
+                planningParams: 'Planning Parameters',
+                workHours: '💼 Work (h/week)',
+                breakHours: '☕ Breaks (h/week)',
+                foodHours: '🍽️ Home meals (h/week)',
+                sportHours: '🏃 Sport (h/week)',
+                sportDays: '📅 Sport days per week',
+                sleepHours: '😴 Sleep (h/day)',
+                morningRitual: '🌅 Morning ritual (h/day)',
+                eveningRitual: '🌙 Evening ritual (h/day)',
+                dailySchedule: '⏰ Daily schedule',
+                wakeUp: 'Wake up',
+                bedTime: 'Bedtime',
+                weeklyTasks: '🎯 Tasks per week',
+                taskDuration: '⏱️ Hours per task',
+                maxWeekdayTasks: '📝 Max tasks/day (weekdays)',
+                freeHoursWeek: 'Free hours per week',
+                totalNeeded: 'Total needed for tasks',
+                tasksPerDay: 'Tasks per day',
+                restHours: 'Remaining for rest',
+                planStatus: 'Plan status',
+                sleepQuality: 'Sleep quality',
+                weekdays: 'Weekdays',
+                weekends: 'Weekends',
+                weekly: 'Weekly',
+                daily: 'Daily',
+                tasks: 'Tasks',
+                timer: 'Timer',
+                analytics: 'Analytics',
+                tips: 'Tips',
+                addNewTask: 'Add new task...',
+                add: 'Add',
+                all: 'All',
+                active: 'Active',
+                completed: 'Completed',
+                focusTime: 'Focus',
+                breakTime: 'Break',
+                start: 'Start',
+                pause: 'Pause',
+                reset: 'Reset',
+                skip: 'Skip',
+                focusDuration: 'Focus (min)',
+                shortBreak: 'Short break (min)',
+                longBreak: 'Long break (min)',
+                completedPomodoros: 'Completed today:',
+                currentCycle: 'Current cycle:',
+                weeklyProgress: 'Weekly progress',
+                efficiencyScore: 'Efficiency',
+                excellentPace: 'Excellent pace!',
+                timeDistribution: 'Time distribution',
+                work: 'Work',
+                houseTasks: 'House tasks',
+                rest: 'Rest',
+                sleep: 'Sleep',
+                breakfast: 'Breakfast',
+                dinner: 'Dinner',
+                lunchBreak: 'Lunch + break',
+                workFirstHalf: 'Work (1st half)',
+                workSecondHalf: 'Work (2nd half)',
+                sport: 'Sport',
+                sportWalk: 'Sport/walk',
+                freeTime: 'Free time',
+                taskDeclensions: 'task,tasks,tasks',
+                delete: 'Delete',
+                noTasks: 'No tasks',
+                restAndRecovery: '⏰ Rest and recovery',
+                homeAutomation: '🏠 Home automation',
+                efficiencyPrinciples: '💡 Efficiency principles',
+                energyManagement: '🧠 Energy management',
+                digitalDetox: '📱 Digital Detox',
+                planningGoals: '🎯 Planning and goals',
+                restTip1: 'Minimum 1 hour rest for every 4 hours of activity',
+                restTip2: '20-minute breaks every 90 minutes of work',
+                restTip3: '1 full day off per week is mandatory',
+                restTip4: '10-20 minute power naps boost productivity',
+                autoTip1: 'Dishwasher saves 5-7 hours per week',
+                autoTip2: 'Robot vacuum: 2-3 hours per week',
+                autoTip3: 'Grocery delivery: 1-2 hours savings',
+                autoTip4: 'Batch cooking: saves 4-5 hours',
+                autoTip5: 'Smart washing machine with delayed start',
+                effTip1: '2-minute rule: if less than 2 minutes - do it now',
+                effTip2: 'Time boxing: allocate specific time for tasks',
+                effTip3: 'Group tasks by type',
+                effTip4: '80/20 principle: 20% of tasks give 80% results',
+                effTip5: 'Pomodoro technique: 25 min work + 5 min break',
+                energyTip1: 'Schedule complex tasks during energy peaks',
+                energyTip2: 'Energy drops after lunch - plan easy tasks',
+                energyTip3: 'Morning brain works 15% more efficiently',
+                energyTip4: 'Need a break every 90 minutes for recovery',
+                digitalTip1: 'Notifications only from important apps',
+                digitalTip2: 'Phone in another room during work',
+                digitalTip3: 'Batch email processing 2-3 times a day',
+                digitalTip4: '1 hour before sleep without screens',
+                planTip1: 'SMART goals: specific, measurable, achievable',
+                planTip2: 'Weekly Review: analyze the past week',
+                planTip3: 'MIT (Most Important Tasks): 3 main tasks of the day',
+                planTip4: 'Plan tomorrow in the evening',
+            },
+        };
+
+        let currentLang = localStorage.getItem('planner_lang') || 'ru';
+        let tasks = [];
+        let currentFilter = 'all';
+        let timerState = {
+            isRunning: false,
+            currentTime: 1500,
+            totalTime: 1500,
+            mode: 'focus',
+            cycle: 1,
+            completedPomodoros: parseInt(localStorage.getItem('planner_pomodoros') || '0'),
+        };
+        let timerInterval = null;
+
+        function getTranslation(key) {
+            return translations[currentLang][key] || translations.ru[key] || key;
+        }
+
+        function updateTexts() {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (element.tagName === 'INPUT' && element.type !== 'number') {
+                    element.placeholder = getTranslation(key);
+                } else {
+                    element.textContent = getTranslation(key);
+                }
+            });
+
+            if (document.getElementById('scheduleCard').style.display !== 'none') {
+                calculateTasks();
+            }
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            localStorage.setItem('planner_lang', currentLang);
+            document.querySelector('.lang-toggle').textContent = currentLang === 'ru' ? 'EN' : 'RU';
+            updateTexts();
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('planner_theme', newTheme);
+
+            const themeToggle = document.querySelector('.theme-toggle');
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('planner_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const themeToggle = document.querySelector('.theme-toggle');
+            themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+
         function loadSettings() {
             const defaults = {
-                work: 40, breaks: 7, food: 5, sport: 3, sportDays: 3, sleep: 9,
-                morning: 1, evening: 1.5, weeklyTasks: 10, duration: 1.5, maxWeekdayTasks: 2,
-                wakeTime: '07:00', sleepTime: '23:00'
+                work: 40,
+                breaks: 7,
+                food: 5,
+                sport: 3,
+                sportDays: 3,
+                morning: 1,
+                evening: 1.5,
+                weeklyTasks: 10,
+                duration: 1.5,
+                maxWeekdayTasks: 2,
+                wakeTime: '07:00',
+                sleepTime: '23:00',
             };
 
             for (const [key, defaultVal] of Object.entries(defaults)) {
@@ -991,16 +1901,35 @@
                     element.value = value;
                 }
             }
+
+            calculateSleep();
         }
 
         function saveSettings() {
-            const fields = ['work', 'breaks', 'food', 'sport', 'sportDays', 'sleep', 'morning', 'evening', 'weeklyTasks', 'duration', 'maxWeekdayTasks', 'wakeTime', 'sleepTime'];
+            const fields = ['work', 'breaks', 'food', 'sport', 'sportDays', 'morning', 'evening', 'weeklyTasks', 'duration', 'maxWeekdayTasks', 'wakeTime', 'sleepTime'];
             fields.forEach(field => {
                 const element = document.getElementById(field);
                 if (element) {
                     localStorage.setItem(`planner_${field}`, element.value);
                 }
             });
+        }
+
+        function calculateSleep() {
+            const wakeTime = document.getElementById('wakeTime').value;
+            const sleepTime = document.getElementById('sleepTime').value;
+
+            const wake = timeToDecimal(wakeTime);
+            let sleep = timeToDecimal(sleepTime);
+
+            if (sleep <= wake) {
+                sleep += 24;
+            }
+
+            const sleepHours = wake + 24 - sleep;
+            document.getElementById('sleepDisplay').textContent = sleepHours.toFixed(1);
+
+            return sleepHours;
         }
 
         function changeValue(fieldId, delta) {
@@ -1016,6 +1945,7 @@
 
         function saveAndCalculate() {
             saveSettings();
+            calculateSleep();
             calculateTasks();
             if (tasks.length > 0) {
                 saveTasks();
@@ -1050,7 +1980,7 @@
             const breaks = parseFloat(document.getElementById('breaks').value) || 0;
             const food = parseFloat(document.getElementById('food').value) || 0;
             const sport = parseFloat(document.getElementById('sport').value) || 0;
-            const sleep = parseFloat(document.getElementById('sleep').value) || 0;
+            const sleep = calculateSleep();
             const morning = parseFloat(document.getElementById('morning').value) || 0;
             const evening = parseFloat(document.getElementById('evening').value) || 0;
             const weeklyTasksCount = parseFloat(document.getElementById('weeklyTasks').value) || 0;
@@ -1082,33 +2012,69 @@
 
             let planStatus = '';
             let statusClass = '';
+            let sleepQualityText = '';
+            let sleepQualityClass = '';
+
+            if (sleep < 6) {
+                sleepQualityText = '😴 ' + (currentLang === 'ru' ? 'Критично мало' : 'Critically low');
+                sleepQualityClass = 'status-danger';
+            } else if (sleep < 7) {
+                sleepQualityText = '😪 ' + (currentLang === 'ru' ? 'Недостаточно' : 'Insufficient');
+                sleepQualityClass = 'status-warning';
+            } else if (sleep <= 9) {
+                sleepQualityText = '😊 ' + (currentLang === 'ru' ? 'Отлично' : 'Excellent');
+                sleepQualityClass = 'status-good';
+            } else {
+                sleepQualityText = '😴 ' + (currentLang === 'ru' ? 'Слишком много' : 'Too much');
+                sleepQualityClass = 'status-warning';
+            }
 
             if (availableHours < 0) {
-                planStatus = '❌ Невозможно';
+                planStatus = '❌ ' + (currentLang === 'ru' ? 'Невозможно' : 'Impossible');
                 statusClass = 'status-danger';
             } else if (totalNeeded > availableHours) {
-                planStatus = '🔥 Не хватает времени';
+                planStatus = '🔥 ' + (currentLang === 'ru' ? 'Не хватает времени' : 'Not enough time');
                 statusClass = 'status-danger';
             } else if (restHours < 5) {
-                planStatus = '⚠️ Очень напряженно';
+                planStatus = '⚠️ ' + (currentLang === 'ru' ? 'Очень напряженно' : 'Very intense');
                 statusClass = 'status-warning';
             } else if (restHours < 10) {
-                planStatus = '💪 Напряженно';
+                planStatus = '💪 ' + (currentLang === 'ru' ? 'Напряженно' : 'Intense');
                 statusClass = 'status-warning';
             } else if (restHours < 20) {
-                planStatus = '✅ Хорошо';
+                planStatus = '✅ ' + (currentLang === 'ru' ? 'Хорошо' : 'Good');
                 statusClass = 'status-good';
             } else {
-                planStatus = '😎 Много времени';
+                planStatus = '😎 ' + (currentLang === 'ru' ? 'Много времени' : 'Plenty of time');
                 statusClass = 'status-good';
             }
 
-            const statusElement = document.getElementById('planStatus');
-            statusElement.textContent = planStatus;
-            statusElement.className = `stat-value ${statusClass}`;
-
             showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay);
             generateSchedules();
+            updateAnalytics(work, totalNeeded, restHours, sleep);
+        }
+
+        function updateAnalytics(work, tasksTime, restTime, sleepHours) {
+            const totalWeekHours = 168;
+            const workPercent = Math.round((work / totalWeekHours) * 100);
+            const tasksPercent = Math.round((tasksTime / totalWeekHours) * 100);
+            const restPercent = Math.round((restTime / totalWeekHours) * 100);
+            const sleepPercent = Math.round(((sleepHours * 7) / totalWeekHours) * 100);
+
+            document.getElementById('workPercent').textContent = `${workPercent}%`;
+            document.getElementById('tasksPercent').textContent = `${tasksPercent}%`;
+            document.getElementById('restPercent').textContent = `${restPercent}%`;
+            document.getElementById('sleepPercent').textContent = `${sleepPercent}%`;
+
+            const completedTasks = tasks.filter(t => t.completed).length;
+            const totalTasks = tasks.length || 10;
+            const progressPercent = Math.round((completedTasks / totalTasks) * 100);
+
+            document.getElementById('weeklyProgress').style.width = `${progressPercent}%`;
+            document.getElementById('weeklyProgressText').textContent = `${completedTasks}/${totalTasks} ${getTranslation('tasks').toLowerCase()}`;
+
+            const efficiency = Math.min(95, Math.max(0, 85 + (restTime - 10) * 2));
+            document.getElementById('efficiencyPercent').textContent = `${Math.round(efficiency)}%`;
         }
 
         function showAlerts(totalNeeded, availableHours, restHours, duration, tasks, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay) {
@@ -1116,13 +2082,25 @@
             alertsDiv.innerHTML = '';
 
             if (totalNeeded > availableHours) {
-                alertsDiv.innerHTML = '<div class="alert alert-warning">⚠️ Нужно ' + totalNeeded.toFixed(1) + ' ч, доступно ' + availableHours.toFixed(1) + ' ч. Уменьши количество задач или время на выполнение.</div>';
+                const msg = currentLang === 'ru'
+                    ? `⚠️ Нужно ${totalNeeded.toFixed(1)} ч, доступно ${availableHours.toFixed(1)} ч. Уменьши количество задач или время на выполнение.`
+                    : `⚠️ Need ${totalNeeded.toFixed(1)}h, available ${availableHours.toFixed(1)}h. Reduce tasks or duration.`;
+                alertsDiv.innerHTML = `<div class="alert alert-warning">${msg}</div>`;
             } else if (restHours < 5) {
-                alertsDiv.innerHTML = '<div class="alert alert-warning">⚠️ Критически мало времени на отдых (' + restHours.toFixed(1) + ' ч). Высокий риск выгорания!</div>';
+                const msg = currentLang === 'ru'
+                    ? `⚠️ Критически мало времени на отдых (${restHours.toFixed(1)} ч). Высокий риск выгорания!`
+                    : `⚠️ Critically low rest time (${restHours.toFixed(1)}h). High burnout risk!`;
+                alertsDiv.innerHTML = `<div class="alert alert-warning">${msg}</div>`;
             } else if (weekendTasksPerDay > 4) {
-                alertsDiv.innerHTML = '<div class="alert alert-warning">⚠️ Слишком много задач на выходные (' + weekendTasksPerDay + '/день). Увеличь максимум задач в будни.</div>';
+                const msg = currentLang === 'ru'
+                    ? `⚠️ Слишком много задач на выходные (${weekendTasksPerDay}/день). Увеличь максимум задач в будни.`
+                    : `⚠️ Too many weekend tasks (${weekendTasksPerDay}/day). Increase weekday task limit.`;
+                alertsDiv.innerHTML = `<div class="alert alert-warning">${msg}</div>`;
             } else if (restHours > 25) {
-                alertsDiv.innerHTML = '<div class="alert alert-success">✅ Отличный баланс! У вас есть ' + restHours.toFixed(1) + ' часов свободного времени в неделю.</div>';
+                const msg = currentLang === 'ru'
+                    ? `✅ Отличный баланс! У вас есть ${restHours.toFixed(1)} часов свободного времени в неделю.`
+                    : `✅ Excellent balance! You have ${restHours.toFixed(1)} hours of free time per week.`;
+                alertsDiv.innerHTML = `<div class="alert alert-success">${msg}</div>`;
             }
         }
 
@@ -1158,42 +2136,69 @@
 
             const isSportDay = sportScheduleDays.includes(1);
 
-            schedule.push({ time: formatTime(currentTime), activity: '🌅 Утренний ритуал', duration: morning });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '🌅 ' + getTranslation('morningRitual'),
+                duration: morning,
+            });
             currentTime += morning;
 
             const breakfastTime = food / 14;
-            schedule.push({ time: formatTime(currentTime), activity: '🍽️ Завтрак', duration: breakfastTime });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '🍽️ ' + getTranslation('breakfast'),
+                duration: breakfastTime,
+            });
             currentTime += breakfastTime;
 
-            schedule.push({ time: formatTime(currentTime), activity: '💼 Работа (1-я половина)', duration: 4 });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '💼 ' + getTranslation('workFirstHalf'),
+                duration: 4,
+            });
             currentTime += 4;
 
             if (sport > 0 && isSportDay) {
                 const sportPerDay = sport / sportDays;
-                schedule.push({ time: formatTime(currentTime), activity: `🏃 Спорт`, duration: sportPerDay });
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: '🏃 ' + getTranslation('sport'),
+                    duration: sportPerDay,
+                });
                 currentTime += sportPerDay;
             }
 
             const lunchBreakTime = breaks / 7;
-            schedule.push({ time: formatTime(currentTime), activity: '☕ Обед + перерыв', duration: lunchBreakTime });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '☕ ' + getTranslation('lunchBreak'),
+                duration: lunchBreakTime,
+            });
             currentTime += lunchBreakTime;
 
-            schedule.push({ time: formatTime(currentTime), activity: '💼 Работа (2-я половина)', duration: 4 });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '💼 ' + getTranslation('workSecondHalf'),
+                duration: 4,
+            });
             currentTime += 4;
 
-            schedule.push({ time: formatTime(currentTime), activity: '🍽️ Ужин', duration: breakfastTime });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '🍽️ ' + getTranslation('dinner'),
+                duration: breakfastTime,
+            });
             currentTime += breakfastTime;
 
             const taskTime = maxWeekdayTasks * duration;
             if (taskTime > 0) {
                 schedule.push({
                     time: formatTime(currentTime),
-                    activity: `🏠 Домашние дела (${maxWeekdayTasks} ${declension(maxWeekdayTasks, ['задача', 'задачи', 'задач'])})`,
-                    duration: taskTime
+                    activity: `🏠 ${getTranslation('houseTasks')} (${maxWeekdayTasks} ${declension(maxWeekdayTasks, getTranslation('taskDeclensions').split(','))})`,
+                    duration: taskTime,
                 });
                 currentTime += taskTime;
             }
-
 
             let bedTime = timeToDecimal(sleepTime);
             if (bedTime <= currentTime) {
@@ -1204,16 +2209,26 @@
             const freeTime = freeTimeEnd - currentTime;
 
             if (freeTime > 0) {
-                schedule.push({ time: formatTime(currentTime), activity: '😌 Свободное время', duration: freeTime });
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: '😌 ' + getTranslation('freeTime'),
+                    duration: freeTime,
+                });
                 currentTime = freeTimeEnd;
             }
 
-            schedule.push({ time: formatTime(currentTime), activity: '🌙 Вечерний ритуал', duration: evening });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '🌙 ' + getTranslation('eveningRitual'),
+                duration: evening,
+            });
 
             document.getElementById('weekdaySchedule').innerHTML = generateScheduleHTML(schedule);
         }
 
         function declension(n, forms) {
+            if (currentLang === 'en') return n === 1 ? forms[0] : forms[1];
+
             n = Math.abs(n) % 100;
             let n1 = n % 10;
             if (n > 10 && n < 20) return forms[2];
@@ -1239,16 +2254,28 @@
             const remainingTasks = Math.max(0, weeklyTasks - totalWeekdayTasks);
             const weekendTasks = Math.ceil(remainingTasks / 2);
 
-            schedule.push({ time: formatTime(currentTime), activity: '🌅 Утренний ритуал', duration: morning });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '🌅 ' + getTranslation('morningRitual'),
+                duration: morning,
+            });
             currentTime += morning;
 
             const breakfastTime = food / 14;
-            schedule.push({ time: formatTime(currentTime), activity: '🍽️ Завтрак', duration: breakfastTime });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '🍽️ ' + getTranslation('breakfast'),
+                duration: breakfastTime,
+            });
             currentTime += breakfastTime;
 
             if (sport > 0 && sportDays > 5) {
                 const sportPerDay = sport / sportDays;
-                schedule.push({ time: formatTime(currentTime), activity: `🏃 Спорт/прогулка`, duration: sportPerDay });
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: '🏃 ' + getTranslation('sportWalk'),
+                    duration: sportPerDay,
+                });
                 currentTime += sportPerDay;
             }
 
@@ -1256,21 +2283,32 @@
             if (taskTime > 0) {
                 schedule.push({
                     time: formatTime(currentTime),
-                    activity: `🏠 Домашние дела (${weekendTasks} ${declension(weekendTasks, ['задача', 'задачи', 'задач'])})`,
-                    duration: taskTime
+                    activity: `🏠 ${getTranslation('houseTasks')} (${weekendTasks} ${declension(weekendTasks, getTranslation('taskDeclensions').split(','))})`,
+                    duration: taskTime,
                 });
                 currentTime += taskTime;
             }
 
-
             const lunchBreakTime = breaks / 14;
-            schedule.push({ time: formatTime(currentTime), activity: '☕ Обед + перерыв', duration: lunchBreakTime });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '☕ ' + getTranslation('lunchBreak'),
+                duration: lunchBreakTime,
+            });
             currentTime += lunchBreakTime;
 
-            schedule.push({ time: formatTime(currentTime), activity: '😌 Свободное время', duration: 2 });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '😌 ' + getTranslation('freeTime'),
+                duration: 2,
+            });
             currentTime += 2;
 
-            schedule.push({ time: formatTime(currentTime), activity: '🍽️ Ужин', duration: breakfastTime });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '🍽️ ' + getTranslation('dinner'),
+                duration: breakfastTime,
+            });
             currentTime += breakfastTime;
 
             let bedTime = timeToDecimal(sleepTime);
@@ -1282,17 +2320,26 @@
             const freeTime = Math.max(0, freeTimeEnd - currentTime);
 
             if (freeTime > 0) {
-                schedule.push({ time: formatTime(currentTime), activity: '😌 Свободное время', duration: freeTime });
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: '😌 ' + getTranslation('freeTime'),
+                    duration: freeTime,
+                });
                 currentTime = freeTimeEnd;
             }
 
-            schedule.push({ time: formatTime(currentTime), activity: '🌙 Вечерний ритуал', duration: evening });
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: '🌙 ' + getTranslation('eveningRitual'),
+                duration: evening,
+            });
 
             document.getElementById('weekendSchedule').innerHTML = generateScheduleHTML(schedule);
         }
 
         function generateWeeklyDistribution() {
-            const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            const weekdays = currentLang === 'ru' ? ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
             const sportDays = parseInt(document.getElementById('sportDays').value) || 0;
             const sport = parseFloat(document.getElementById('sport').value) || 0;
             const duration = parseFloat(document.getElementById('duration').value) || 1;
@@ -1326,21 +2373,27 @@
                 const sportDayNames = sportScheduleDays.map(dayIndex => weekdays[dayIndex]).join(', ');
 
                 html += `
-                    <div style="margin-top: 16px; padding: 12px; background: #f0f9ff; border-radius: 6px; border: 1px solid #bae6fd;">
-                        <div style="font-size: 13px; font-weight: 600; color: #0369a1; margin-bottom: 6px;">🏃 Спорт:</div>
-                        <div style="font-size: 12px; color: #0369a1;">
-                            ${sportDayNames}: по ${sportPerDay.toFixed(1)} часа
+                    <div style="margin-top: 16px; padding: 12px; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 13px; font-weight: 600; color: var(--primary-color); margin-bottom: 6px;">🏃 ${getTranslation('sport')}:</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">
+                            ${sportDayNames}: ${currentLang === 'ru' ? 'по' : 'per'} ${sportPerDay.toFixed(1)} ${currentLang === 'ru' ? 'часа' : 'hours'}
                         </div>
                     </div>
                 `;
             }
 
+            const tasksLabel = currentLang === 'ru' ? 'Распределение задач' : 'Task distribution';
+            const weekdaysLabel = currentLang === 'ru' ? 'Будни' : 'Weekdays';
+            const weekendsLabel = currentLang === 'ru' ? 'Выходные' : 'Weekends';
+            const maxLabel = currentLang === 'ru' ? 'максимум' : 'max';
+            const perDayLabel = currentLang === 'ru' ? 'задач/день' : 'tasks/day';
+
             html += `
-                <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 6px; border: 1px solid #fbbf24;">
-                    <div style="font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 6px;">🏠 Распределение задач:</div>
-                    <div style="font-size: 12px; color: #92400e;">
-                        Будни: максимум ${maxWeekdayTasks} задач/день (${(maxWeekdayTasks * duration).toFixed(1)}ч)<br>
-                        Выходные: ${weekendTasksPerDay} задач/день (${(weekendTasksPerDay * duration).toFixed(1)}ч)
+                <div style="margin-top: 16px; padding: 12px; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--warning-color); margin-bottom: 6px;">🏠 ${tasksLabel}:</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">
+                        ${weekdaysLabel}: ${maxLabel} ${maxWeekdayTasks} ${perDayLabel} (${(maxWeekdayTasks * duration).toFixed(1)}${currentLang === 'ru' ? 'ч' : 'h'})<br>
+                        ${weekendsLabel}: ${weekendTasksPerDay} ${perDayLabel} (${(weekendTasksPerDay * duration).toFixed(1)}${currentLang === 'ru' ? 'ч' : 'h'})
                     </div>
                 </div>
             `;
@@ -1349,8 +2402,12 @@
         }
 
         function generateDailyBreakdown() {
-            const weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-            const shortDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            const weekdays = currentLang === 'ru'
+                ? ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+                : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+            const shortDays = currentLang === 'ru' ? ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
             const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
             const sport = parseFloat(document.getElementById('sport').value) || 0;
             const duration = parseFloat(document.getElementById('duration').value) || 1;
@@ -1374,6 +2431,11 @@
                 if (isWeekend) scheduleClass += ' weekend';
                 if (isSportDay) scheduleClass += ' sport-day';
 
+                const tasksLabel = currentLang === 'ru' ? 'Задач' : 'Tasks';
+                const sportLabel = currentLang === 'ru' ? 'Спорт' : 'Sport';
+                const weekendText = currentLang === 'ru' ? 'Выходной - больше отдыха!' : 'Weekend - more rest!';
+                const workdayText = currentLang === 'ru' ? 'Рабочий день' : 'Workday';
+
                 html += `
                     <div class="${scheduleClass}">
                         <div class="day-title">
@@ -1381,10 +2443,10 @@
                             ${isSportDay ? '🏃' : ''}
                             ${isWeekend ? '😎' : '💼'}
                         </div>
-                        <div style="font-size: 13px; color: #4b5563; line-height: 1.6;">
-                            🏠 Задач: ${dayTasks} (${(dayTasks * duration).toFixed(1)}ч)<br>
-                            ${sportTime > 0 ? `🏃 Спорт: ${sportTime}ч<br>` : ''}
-                            ${isWeekend ? '😎 Выходной - больше отдыха!' : '💼 Рабочий день'}
+                        <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                            🏠 ${tasksLabel}: ${dayTasks} (${(dayTasks * duration).toFixed(1)}${currentLang === 'ru' ? 'ч' : 'h'})<br>
+                            ${sportTime > 0 ? `🏃 ${sportLabel}: ${sportTime}${currentLang === 'ru' ? 'ч' : 'h'}<br>` : ''}
+                            ${isWeekend ? `😎 ${weekendText}` : `💼 ${workdayText}`}
                         </div>
                     </div>
                 `;
@@ -1418,15 +2480,6 @@
             return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            loadSettings();
-            loadTasks();
-            calculateTasks();
-        });
-
-        let tasks = [];
-        let currentFilter = 'all';
-
         function loadTasks() {
             const saved = localStorage.getItem('planner_tasks');
             try {
@@ -1435,7 +2488,7 @@
                     tasks = [];
                 }
             } catch (e) {
-                console.warn('Ошибка загрузки задач:', e);
+                console.warn('Error loading tasks:', e);
                 tasks = [];
             }
             renderTasks();
@@ -1445,15 +2498,9 @@
             try {
                 localStorage.setItem('planner_tasks', JSON.stringify(tasks));
             } catch (e) {
-                console.warn('Ошибка сохранения задач:', e);
+                console.warn('Error saving tasks:', e);
             }
         }
-
-        setInterval(() => {
-            if (tasks.length > 0) {
-                saveTasks();
-            }
-        }, 30000);
 
         function addTask() {
             const input = document.getElementById('newTask');
@@ -1464,13 +2511,14 @@
                     id: Date.now(),
                     text: text,
                     completed: false,
-                    createdAt: new Date().toISOString()
+                    createdAt: new Date().toISOString(),
                 };
 
                 tasks.unshift(task);
                 saveTasks();
                 renderTasks();
                 input.value = '';
+                updateAnalytics();
             }
         }
 
@@ -1486,6 +2534,7 @@
                 task.completed = !task.completed;
                 saveTasks();
                 renderTasks();
+                updateAnalytics();
             }
         }
 
@@ -1493,6 +2542,7 @@
             tasks = tasks.filter(t => t.id !== id);
             saveTasks();
             renderTasks();
+            updateAnalytics();
         }
 
         function filterTasks(filter) {
@@ -1517,7 +2567,7 @@
             }
 
             if (filteredTasks.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #64748b; padding: 40px; font-size: 14px;">Нет задач</div>';
+                container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 40px; font-size: 14px;">${getTranslation('noTasks')}</div>`;
                 return;
             }
 
@@ -1527,13 +2577,144 @@
                            onchange="toggleTask(${task.id})">
                     <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
                     <div class="task-actions">
-                        <button class="task-btn delete" onclick="deleteTask(${task.id})">Удалить</button>
+                        <button class="task-btn delete" onclick="deleteTask(${task.id})">${getTranslation('delete')}</button>
                     </div>
                 </div>
             `).join('');
 
             container.innerHTML = html;
         }
+
+        function initTimer() {
+            const focusTime = parseInt(document.getElementById('focusTime').value) || 25;
+            const shortBreak = parseInt(document.getElementById('shortBreak').value) || 5;
+            const longBreak = parseInt(document.getElementById('longBreak').value) || 15;
+
+            if (timerState.mode === 'focus') {
+                timerState.totalTime = focusTime * 60;
+            } else if (timerState.mode === 'shortBreak') {
+                timerState.totalTime = shortBreak * 60;
+            } else {
+                timerState.totalTime = longBreak * 60;
+            }
+
+            timerState.currentTime = timerState.totalTime;
+            updateTimerDisplay();
+        }
+
+        function toggleTimer() {
+            if (timerState.isRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            timerState.isRunning = true;
+            document.getElementById('timerStartBtn').textContent = getTranslation('pause');
+
+            timerInterval = setInterval(() => {
+                timerState.currentTime--;
+                updateTimerDisplay();
+
+                if (timerState.currentTime <= 0) {
+                    completeTimer();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            timerState.isRunning = false;
+            document.getElementById('timerStartBtn').textContent = getTranslation('start');
+            clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            initTimer();
+        }
+
+        function skipTimer() {
+            completeTimer();
+        }
+
+        function completeTimer() {
+            pauseTimer();
+
+            if (timerState.mode === 'focus') {
+                timerState.completedPomodoros++;
+                localStorage.setItem('planner_pomodoros', timerState.completedPomodoros.toString());
+
+                if (timerState.cycle % 4 === 0) {
+                    timerState.mode = 'longBreak';
+                } else {
+                    timerState.mode = 'shortBreak';
+                }
+                timerState.cycle++;
+            } else {
+                timerState.mode = 'focus';
+            }
+
+            initTimer();
+            updatePomodoroStats();
+
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const message = timerState.mode === 'focus'
+                    ? currentLang === 'ru' ? 'Время работать!' : 'Time to work!'
+                    : currentLang === 'ru' ? 'Время отдохнуть!' : 'Time for a break!';
+                new Notification('Pomodoro Timer', { body: message });
+            }
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerState.currentTime / 60);
+            const seconds = timerState.currentTime % 60;
+            const timeText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            document.getElementById('timerTime').textContent = timeText;
+
+            const label = timerState.mode === 'focus' ? getTranslation('focusTime') : getTranslation('breakTime');
+            document.getElementById('timerLabel').textContent = label;
+
+            const progress = ((timerState.totalTime - timerState.currentTime) / timerState.totalTime) * 283;
+            document.getElementById('timerProgress').style.strokeDasharray = `${progress} 283`;
+        }
+
+        function updateTimerSettings() {
+            if (!timerState.isRunning) {
+                initTimer();
+            }
+        }
+
+        function updatePomodoroStats() {
+            document.getElementById('pomodoroCount').textContent = timerState.completedPomodoros;
+            document.getElementById('currentCycle').textContent = `${((timerState.cycle - 1) % 4) + 1}/4`;
+        }
+
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initTheme();
+            document.querySelector('.lang-toggle').textContent = currentLang === 'ru' ? 'EN' : 'RU';
+            loadSettings();
+            loadTasks();
+            calculateTasks();
+            initTimer();
+            updatePomodoroStats();
+            updateTexts();
+            requestNotificationPermission();
+
+            setInterval(() => {
+                if (tasks.length > 0) {
+                    saveTasks();
+                }
+            }, 30000);
+        });
     </script>
 </body>
 
