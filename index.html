@@ -123,7 +123,7 @@
 
         .main-layout {
             display: grid;
-            grid-template-columns: 480px 1fr;
+            grid-template-columns: 575px 1fr;
             gap: 20px;
             height: 100%;
         }
@@ -153,20 +153,38 @@
         }
 
         .controls-grid {
-            padding: 16px 20px 20px;
+            padding: 20px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .controls-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px 16px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            align-items: end;
+        }
+
+        .controls-row-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            align-items: end;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .input-group.hidden {
             display: none;
+        }
+
+        .input-group.full-width {
+            grid-column: 1 / -1;
         }
 
         .input-label {
@@ -181,19 +199,19 @@
         .input-controls {
             display: flex;
             align-items: center;
-            gap: 8px;
-            height: 36px;
+            gap: 10px;
+            height: 40px;
         }
 
         .control-btn {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             background: var(--bg-primary);
             color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
@@ -204,17 +222,18 @@
         .control-btn:hover {
             border-color: var(--primary-color);
             color: var(--primary-color);
-            transform: scale(1.1);
+            transform: scale(1.05);
+            background: rgba(59, 130, 246, 0.05);
         }
 
         .value-input {
-            width: 70px;
-            height: 30px;
-            padding: 0 8px;
+            width: 80px;
+            height: 32px;
+            padding: 0 10px;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600;
             text-align: center;
             transition: var(--transition);
             background: var(--bg-primary);
@@ -242,13 +261,15 @@
 
         .time-input {
             width: 100%;
-            height: 30px;
-            padding: 0 8px;
+            height: 34px;
+            padding: 0 10px;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 500;
             background: var(--bg-primary);
             color: var(--text-primary);
+            transition: var(--transition);
         }
 
         .time-input:focus {
@@ -264,6 +285,12 @@
             padding: 14px;
             margin: 12px 0;
             grid-column: 1 / -1;
+        }
+
+        .priority-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
 
         [data-theme='dark'] .priority-section {
@@ -432,7 +459,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
+            padding: 6px 16px;
             border-radius: var(--radius-sm);
             background: var(--bg-secondary);
             margin-bottom: 8px;
@@ -463,20 +490,29 @@
             font-size: 11px;
             font-weight: 600;
             color: var(--primary-color);
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            padding: 6px 12px;
-            border-radius: 16px;
-            border: 1px solid var(--primary-color);
-            min-width: 60px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            min-width: 50px;
             text-align: center;
             white-space: nowrap;
-            box-shadow: var(--shadow-sm);
             transition: var(--transition);
+            margin-left: 12px;
         }
 
         .schedule-duration:hover {
             transform: scale(1.05);
-            box-shadow: var(--shadow-md);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
+        }
+
+        [data-theme='dark'] .schedule-duration {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        [data-theme='dark'] .schedule-duration:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.15) 100%);
         }
 
         .weekly-distribution {
@@ -1077,6 +1113,25 @@
             border-color: #059669;
         }
 
+        @media (max-width: 1400px) {
+            .main-layout {
+                grid-template-columns: 480px 1fr;
+            }
+
+            .controls-row {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .controls-row-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .priority-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 1200px) {
             .main-layout {
                 grid-template-columns: 1fr;
@@ -1100,20 +1155,17 @@
                 overflow: visible;
             }
 
-            .controls-grid {
+            .controls-row {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 14px;
+            }
+
+            .controls-row-2 {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .priority-section .input-group {
-                width: calc(50% - 8px);
-            }
-
-            .priority-section .input-group:nth-child(2n) {
-                margin-right: 0;
-            }
-
-            .priority-section .input-group:nth-child(2n+1) {
-                margin-right: 16px;
+            .priority-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
 
             .stats-grid {
@@ -1148,17 +1200,21 @@
             }
 
             .controls-grid {
+                padding: 16px 20px 20px;
+                gap: 16px;
+            }
+
+            .controls-row {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .controls-row-2 {
                 grid-template-columns: 1fr;
             }
 
-            .priority-section .input-group {
-                width: 100%;
-                margin-right: 0;
-                margin-bottom: 14px;
-            }
-
-            .priority-section .input-group:last-child {
-                margin-bottom: 0;
+            .priority-grid {
+                grid-template-columns: 1fr;
             }
 
             .stats-grid {
@@ -1198,6 +1254,7 @@
 
             .schedule-duration {
                 align-self: flex-end;
+                margin-left: 0;
             }
 
             .timer-circle {
@@ -1225,6 +1282,12 @@
                 max-width: none;
             }
         }
+
+        @media (max-width: 480px) {
+            .controls-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
@@ -1247,96 +1310,102 @@
                 </div>
 
                 <div class="controls-grid">
-                    <div class="input-group">
-                        <label class="input-label" data-i18n="workHours">💼 Работа (ч/нед)</label>
-                        <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('work', -1)"
-                                aria-label="Decrease">−</button>
-                            <input type="number" class="value-input" id="work" value="40" min="0" max="80" step="1"
-                                oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('work', 1)"
-                                aria-label="Increase">+</button>
+                    <div class="controls-row">
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="workHours">💼 Работа (ч/нед)</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('work', -1)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="work" value="40" min="0" max="80" step="1"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('work', 1)"
+                                    aria-label="Increase">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="breakHours">☕ Перерывы (ч/нед)</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('breaks', -1)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="breaks" value="7" min="0" max="40"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('breaks', 1)"
+                                    aria-label="Increase">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="foodHours">🍽️ Еда дома (ч/нед)</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('food', -1)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="food" value="5" min="1" max="30"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('food', 1)"
+                                    aria-label="Increase">+</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label class="input-label" data-i18n="breakHours">☕ Перерывы (ч/нед)</label>
-                        <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('breaks', -1)"
-                                aria-label="Decrease">−</button>
-                            <input type="number" class="value-input" id="breaks" value="7" min="0" max="40"
-                                oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('breaks', 1)"
-                                aria-label="Increase">+</button>
+                    <div class="controls-row">
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="sportHours">🏃 Спорт (ч/нед)</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('sport', -1)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="sport" value="3" min="0" max="20"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('sport', 1)"
+                                    aria-label="Increase">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="sportDays">📅 Дней спорта в неделю</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('sportDays', -1)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="sportDays" value="3" min="1" max="7"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('sportDays', 1)"
+                                    aria-label="Increase">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="morningRitual">🌅 Утренний ритуал (ч/день)</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('morning', -0.5)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="morning" value="1" min="0" max="3"
+                                    step="0.5" oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('morning', 0.5)"
+                                    aria-label="Increase">+</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label class="input-label" data-i18n="foodHours">🍽️ Еда дома (ч/нед)</label>
-                        <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('food', -1)"
-                                aria-label="Decrease">−</button>
-                            <input type="number" class="value-input" id="food" value="5" min="1" max="30"
-                                oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('food', 1)"
-                                aria-label="Increase">+</button>
+                    <div class="controls-row-2">
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="eveningRitual">🌙 Вечерний ритуал (ч/день)</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('evening', -0.5)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="evening" value="1.5" min="0" max="4"
+                                    step="0.5" oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('evening', 0.5)"
+                                    aria-label="Increase">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group hidden">
+                            <label class="input-label" data-i18n="sleepHours">😴 Сон (ч/день)</label>
+                            <div class="sleep-value" id="sleepDisplay">8.0</div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label class="input-label" data-i18n="sportHours">🏃 Спорт (ч/нед)</label>
-                        <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('sport', -1)"
-                                aria-label="Decrease">−</button>
-                            <input type="number" class="value-input" id="sport" value="3" min="0" max="20"
-                                oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('sport', 1)"
-                                aria-label="Increase">+</button>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label" data-i18n="sportDays">📅 Дней спорта в неделю</label>
-                        <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('sportDays', -1)"
-                                aria-label="Decrease">−</button>
-                            <input type="number" class="value-input" id="sportDays" value="3" min="1" max="7"
-                                oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('sportDays', 1)"
-                                aria-label="Increase">+</button>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label" data-i18n="morningRitual">🌅 Утренний ритуал (ч/день)</label>
-                        <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('morning', -0.5)"
-                                aria-label="Decrease">−</button>
-                            <input type="number" class="value-input" id="morning" value="1" min="0" max="3" step="0.5"
-                                oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('morning', 0.5)"
-                                aria-label="Increase">+</button>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label" data-i18n="eveningRitual">🌙 Вечерний ритуал (ч/день)</label>
-                        <div class="input-controls">
-                            <button class="control-btn" onclick="changeValue('evening', -0.5)"
-                                aria-label="Decrease">−</button>
-                            <input type="number" class="value-input" id="evening" value="1.5" min="0" max="4" step="0.5"
-                                oninput="saveAndCalculate()">
-                            <button class="control-btn" onclick="changeValue('evening', 0.5)"
-                                aria-label="Increase">+</button>
-                        </div>
-                    </div>
-
-                    <div class="input-group hidden">
-                        <label class="input-label" data-i18n="sleepHours">😴 Сон (ч/день)</label>
-                        <div class="sleep-value" id="sleepDisplay">8.0</div>
-                    </div>
-
-                    <div class="input-group" style="grid-column: 1 / -1;">
+                    <div class="input-group full-width">
                         <label class="input-label" data-i18n="dailySchedule">⏰ Режим дня</label>
                         <div class="time-inputs">
                             <div>
@@ -1385,41 +1454,44 @@
                     </div>
 
                     <div class="priority-section">
-                        <div class="input-group">
-                            <label class="input-label priority-label" data-i18n="weeklyTasks">🎯 Задач в неделю</label>
-                            <div class="input-controls">
-                                <button class="control-btn" onclick="changeValue('weeklyTasks', -1)"
-                                    aria-label="Decrease">−</button>
-                                <input type="number" class="value-input" id="weeklyTasks" value="10" min="1" max="50"
-                                    oninput="saveAndCalculate()">
-                                <button class="control-btn" onclick="changeValue('weeklyTasks', 1)"
-                                    aria-label="Increase">+</button>
+                        <div class="priority-grid">
+                            <div class="input-group">
+                                <label class="input-label priority-label" data-i18n="weeklyTasks">🎯 Задач в
+                                    неделю</label>
+                                <div class="input-controls">
+                                    <button class="control-btn" onclick="changeValue('weeklyTasks', -1)"
+                                        aria-label="Decrease">−</button>
+                                    <input type="number" class="value-input" id="weeklyTasks" value="10" min="1"
+                                        max="50" oninput="saveAndCalculate()">
+                                    <button class="control-btn" onclick="changeValue('weeklyTasks', 1)"
+                                        aria-label="Increase">+</button>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="input-group">
-                            <label class="input-label priority-label" data-i18n="taskDuration">⏱️ Часов на
-                                задачу</label>
-                            <div class="input-controls">
-                                <button class="control-btn" onclick="changeValue('duration', -0.5)"
-                                    aria-label="Decrease">−</button>
-                                <input type="number" class="value-input" id="duration" value="1.5" min="0.5" max="8"
-                                    step="0.5" oninput="saveAndCalculate()">
-                                <button class="control-btn" onclick="changeValue('duration', 0.5)"
-                                    aria-label="Increase">+</button>
+                            <div class="input-group">
+                                <label class="input-label priority-label" data-i18n="taskDuration">⏱️ Часов на
+                                    задачу</label>
+                                <div class="input-controls">
+                                    <button class="control-btn" onclick="changeValue('duration', -0.5)"
+                                        aria-label="Decrease">−</button>
+                                    <input type="number" class="value-input" id="duration" value="1.5" min="0.5" max="8"
+                                        step="0.5" oninput="saveAndCalculate()">
+                                    <button class="control-btn" onclick="changeValue('duration', 0.5)"
+                                        aria-label="Increase">+</button>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="input-group">
-                            <label class="input-label priority-label" data-i18n="maxWeekdayTasks">📝 Макс задач/день
-                                (будни)</label>
-                            <div class="input-controls">
-                                <button class="control-btn" onclick="changeValue('maxWeekdayTasks', -1)"
-                                    aria-label="Decrease">−</button>
-                                <input type="number" class="value-input" id="maxWeekdayTasks" value="2" min="0" max="10"
-                                    oninput="saveAndCalculate()">
-                                <button class="control-btn" onclick="changeValue('maxWeekdayTasks', 1)"
-                                    aria-label="Increase">+</button>
+                            <div class="input-group">
+                                <label class="input-label priority-label" data-i18n="maxWeekdayTasks">📝 Макс задач/день
+                                    (будни)</label>
+                                <div class="input-controls">
+                                    <button class="control-btn" onclick="changeValue('maxWeekdayTasks', -1)"
+                                        aria-label="Decrease">−</button>
+                                    <input type="number" class="value-input" id="maxWeekdayTasks" value="2" min="0"
+                                        max="10" oninput="saveAndCalculate()">
+                                    <button class="control-btn" onclick="changeValue('maxWeekdayTasks', 1)"
+                                        aria-label="Increase">+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1694,10 +1766,10 @@
                 foodHours: '🍽️ Еда дома (ч/нед)',
                 sportHours: '🏃 Спорт (ч/нед)',
                 sportDays: '📅 Дней спорта в неделю',
-                sleepHours: '😴 Сон (ч/день)',
-                morningRitual: '🌅 Утренний ритуал (ч/день)',
+                sleepHours: '😴 Сон',
+                morningRitual: '🌅 Утренний ритуал (ч/д)',
                 morningRitualSchedule: '🌅 Утренний ритуал',
-                eveningRitual: '🌙 Вечерний ритуал (ч/день)',
+                eveningRitual: '🌙 Вечерний ритуал (ч/д)',
                 eveningRitualSchedule: '🌙 Вечерний ритуал',
                 dailySchedule: '⏰ Режим дня',
                 wakeUp: 'Подъем',
@@ -1808,7 +1880,7 @@
                 bedTime: 'Bedtime',
                 weeklyTasks: '🎯 Tasks per week',
                 taskDuration: '⏱️ Hours per task',
-                maxWeekdayTasks: '📝 Max tasks/day (weekdays)',
+                maxWeekdayTasks: '📝 Max tasks/day (weekday)',
                 freeHoursWeek: 'Free hours per week',
                 totalNeeded: 'Total needed for tasks',
                 tasksPerDay: 'Tasks per day',
@@ -2033,7 +2105,6 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-            // Find the clicked button and activate it
             const clickedButton = event ? event.target : document.querySelector(`[onclick="switchTab('${tabName}')"]`);
             if (clickedButton) {
                 clickedButton.classList.add('active');
@@ -2212,43 +2283,40 @@
         function updateScheduleTabs(sportDays) {
             const scheduleTabs = document.getElementById('scheduleTabs');
             const weekdayTab = scheduleTabs.querySelector('[onclick="switchTab(\'weekday\')"]');
-            const sportDayTab = scheduleTabs.querySelector('[onclick="switchTab(\'sportDay\')"]');
-            const regularDayTab = scheduleTabs.querySelector('[onclick="switchTab(\'regularDay\')"]');
+            let sportDayTab = scheduleTabs.querySelector('[onclick="switchTab(\'sportDay\')"]');
+            let regularDayTab = scheduleTabs.querySelector('[onclick="switchTab(\'regularDay\')"]');
 
             if (sportDays < 7) {
-                // Hide weekday tab, show sport/regular tabs
                 if (weekdayTab) weekdayTab.style.display = 'none';
 
                 if (!sportDayTab) {
-                    const newSportTab = document.createElement('button');
-                    newSportTab.className = 'tab-btn active';
-                    newSportTab.setAttribute('onclick', "switchTab('sportDay')");
-                    newSportTab.setAttribute('data-i18n', 'sportDayTab');
-                    newSportTab.textContent = getTranslation('sportDayTab');
-                    scheduleTabs.insertBefore(newSportTab, scheduleTabs.children[1]);
+                    sportDayTab = document.createElement('button');
+                    sportDayTab.className = 'tab-btn active';
+                    sportDayTab.setAttribute('onclick', "switchTab('sportDay')");
+                    sportDayTab.setAttribute('data-i18n', 'sportDayTab');
+                    sportDayTab.textContent = getTranslation('sportDayTab');
+                    scheduleTabs.insertBefore(sportDayTab, scheduleTabs.children[1]);
                 } else {
                     sportDayTab.style.display = 'block';
                     sportDayTab.classList.add('active');
                 }
 
                 if (!regularDayTab) {
-                    const newRegularTab = document.createElement('button');
-                    newRegularTab.className = 'tab-btn';
-                    newRegularTab.setAttribute('onclick', "switchTab('regularDay')");
-                    newRegularTab.setAttribute('data-i18n', 'regularDayTab');
-                    newRegularTab.textContent = getTranslation('regularDayTab');
-                    scheduleTabs.insertBefore(newRegularTab, scheduleTabs.children[2]);
+                    regularDayTab = document.createElement('button');
+                    regularDayTab.className = 'tab-btn';
+                    regularDayTab.setAttribute('onclick', "switchTab('regularDay')");
+                    regularDayTab.setAttribute('data-i18n', 'regularDayTab');
+                    regularDayTab.textContent = getTranslation('regularDayTab');
+                    scheduleTabs.insertBefore(regularDayTab, scheduleTabs.children[2]);
                 } else {
                     regularDayTab.style.display = 'block';
                 }
 
-                // Set active tab
                 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                 if (sportDayTab) sportDayTab.classList.add('active');
                 document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                 document.getElementById('sportDayTab').classList.add('active');
             } else {
-                // Show weekday tab, hide sport/regular tabs
                 if (weekdayTab) {
                     weekdayTab.style.display = 'block';
                     weekdayTab.classList.add('active');
@@ -2256,7 +2324,6 @@
                 if (sportDayTab) sportDayTab.style.display = 'none';
                 if (regularDayTab) regularDayTab.style.display = 'none';
 
-                // Set active tab
                 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                 if (weekdayTab) weekdayTab.classList.add('active');
                 document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -2379,11 +2446,6 @@
             });
 
             return schedule;
-        }
-
-        function timeToDecimal(time) {
-            const [hours, minutes] = time.split(':').map(Number);
-            return hours + minutes / 60;
         }
 
         function timeToDecimal(time) {
@@ -2578,11 +2640,13 @@
                 const startDecimal = timeToDecimal(startTime);
                 const endDecimal = startDecimal + item.duration;
                 const endTime = formatTime(endDecimal);
+                const durationHM = formatDuration(item.duration);
 
                 html += `
                     <div class="schedule-item">
                         <span class="schedule-time">${startTime} - ${endTime}</span>
                         <span class="schedule-activity">${item.activity}</span>
+                        <span class="schedule-duration">${durationHM}</span>
                     </div>
                 `;
             });
@@ -2594,6 +2658,13 @@
             if (hours < 0) hours += 24;
             const minutes = Math.round((decimalTime % 1) * 60);
             return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        }
+
+        function formatDuration(hours) {
+            const h = Math.floor(hours);
+            const m = Math.round((hours % 1) * 60);
+
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
         }
 
         function loadTasks() {
