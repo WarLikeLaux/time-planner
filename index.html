@@ -459,6 +459,26 @@
             margin-left: 16px;
         }
 
+        .schedule-duration {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary-color);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            padding: 6px 12px;
+            border-radius: 16px;
+            border: 1px solid var(--primary-color);
+            min-width: 60px;
+            text-align: center;
+            white-space: nowrap;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .schedule-duration:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
         .weekly-distribution {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -1080,6 +1100,22 @@
                 overflow: visible;
             }
 
+            .controls-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .priority-section .input-group {
+                width: calc(50% - 8px);
+            }
+
+            .priority-section .input-group:nth-child(2n) {
+                margin-right: 0;
+            }
+
+            .priority-section .input-group:nth-child(2n+1) {
+                margin-right: 16px;
+            }
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1115,6 +1151,16 @@
                 grid-template-columns: 1fr;
             }
 
+            .priority-section .input-group {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 14px;
+            }
+
+            .priority-section .input-group:last-child {
+                margin-bottom: 0;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
@@ -1134,6 +1180,24 @@
             .tab-btn {
                 padding: 10px 12px;
                 font-size: 12px;
+            }
+
+            .schedule-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .schedule-time {
+                min-width: auto;
+            }
+
+            .schedule-activity {
+                margin-left: 0;
+            }
+
+            .schedule-duration {
+                align-self: flex-end;
             }
 
             .timer-circle {
@@ -1390,12 +1454,11 @@
                 </div>
 
                 <div class="content-card" id="scheduleCard" style="display: none;">
-                    <div class="schedule-tabs">
+                    <div class="schedule-tabs" id="scheduleTabs">
                         <button class="tab-btn active" onclick="switchTab('weekday')"
                             data-i18n="weekdays">Будни</button>
                         <button class="tab-btn" onclick="switchTab('weekend')" data-i18n="weekends">Выходные</button>
                         <button class="tab-btn" onclick="switchTab('weekly')" data-i18n="weekly">Неделя</button>
-                        <button class="tab-btn" onclick="switchTab('daily')" data-i18n="daily">По дням</button>
                         <button class="tab-btn" onclick="switchTab('tasks')" data-i18n="tasks">Задачи</button>
                         <button class="tab-btn" onclick="switchTab('timer')" data-i18n="timer">Таймер</button>
                         <button class="tab-btn" onclick="switchTab('analytics')"
@@ -1407,16 +1470,20 @@
                         <div id="weekdaySchedule"></div>
                     </div>
 
+                    <div id="sportDayTab" class="tab-content">
+                        <div id="sportDaySchedule"></div>
+                    </div>
+
+                    <div id="regularDayTab" class="tab-content">
+                        <div id="regularDaySchedule"></div>
+                    </div>
+
                     <div id="weekendTab" class="tab-content">
                         <div id="weekendSchedule"></div>
                     </div>
 
                     <div id="weeklyTab" class="tab-content">
                         <div id="weeklyDistribution"></div>
-                    </div>
-
-                    <div id="dailyTab" class="tab-content">
-                        <div id="dailyBreakdown"></div>
                     </div>
 
                     <div id="tasksTab" class="tab-content">
@@ -1647,7 +1714,6 @@
                 weekdays: 'Будни',
                 weekends: 'Выходные',
                 weekly: 'Неделя',
-                daily: 'По дням',
                 tasks: 'Задачи',
                 timer: 'Таймер',
                 analytics: 'Аналитика',
@@ -1673,20 +1739,24 @@
                 excellentPace: 'Отличный темп!',
                 timeDistribution: 'Распределение времени',
                 work: 'Работа',
-                houseTasks: 'Дом. задачи',
+                houseTasks: '🏠 Дом. задачи',
                 rest: 'Отдых',
                 sleep: 'Сон',
-                breakfast: 'Завтрак',
-                dinner: 'Ужин',
-                lunchBreak: 'Обед + перерыв',
-                workFirstHalf: 'Работа (1-я половина)',
-                workSecondHalf: 'Работа (2-я половина)',
-                sport: 'Спорт',
-                sportWalk: 'Спорт/прогулка',
-                freeTime: 'Свободное время',
+                breakfast: '🍽️ Завтрак',
+                dinner: '🍽️ Ужин',
+                lunchBreak: '☕ Обед + перерыв',
+                workFirstHalf: '💼 Работа (1-я половина)',
+                workSecondHalf: '💼 Работа (2-я половина)',
+                sport: '🏃 Спорт',
+                sportWalk: '🏃 Спорт/прогулка',
+                freeTime: '😌 Свободное время',
                 taskDeclensions: 'задача,задачи,задач',
                 delete: 'Удалить',
                 noTasks: 'Нет задач',
+                sportDayTab: 'Дни со спортом',
+                regularDayTab: 'Обычные дни',
+                sportDay: 'Дни с тренировками',
+                regularDay: 'Обычные дни',
                 restAndRecovery: '⏰ Отдых и восстановление',
                 homeAutomation: '🏠 Автоматизация быта',
                 efficiencyPrinciples: '💡 Принципы эффективности',
@@ -1748,7 +1818,6 @@
                 weekdays: 'Weekdays',
                 weekends: 'Weekends',
                 weekly: 'Weekly',
-                daily: 'Daily',
                 tasks: 'Tasks',
                 timer: 'Timer',
                 analytics: 'Analytics',
@@ -1774,20 +1843,24 @@
                 excellentPace: 'Excellent pace!',
                 timeDistribution: 'Time distribution',
                 work: 'Work',
-                houseTasks: 'House tasks',
+                houseTasks: '🏠 House tasks',
                 rest: 'Rest',
                 sleep: 'Sleep',
-                breakfast: 'Breakfast',
-                dinner: 'Dinner',
-                lunchBreak: 'Lunch + break',
-                workFirstHalf: 'Work (1st half)',
-                workSecondHalf: 'Work (2nd half)',
-                sport: 'Sport',
-                sportWalk: 'Sport/walk',
-                freeTime: 'Free time',
+                breakfast: '🍽️ Breakfast',
+                dinner: '🍽️ Dinner',
+                lunchBreak: '☕ Lunch + break',
+                workFirstHalf: '💼 Work (1st half)',
+                workSecondHalf: '💼 Work (2nd half)',
+                sport: '🏃 Sport',
+                sportWalk: '🏃 Sport/walk',
+                freeTime: '😌 Free time',
                 taskDeclensions: 'task,tasks,tasks',
                 delete: 'Delete',
                 noTasks: 'No tasks',
+                sportDayTab: 'Days with sport',
+                regularDayTab: 'Regular days',
+                sportDay: 'Days with workouts',
+                regularDay: 'Regular days',
                 restAndRecovery: '⏰ Rest and recovery',
                 homeAutomation: '🏠 Home automation',
                 efficiencyPrinciples: '💡 Efficiency principles',
@@ -1960,8 +2033,16 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-            event.target.classList.add('active');
-            document.getElementById(tabName + 'Tab').classList.add('active');
+            // Find the clicked button and activate it
+            const clickedButton = event ? event.target : document.querySelector(`[onclick="switchTab('${tabName}')"]`);
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+
+            const tabContent = document.getElementById(tabName + 'Tab');
+            if (tabContent) {
+                tabContent.classList.add('active');
+            }
         }
 
         function getSportDays() {
@@ -2111,21 +2192,89 @@
         function generateSchedules() {
             const wakeTime = document.getElementById('wakeTime').value;
             const sleepTime = document.getElementById('sleepTime').value;
+            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
 
-            generateWeekdaySchedule(wakeTime, sleepTime);
+            updateScheduleTabs(sportDays);
+
+            if (sportDays < 7) {
+                generateSportDaySchedule(wakeTime, sleepTime);
+                generateRegularDaySchedule(wakeTime, sleepTime);
+            } else {
+                generateWeekdaySchedule(wakeTime, sleepTime);
+            }
+
             generateWeekendSchedule(wakeTime, sleepTime);
             generateWeeklyDistribution();
-            generateDailyBreakdown();
 
             document.getElementById('scheduleCard').style.display = 'flex';
         }
 
-        function timeToDecimal(time) {
-            const [hours, minutes] = time.split(':').map(Number);
-            return hours + minutes / 60;
+        function updateScheduleTabs(sportDays) {
+            const scheduleTabs = document.getElementById('scheduleTabs');
+            const weekdayTab = scheduleTabs.querySelector('[onclick="switchTab(\'weekday\')"]');
+            const sportDayTab = scheduleTabs.querySelector('[onclick="switchTab(\'sportDay\')"]');
+            const regularDayTab = scheduleTabs.querySelector('[onclick="switchTab(\'regularDay\')"]');
+
+            if (sportDays < 7) {
+                // Hide weekday tab, show sport/regular tabs
+                if (weekdayTab) weekdayTab.style.display = 'none';
+
+                if (!sportDayTab) {
+                    const newSportTab = document.createElement('button');
+                    newSportTab.className = 'tab-btn active';
+                    newSportTab.setAttribute('onclick', "switchTab('sportDay')");
+                    newSportTab.setAttribute('data-i18n', 'sportDayTab');
+                    newSportTab.textContent = getTranslation('sportDayTab');
+                    scheduleTabs.insertBefore(newSportTab, scheduleTabs.children[1]);
+                } else {
+                    sportDayTab.style.display = 'block';
+                    sportDayTab.classList.add('active');
+                }
+
+                if (!regularDayTab) {
+                    const newRegularTab = document.createElement('button');
+                    newRegularTab.className = 'tab-btn';
+                    newRegularTab.setAttribute('onclick', "switchTab('regularDay')");
+                    newRegularTab.setAttribute('data-i18n', 'regularDayTab');
+                    newRegularTab.textContent = getTranslation('regularDayTab');
+                    scheduleTabs.insertBefore(newRegularTab, scheduleTabs.children[2]);
+                } else {
+                    regularDayTab.style.display = 'block';
+                }
+
+                // Set active tab
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                if (sportDayTab) sportDayTab.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById('sportDayTab').classList.add('active');
+            } else {
+                // Show weekday tab, hide sport/regular tabs
+                if (weekdayTab) {
+                    weekdayTab.style.display = 'block';
+                    weekdayTab.classList.add('active');
+                }
+                if (sportDayTab) sportDayTab.style.display = 'none';
+                if (regularDayTab) regularDayTab.style.display = 'none';
+
+                // Set active tab
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                if (weekdayTab) weekdayTab.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById('weekdayTab').classList.add('active');
+            }
         }
 
-        function generateWeekdaySchedule(wakeTime, sleepTime) {
+        function generateSportDaySchedule(wakeTime, sleepTime) {
+            const schedule = generateSingleWeekdayScheduleArray(wakeTime, sleepTime, true);
+            document.getElementById('sportDaySchedule').innerHTML = generateScheduleHTML(schedule);
+        }
+
+        function generateRegularDaySchedule(wakeTime, sleepTime) {
+            const schedule = generateSingleWeekdayScheduleArray(wakeTime, sleepTime, false);
+            document.getElementById('regularDaySchedule').innerHTML = generateScheduleHTML(schedule);
+        }
+
+        function generateSingleWeekdayScheduleArray(wakeTime, sleepTime, isSportDay) {
             let currentTime = timeToDecimal(wakeTime);
             const schedule = [];
             const morning = parseFloat(document.getElementById('morning').value) || 0;
@@ -2134,15 +2283,17 @@
             const breaks = parseFloat(document.getElementById('breaks').value) || 7;
             const sport = parseFloat(document.getElementById('sport').value) || 0;
             const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
-            const sportScheduleDays = getSportDays();
             const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
             const duration = parseFloat(document.getElementById('duration').value) || 1;
+            const work = parseFloat(document.getElementById('work').value) || 0;
 
-            const isSportDay = sportScheduleDays.includes(1);
+            const workHoursPerDay = work / 5;
+            const firstHalf = workHoursPerDay / 2;
+            const secondHalf = workHoursPerDay / 2;
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🌅 ' + getTranslation('morningRitualSchedule'),
+                activity: getTranslation('morningRitualSchedule'),
                 duration: morning,
             });
             currentTime += morning;
@@ -2150,23 +2301,23 @@
             const breakfastTime = food / 14;
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🍽️ ' + getTranslation('breakfast'),
+                activity: getTranslation('breakfast'),
                 duration: breakfastTime,
             });
             currentTime += breakfastTime;
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '💼 ' + getTranslation('workFirstHalf'),
-                duration: 4,
+                activity: getTranslation('workFirstHalf'),
+                duration: firstHalf,
             });
-            currentTime += 4;
+            currentTime += firstHalf;
 
             if (sport > 0 && isSportDay) {
                 const sportPerDay = sport / sportDays;
                 schedule.push({
                     time: formatTime(currentTime),
-                    activity: '🏃 ' + getTranslation('sport'),
+                    activity: getTranslation('sport'),
                     duration: sportPerDay,
                 });
                 currentTime += sportPerDay;
@@ -2175,21 +2326,21 @@
             const lunchBreakTime = breaks / 7;
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '☕ ' + getTranslation('lunchBreak'),
+                activity: getTranslation('lunchBreak'),
                 duration: lunchBreakTime,
             });
             currentTime += lunchBreakTime;
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '💼 ' + getTranslation('workSecondHalf'),
-                duration: 4,
+                activity: getTranslation('workSecondHalf'),
+                duration: secondHalf,
             });
-            currentTime += 4;
+            currentTime += secondHalf;
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🍽️ ' + getTranslation('dinner'),
+                activity: getTranslation('dinner'),
                 duration: breakfastTime,
             });
             currentTime += breakfastTime;
@@ -2198,7 +2349,7 @@
             if (taskTime > 0) {
                 schedule.push({
                     time: formatTime(currentTime),
-                    activity: `🏠 ${getTranslation('houseTasks')} (${maxWeekdayTasks} ${declension(maxWeekdayTasks, getTranslation('taskDeclensions').split(','))})`,
+                    activity: `${getTranslation('houseTasks')} (${maxWeekdayTasks} ${declension(maxWeekdayTasks, getTranslation('taskDeclensions').split(','))})`,
                     duration: taskTime,
                 });
                 currentTime += taskTime;
@@ -2215,7 +2366,7 @@
             if (freeTime > 0) {
                 schedule.push({
                     time: formatTime(currentTime),
-                    activity: '😌 ' + getTranslation('freeTime'),
+                    activity: getTranslation('freeTime'),
                     duration: freeTime,
                 });
                 currentTime = freeTimeEnd;
@@ -2223,10 +2374,25 @@
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🌙 ' + getTranslation('eveningRitualSchedule'),
+                activity: getTranslation('eveningRitualSchedule'),
                 duration: evening,
             });
 
+            return schedule;
+        }
+
+        function timeToDecimal(time) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours + minutes / 60;
+        }
+
+        function timeToDecimal(time) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours + minutes / 60;
+        }
+
+        function generateWeekdaySchedule(wakeTime, sleepTime) {
+            const schedule = generateSingleWeekdayScheduleArray(wakeTime, sleepTime, true);
             document.getElementById('weekdaySchedule').innerHTML = generateScheduleHTML(schedule);
         }
 
@@ -2260,7 +2426,7 @@
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🌅 ' + getTranslation('morningRitualSchedule'),
+                activity: getTranslation('morningRitualSchedule'),
                 duration: morning,
             });
             currentTime += morning;
@@ -2268,7 +2434,7 @@
             const breakfastTime = food / 14;
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🍽️ ' + getTranslation('breakfast'),
+                activity: getTranslation('breakfast'),
                 duration: breakfastTime,
             });
             currentTime += breakfastTime;
@@ -2277,7 +2443,7 @@
                 const sportPerDay = sport / sportDays;
                 schedule.push({
                     time: formatTime(currentTime),
-                    activity: '🏃 ' + getTranslation('sportWalk'),
+                    activity: getTranslation('sportWalk'),
                     duration: sportPerDay,
                 });
                 currentTime += sportPerDay;
@@ -2287,7 +2453,7 @@
             if (taskTime > 0) {
                 schedule.push({
                     time: formatTime(currentTime),
-                    activity: `🏠 ${getTranslation('houseTasks')} (${weekendTasks} ${declension(weekendTasks, getTranslation('taskDeclensions').split(','))})`,
+                    activity: `${getTranslation('houseTasks')} (${weekendTasks} ${declension(weekendTasks, getTranslation('taskDeclensions').split(','))})`,
                     duration: taskTime,
                 });
                 currentTime += taskTime;
@@ -2296,21 +2462,21 @@
             const lunchBreakTime = breaks / 14;
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '☕ ' + getTranslation('lunchBreak'),
+                activity: getTranslation('lunchBreak'),
                 duration: lunchBreakTime,
             });
             currentTime += lunchBreakTime;
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '😌 ' + getTranslation('freeTime'),
+                activity: getTranslation('freeTime'),
                 duration: 2,
             });
             currentTime += 2;
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🍽️ ' + getTranslation('dinner'),
+                activity: getTranslation('dinner'),
                 duration: breakfastTime,
             });
             currentTime += breakfastTime;
@@ -2326,7 +2492,7 @@
             if (freeTime > 0) {
                 schedule.push({
                     time: formatTime(currentTime),
-                    activity: '😌 ' + getTranslation('freeTime'),
+                    activity: getTranslation('freeTime'),
                     duration: freeTime,
                 });
                 currentTime = freeTimeEnd;
@@ -2334,7 +2500,7 @@
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🌙 ' + getTranslation('eveningRitualSchedule'),
+                activity: getTranslation('eveningRitualSchedule'),
                 duration: evening,
             });
 
@@ -2403,60 +2569,6 @@
             `;
 
             document.getElementById('weeklyDistribution').innerHTML = html;
-        }
-
-        function generateDailyBreakdown() {
-            const weekdays = currentLang === 'ru'
-                ? ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-                : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-            const shortDays = currentLang === 'ru' ? ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
-            const sport = parseFloat(document.getElementById('sport').value) || 0;
-            const duration = parseFloat(document.getElementById('duration').value) || 1;
-            const weeklyTasks = parseInt(document.getElementById('weeklyTasks').value) || 0;
-            const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
-
-            const sportScheduleDays = getSportDays();
-            const totalWeekdayTasks = maxWeekdayTasks * 5;
-            const remainingTasks = Math.max(0, weeklyTasks - totalWeekdayTasks);
-            const weekendTasksPerDay = Math.ceil(remainingTasks / 2);
-
-            let html = '';
-
-            for (let i = 0; i < 7; i++) {
-                const isWeekend = i >= 5;
-                const isSportDay = sportScheduleDays.includes(i);
-                const dayTasks = isWeekend ? weekendTasksPerDay : maxWeekdayTasks;
-                const sportTime = isSportDay && sport > 0 ? (sport / sportDays).toFixed(1) : 0;
-
-                let scheduleClass = 'day-schedule';
-                if (isWeekend) scheduleClass += ' weekend';
-                if (isSportDay) scheduleClass += ' sport-day';
-
-                const tasksLabel = currentLang === 'ru' ? 'Задач' : 'Tasks';
-                const sportLabel = currentLang === 'ru' ? 'Спорт' : 'Sport';
-                const weekendText = currentLang === 'ru' ? 'Выходной - больше отдыха!' : 'Weekend - more rest!';
-                const workdayText = currentLang === 'ru' ? 'Рабочий день' : 'Workday';
-
-                html += `
-                    <div class="${scheduleClass}">
-                        <div class="day-title">
-                            ${weekdays[i]} (${shortDays[i]})
-                            ${isSportDay ? '🏃' : ''}
-                            ${isWeekend ? '😎' : '💼'}
-                        </div>
-                        <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                            🏠 ${tasksLabel}: ${dayTasks} (${(dayTasks * duration).toFixed(1)}${currentLang === 'ru' ? 'ч' : 'h'})<br>
-                            ${sportTime > 0 ? `🏃 ${sportLabel}: ${sportTime}${currentLang === 'ru' ? 'ч' : 'h'}<br>` : ''}
-                            ${isWeekend ? `😎 ${weekendText}` : `💼 ${workdayText}`}
-                        </div>
-                    </div>
-                `;
-            }
-
-            document.getElementById('dailyBreakdown').innerHTML = html;
         }
 
         function generateScheduleHTML(schedule) {
