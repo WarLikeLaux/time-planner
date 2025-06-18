@@ -1629,7 +1629,9 @@
                 sportDays: '📅 Дней спорта в неделю',
                 sleepHours: '😴 Сон (ч/день)',
                 morningRitual: '🌅 Утренний ритуал (ч/день)',
+                morningRitualSchedule: '🌅 Утренний ритуал',
                 eveningRitual: '🌙 Вечерний ритуал (ч/день)',
+                eveningRitualSchedule: '🌙 Вечерний ритуал',
                 dailySchedule: '⏰ Режим дня',
                 wakeUp: 'Подъем',
                 bedTime: 'Сон',
@@ -1728,7 +1730,9 @@
                 sportDays: '📅 Sport days per week',
                 sleepHours: '😴 Sleep (h/day)',
                 morningRitual: '🌅 Morning ritual (h/day)',
+                morningRitualSchedule: '🌅 Morning ritual',
                 eveningRitual: '🌙 Evening ritual (h/day)',
+                eveningRitualSchedule: '🌙 Evening ritual',
                 dailySchedule: '⏰ Daily schedule',
                 wakeUp: 'Wake up',
                 bedTime: 'Bedtime',
@@ -2138,7 +2142,7 @@
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🌅 ' + getTranslation('morningRitual'),
+                activity: '🌅 ' + getTranslation('morningRitualSchedule'),
                 duration: morning,
             });
             currentTime += morning;
@@ -2219,7 +2223,7 @@
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🌙 ' + getTranslation('eveningRitual'),
+                activity: '🌙 ' + getTranslation('eveningRitualSchedule'),
                 duration: evening,
             });
 
@@ -2256,7 +2260,7 @@
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🌅 ' + getTranslation('morningRitual'),
+                activity: '🌅 ' + getTranslation('morningRitualSchedule'),
                 duration: morning,
             });
             currentTime += morning;
@@ -2330,7 +2334,7 @@
 
             schedule.push({
                 time: formatTime(currentTime),
-                activity: '🌙 ' + getTranslation('eveningRitual'),
+                activity: '🌙 ' + getTranslation('eveningRitualSchedule'),
                 duration: evening,
             });
 
