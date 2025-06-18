@@ -279,12 +279,9 @@
         }
 
         .priority-section {
-            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
-            border: 1px solid #fde047;
+            padding: 20px;
+            background: var(--bg-tertiary);
             border-radius: var(--radius-md);
-            padding: 14px;
-            margin: 12px 0;
-            grid-column: 1 / -1;
         }
 
         .priority-grid {
@@ -1288,6 +1285,28 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .clear-data-section {
+            padding: 20px;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .clear-data-btn {
+            padding: 10px 20px;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .clear-data-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
     </style>
 </head>
 
@@ -1495,6 +1514,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="clear-data-section">
+                    <button class="clear-data-btn" onclick="clearAllData()" data-i18n="clearData">🗑️ Очистить все данные</button>
                 </div>
             </div>
 
@@ -1861,6 +1883,7 @@
                 planTip2: 'Weekly Review: анализ прошедшей недели',
                 planTip3: 'MIT (Most Important Tasks): 3 главные задачи дня',
                 planTip4: 'Планирование на завтра с вечера',
+                clearData: '🗑️ Очистить все данные',
             },
             en: {
                 title: '⏰ Programmer Time Planner',
@@ -1965,6 +1988,7 @@
                 planTip2: 'Weekly Review: analyze the past week',
                 planTip3: 'MIT (Most Important Tasks): 3 main tasks of the day',
                 planTip4: 'Plan tomorrow in the evening',
+                clearData: '🗑️ Clear all data',
             },
         };
 
@@ -2036,8 +2060,8 @@
                 morning: 1,
                 evening: 1,
                 weeklyTasks: 10,
-                duration: 1.5,
-                maxWeekdayTasks: 2,
+                duration: 1,
+                maxWeekdayTasks: 1,
                 wakeTime: '07:00',
                 sleepTime: '23:00',
             };
@@ -2883,6 +2907,11 @@
             if ('Notification' in window && Notification.permission === 'default') {
                 Notification.requestPermission();
             }
+        }
+
+        function clearAllData() {
+            localStorage.clear();
+            location.reload();
         }
 
         document.addEventListener('DOMContentLoaded', function () {
