@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Programmer Time Planner - Optimize your daily schedule">
     <title data-i18n="title">Планировщик времени программиста</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' r='28' fill='%230f172a' stroke='%233b82f6' stroke-width='4'/%3E%3Cpath d='M32 18V32L42 38' stroke='%233b82f6' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"/>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' r='28' fill='%230f172a' stroke='%233b82f6' stroke-width='4'/%3E%3Cpath d='M32 18V32L42 38' stroke='%233b82f6' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
     <style>
         :root {
             --primary-color: #3b82f6;
@@ -1085,6 +1086,21 @@
             align-items: flex-start;
             gap: 12px;
             box-shadow: var(--shadow-lg);
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            animation: alertFadeIn 0.5s ease;
+        }
+
+        @keyframes alertFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .alert-warning {
@@ -1237,9 +1253,14 @@
             }
 
             .schedule-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
+                padding: 6px 4vw;
+                margin-bottom: 4px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                width: 100%;
             }
 
             .schedule-time {
@@ -1282,8 +1303,36 @@
         }
 
         @media (max-width: 480px) {
-            .controls-row {
-                grid-template-columns: 1fr;
+            .header h1 {
+                font-size: 15px;
+                gap: 4px;
+                max-width: 60%;
+            }
+
+            .header-content {
+                gap: 4px;
+            }
+
+            .task-input-section {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .task-input-section input,
+            .task-input-section button {
+                width: 100%;
+                font-size: 13px;
+                padding: 8px 6px;
+            }
+
+            .task-btn {
+                padding: 4px 6px;
+                font-size: 10px;
+            }
+
+            .schedule-item {
+                padding: 4px 8px;
+                font-size: 12px;
             }
         }
 
@@ -1308,18 +1357,309 @@
             opacity: 0.9;
             transform: scale(1.02);
         }
+
+        @media (max-width: 600px) {
+
+            html,
+            body {
+                width: 100vw;
+                overflow-x: hidden;
+            }
+
+            .container {
+                max-width: 100vw;
+                width: 100vw;
+                margin: 0;
+                padding: 0;
+            }
+
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 4px;
+                width: 100vw;
+                margin: 0;
+            }
+
+            .controls-panel,
+            .results-area,
+            .content-card {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 0;
+                width: 100vw;
+                margin: 0;
+            }
+
+            .controls-grid {
+                padding: 8px 4vw 12px 4vw;
+                gap: 8px;
+            }
+
+            .panel-header {
+                padding: 8px 4vw;
+            }
+
+            .panel-title {
+                font-size: 12px;
+            }
+
+            .controls-row,
+            .controls-row-2 {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .priority-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .input-label {
+                font-size: 11px;
+            }
+
+            .value-input,
+            .time-input {
+                height: 26px;
+                font-size: 12px;
+            }
+
+            .input-controls {
+                height: 28px;
+            }
+
+            .control-btn {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+
+            .header {
+                padding: 8px 0;
+            }
+
+            .header-content {
+                padding: 0 4vw;
+                flex-direction: row !important;
+                align-items: center;
+                justify-content: space-between;
+                gap: 4px;
+                width: 100%;
+                display: flex;
+            }
+
+            .header h1 {
+                font-size: 14px;
+                gap: 4px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 70%;
+                margin: 0;
+            }
+
+            .header-controls {
+                gap: 4px;
+                flex-shrink: 0;
+                display: flex;
+                margin: 0;
+            }
+
+            .theme-toggle,
+            .lang-toggle {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .schedule-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                font-size: 11px;
+                scrollbar-width: none;
+                white-space: nowrap;
+                display: flex;
+                flex-wrap: nowrap;
+                padding: 0 4vw;
+                gap: 2px;
+                justify-content: flex-start;
+                background: var(--bg-tertiary);
+                height: 40px;
+            }
+
+            .schedule-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab-btn {
+                padding: 0 12px;
+                font-size: 11px;
+                flex-shrink: 0;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: auto;
+                border-radius: 0;
+                border-bottom: 2px solid transparent;
+            }
+
+            .tab-btn.active {
+                background: transparent;
+                border-bottom: 2px solid var(--primary-color);
+            }
+
+            .tab-content {
+                padding: 6px 4vw;
+            }
+
+            .stats-grid,
+            .tips-grid,
+            .analytics-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .stat-card,
+            .tip-card,
+            .analytics-card {
+                padding: 8px 4vw;
+                min-height: 60px;
+                border-radius: 0;
+                margin: 0;
+            }
+
+            .weekly-distribution {
+                grid-template-columns: 1fr 1fr;
+                gap: 4px;
+            }
+
+            .day-card {
+                padding: 6px 2vw;
+            }
+
+            .timer-circle {
+                width: 100px;
+                height: 100px;
+            }
+
+            .timer-time {
+                font-size: 15px;
+            }
+
+            .timer-btn {
+                padding: 6px 0;
+                font-size: 11px;
+            }
+
+            .alert-container {
+                bottom: 2px;
+                right: 4vw;
+                left: 4vw;
+                max-width: none;
+            }
+
+            .schedule-item {
+                padding: 6px 4vw;
+                margin-bottom: 4px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .schedule-time {
+                font-size: 11px;
+                min-width: 80px;
+                flex-shrink: 0;
+            }
+
+            .schedule-activity {
+                font-size: 12px;
+                flex: 1;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin: 0 8px;
+            }
+
+            .schedule-duration {
+                font-size: 10px;
+                padding: 3px 8px;
+                flex-shrink: 0;
+                margin-left: 0;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 15px;
+                gap: 4px;
+                max-width: 60%;
+            }
+
+            .header-content {
+                gap: 4px;
+            }
+
+            .task-input-section {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .task-input-section input,
+            .task-input-section button {
+                width: 100%;
+                font-size: 13px;
+                padding: 8px 6px;
+            }
+
+            .task-btn {
+                padding: 4px 6px;
+                font-size: 10px;
+            }
+
+            .schedule-item {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .header h1 {
+                font-size: 12px;
+            }
+
+            .panel-title,
+            .input-label {
+                font-size: 11px;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+
+            .timer-time {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="header">
         <div class="header-content">
-            <h1 data-i18n="title"><span style="display:inline-block;vertical-align:middle;margin-right:8px;">  
-                <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
-                  <circle cx="32" cy="32" r="28" fill="#0f172a" stroke="#3b82f6" stroke-width="4"/>
-                  <path d="M32 18V32L42 38" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>⏰ Планировщик времени программиста</h1>
+            <h1 data-i18n="title"><span style="display:inline-block;vertical-align:middle;margin-right:8px;">
+                    <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;">
+                        <circle cx="32" cy="32" r="28" fill="#0f172a" stroke="#3b82f6" stroke-width="4" />
+                        <path d="M32 18V32L42 38" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </span>⏰ Планировщик времени программиста</h1>
             <div class="header-controls">
                 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
                 <button class="lang-toggle" onclick="toggleLanguage()" aria-label="Toggle language">EN</button>
@@ -1522,7 +1862,8 @@
                     </div>
                 </div>
                 <div class="clear-data-section">
-                    <button class="clear-data-btn" onclick="clearAllData()" data-i18n="clearData">🗑️ Очистить все данные</button>
+                    <button class="clear-data-btn" onclick="clearAllData()" data-i18n="clearData">🗑️ Очистить все
+                        данные</button>
                 </div>
             </div>
 
@@ -2263,7 +2604,7 @@
             document.getElementById('efficiencyPercent').textContent = `${Math.round(efficiency)}%`;
         }
 
-        function showAlerts(totalNeeded, availableHours, restHours, duration, tasks, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay) {
+        function showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay) {
             const alertsDiv = document.getElementById('alerts');
             alertsDiv.innerHTML = '';
 
@@ -2271,23 +2612,52 @@
                 const msg = currentLang === 'ru'
                     ? `⚠️ Нужно ${totalNeeded.toFixed(1)} ч, доступно ${availableHours.toFixed(1)} ч. Уменьши количество задач или время на выполнение.`
                     : `⚠️ Need ${totalNeeded.toFixed(1)}h, available ${availableHours.toFixed(1)}h. Reduce tasks or duration.`;
-                alertsDiv.innerHTML = `<div class="alert alert-warning">${msg}</div>`;
+                showAlert(msg, 'warning');
             } else if (restHours < 5) {
                 const msg = currentLang === 'ru'
                     ? `⚠️ Критически мало времени на отдых (${restHours.toFixed(1)} ч). Высокий риск выгорания!`
                     : `⚠️ Critically low rest time (${restHours.toFixed(1)}h). High burnout risk!`;
-                alertsDiv.innerHTML = `<div class="alert alert-warning">${msg}</div>`;
+                showAlert(msg, 'warning');
             } else if (weekendTasksPerDay > 4) {
                 const msg = currentLang === 'ru'
                     ? `⚠️ Слишком много задач на выходные (${weekendTasksPerDay}/день). Увеличь максимум задач в будни.`
                     : `⚠️ Too many weekend tasks (${weekendTasksPerDay}/day). Increase weekday task limit.`;
-                alertsDiv.innerHTML = `<div class="alert alert-warning">${msg}</div>`;
+                showAlert(msg, 'warning');
             } else if (restHours > 25) {
                 const msg = currentLang === 'ru'
                     ? `✅ Отличный баланс! У вас есть ${restHours.toFixed(1)} часов свободного времени в неделю.`
                     : `✅ Excellent balance! You have ${restHours.toFixed(1)} hours of free time per week.`;
-                alertsDiv.innerHTML = `<div class="alert alert-success">${msg}</div>`;
+                showAlert(msg, 'success');
             }
+        }
+
+        // New function to show alerts with auto-close after 5 seconds
+        function showAlert(message, type) {
+            const alertsDiv = document.getElementById('alerts');
+            const alertId = 'alert-' + Date.now();
+            const alertElement = document.createElement('div');
+            alertElement.id = alertId;
+            alertElement.className = `alert alert-${type}`;
+            alertElement.innerHTML = message;
+            alertsDiv.appendChild(alertElement);
+            
+            // Auto-close after 5 seconds
+            setTimeout(() => {
+                const alertToRemove = document.getElementById(alertId);
+                if (alertToRemove) {
+                    // Add fade-out animation
+                    alertToRemove.style.opacity = '0';
+                    alertToRemove.style.transform = 'translateY(20px)';
+                    alertToRemove.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    
+                    // Remove from DOM after animation completes
+                    setTimeout(() => {
+                        if (alertToRemove.parentNode) {
+                            alertToRemove.parentNode.removeChild(alertToRemove);
+                        }
+                    }, 500);
+                }
+            }, 5000);
         }
 
         function generateSchedules() {
