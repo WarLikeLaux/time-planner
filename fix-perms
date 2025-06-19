@@ -1,0 +1,24 @@
+#!/bin/bash
+
+read -p "Username: " USERNAME
+
+groupadd -f devs
+if ! id "$USERNAME" &>/dev/null; then
+    useradd -m -s /bin/bash -G devs $USERNAME
+else
+    usermod -a -G devs $USERNAME
+fi
+usermod -a -G devs www-data
+
+GROUP="devs"
+OWNER="$USERNAME"
+
+setfacl -bR .
+chown -R $OWNER:$GROUP .
+find . -type d -exec chmod 2775 {} \;
+find . -type f -exec chmod 0664 {} \;
+[ -d vendor/bin ] && chmod -R 775 vendor/bin
+
+for TMP in runtime web/assets cache tests/_output; do
+    find . -type d -path "*/$TMP" -exec chmod -R 2777 {} \;
+done
