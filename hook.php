@@ -28,7 +28,13 @@ if (!hash_equals($signature, $_SERVER['HTTP_X_HUB_SIGNATURE_256'])) {
     exit;
 }
 
-exec("cd $projectDir && git pull origin $branch 2>&1", $output, $code);
+exec("cd $projectDir && /usr/bin/git pull origin $branch 2>&1", $output, $code);
 
-http_response_code($code === 0 ? 200 : 500);
-echo $code === 0 ? 'OK' : 'Failed';
+if ($code === 0) {
+    http_response_code(200);
+    echo "OK";
+} else {
+    http_response_code(500);
+    $errorOutput = !empty($output) ? implode("\n", $output) : 'Unknown error';
+    echo "Failed (exit code $code):\n$errorOutput";
+}
