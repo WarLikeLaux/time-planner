@@ -1,4 +1,4 @@
-const CACHE_NAME = 'timeplanner-v2.0.0'
+const CACHE_NAME = 'timeplanner-v2.0.1'
 const STATIC_ASSETS = ['./index.html', './manifest.json']
 const DEBUG = false
 
