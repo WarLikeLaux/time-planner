@@ -9,7 +9,6 @@
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' r='28' fill='%230f172a' stroke='%233b82f6' stroke-width='4'/%3E%3Cpath d='M32 18V32L42 38' stroke='%233b82f6' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 
-    <!-- PWA Manifest -->
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#3b82f6">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -75,7 +74,6 @@
             --gradient-warning: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
         }
 
-        /* Auto dark theme based on system preference */
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme='light']) {
                 --text-primary: #f8fafc;
@@ -218,7 +216,6 @@
             outline: none;
         }
 
-        /* High contrast mode support */
         @media (prefers-contrast: high) {
             :root {
                 --border-color: #000000;
@@ -231,7 +228,6 @@
             }
         }
 
-        /* Reduced motion support */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -2067,7 +2063,7 @@
                             данных</button>
                         <input type="file" id="importFile" accept=".json" style="display: none;"
                             onchange="handleFileImport(event)">
-                        <button class="clear-data-btn" onclick="clearAllData()" data-i18n="clearData">🗑️ Очистить все
+                        <button class="clear-data-btn" onclick="clearAllData()" data-i18n="clearData">🗑️ Очистить
                             данные</button>
                     </div>
                 </div>
@@ -2436,7 +2432,7 @@
                 planTip2: 'Weekly Review: анализ прошедшей недели',
                 planTip3: 'MIT (Most Important Tasks): 3 главные задачи дня',
                 planTip4: 'Планирование на завтра с вечера',
-                clearData: '🗑️ Очистить все данные',
+                clearData: '🗑️ Очистить данные',
                 exportData: '📤 Экспорт данных',
                 importData: '📥 Импорт данных',
                 showMore: 'Показать еще',
@@ -2580,7 +2576,6 @@
                 }
             });
 
-            // Update install button if it exists
             updateInstallButtonText();
 
             if (document.getElementById('scheduleCard').style.display !== 'none') {
@@ -2594,7 +2589,6 @@
             document.querySelector('.lang-toggle').textContent = currentLang === 'ru' ? 'EN' : 'RU';
             updateTexts();
 
-            // Update install button text if it exists
             updateInstallButtonText();
         }
 
@@ -2702,7 +2696,6 @@
             saveSettings();
             calculateSleep();
 
-            // Debounce expensive calculations
             clearTimeout(calculationDebounceTimer);
             calculationDebounceTimer = setTimeout(() => {
                 calculateTasks();
@@ -2827,7 +2820,7 @@
         }
 
         function updateAnalytics(work, tasksTime, restTime, sleepHours) {
-            // If no parameters provided, get current values from the form
+
             if (arguments.length === 0) {
                 work = parseFloat(document.getElementById('work').value) || 0;
                 tasksTime = parseFloat(document.getElementById('weeklyTasks').value) * parseFloat(document.getElementById('duration').value) || 0;
@@ -2846,7 +2839,7 @@
             document.getElementById('restPercent').textContent = `${restPercent}%`;
             document.getElementById('sleepPercent').textContent = `${sleepPercent}%`;
 
-            // Calculate task completion metrics
+
             const completedTasks = tasks.filter(t => t.completed).length;
             const totalTasks = Math.max(tasks.length, 1);
             const progressPercent = Math.round((completedTasks / totalTasks) * 100);
@@ -2867,9 +2860,9 @@
                 progressText.textContent = `${completedTasks}/${totalTasks} ${getTranslation('tasks').toLowerCase()}`;
             }
 
-            // Enhanced efficiency calculation
+
             const workLifeBalance = calculateWorkLifeBalance(work, restTime, sleepHours);
-            const availableTime = 168 - work - (sleepHours * 7); // Calculate available hours in week
+            const availableTime = 168 - work - (sleepHours * 7);
             const taskLoad = Math.min(100, (tasksTime / Math.max(availableTime, 1)) * 100);
             const sleepQuality = sleepHours >= 7 && sleepHours <= 9 ? 100 : Math.max(0, 100 - Math.abs(sleepHours - 8) * 15);
 
@@ -2882,7 +2875,7 @@
                     efficiency >= 60 ? 'efficiency-good' : 'efficiency-needs-improvement';
             }
 
-            // Store analytics for trends
+
             const today = new Date().toISOString().split('T')[0];
             const analyticsHistory = JSON.parse(localStorage.getItem('planner_analytics_history') || '{}');
             analyticsHistory[today] = {
@@ -2892,7 +2885,7 @@
                 sleepQuality
             };
 
-            // Keep only last 30 days
+
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
             Object.keys(analyticsHistory).forEach(date => {
@@ -2963,7 +2956,7 @@
             }
         }
 
-        // New function to show alerts with auto-close after 5 seconds
+
         function showAlert(message, type) {
             const alertsDiv = document.getElementById('alerts');
             const alertId = 'alert-' + Date.now();
@@ -2973,16 +2966,16 @@
             alertElement.innerHTML = message;
             alertsDiv.appendChild(alertElement);
 
-            // Auto-close after 5 seconds
+
             setTimeout(() => {
                 const alertToRemove = document.getElementById(alertId);
                 if (alertToRemove) {
-                    // Add fade-out animation
+
                     alertToRemove.style.opacity = '0';
                     alertToRemove.style.transform = 'translateY(20px)';
                     alertToRemove.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
 
-                    // Remove from DOM after animation completes
+
                     setTimeout(() => {
                         if (alertToRemove.parentNode) {
                             alertToRemove.parentNode.removeChild(alertToRemove);
@@ -3561,7 +3554,7 @@
         function completeTimer() {
             pauseTimer();
 
-            // Show completion notification
+
             const isBreak = timerState.mode !== 'focus';
             const title = isBreak
                 ? (currentLang === 'ru' ? 'Перерыв завершен!' : 'Break Complete!')
@@ -3592,7 +3585,7 @@
         }
 
         function showTimerNotification(title, body) {
-            // Browser notification
+
             if ('Notification' in window && Notification.permission === 'granted') {
                 const notification = new Notification(title, {
                     body: body,
@@ -3603,13 +3596,13 @@
                     vibrate: [200, 100, 200]
                 });
 
-                // Auto-close after 5 seconds
+
                 setTimeout(() => {
                     notification.close();
                 }, 5000);
             }
 
-            // Visual alert
+
             showAlert(`${title} ${body}`, 'success');
         }
 
@@ -3656,7 +3649,7 @@
                     }
                 };
 
-                // Export all settings
+
                 const settingsKeys = ['work', 'breaks', 'food', 'sport', 'sportDays', 'morning', 'evening',
                     'weeklyTasks', 'duration', 'maxWeekdayTasks', 'wakeTime', 'sleepTime',
                     'planner_lang', 'planner_theme'];
@@ -3702,26 +3695,26 @@
                         throw new Error('Invalid backup file format');
                     }
 
-                    // Confirm import
+
                     const confirmMessage = currentLang === 'ru'
                         ? 'Это действие заменит все текущие данные. Продолжить?'
                         : 'This will replace all current data. Continue?';
 
                     if (!confirm(confirmMessage)) return;
 
-                    // Import settings
+
                     Object.entries(data.settings).forEach(([key, value]) => {
                         const storageKey = key.startsWith('planner_') ? key : `planner_${key}`;
                         localStorage.setItem(storageKey, value);
                     });
 
-                    // Import tasks
+
                     if (data.tasks && Array.isArray(data.tasks)) {
                         tasks = data.tasks;
                         saveTasks();
                     }
 
-                    // Import timer stats
+
                     if (data.timerStats && data.timerStats.completedPomodoros) {
                         timerState.completedPomodoros = data.timerStats.completedPomodoros;
                         localStorage.setItem('planner_pomodoros', timerState.completedPomodoros.toString());
@@ -3740,7 +3733,7 @@
             };
 
             reader.readAsText(file);
-            // Reset file input
+
             event.target.value = '';
         }
 
@@ -3780,7 +3773,7 @@
             }
         });
 
-        // Service Worker Registration
+
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
@@ -3793,22 +3786,22 @@
             }
         }
 
-        // PWA Installation
+
         let deferredPrompt;
         let manualInstallButton = null;
 
         function initPWA() {
-            // Check for Yandex browser or other browsers that may not support beforeinstallprompt
+
             const isYandex = navigator.userAgent.includes('YaBrowser');
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-            // Don't show install button if already installed
+
             if (isStandalone) {
                 console.log('App is already installed');
                 return;
             }
 
-            // Show install button for Yandex and other browsers after delay
+
             if (isYandex) {
                 setTimeout(() => {
                     if (!document.querySelector('.install-pwa-btn')) {
@@ -3817,7 +3810,7 @@
                     }
                 }, 1000);
             } else {
-                // For other browsers, wait a bit longer to see if beforeinstallprompt fires
+
                 setTimeout(() => {
                     if (!document.querySelector('.install-pwa-btn') && !deferredPrompt) {
                         console.log('Showing manual install button (no beforeinstallprompt)');
@@ -3857,7 +3850,7 @@
         }
 
         function showManualInstallButton() {
-            if (manualInstallButton) return; // Already shown
+            if (manualInstallButton) return;
 
             manualInstallButton = document.createElement('button');
             manualInstallButton.className = 'install-pwa-btn manual-install';

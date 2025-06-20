@@ -1,0 +1,14 @@
+{
+	"port": 3000,
+	"host": "0.0.0.0",
+	"root": "./",
+	"open": true,
+	"ignore": "node_modules,tests,.git,dist",
+	"file": "index.html",
+	"wait": 500,
+	"mount": [],
+	"logLevel": 2,
+	"cors": true,
+	"noBrowser": false,
+	"noCssInject": false
+}

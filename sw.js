@@ -1,129 +1,120 @@
-const CACHE_NAME = 'timeplanner-v2.0.0';
-const STATIC_ASSETS = ['./index.html', './manifest.json'];
+const CACHE_NAME = 'timeplanner-v2.0.0'
+const STATIC_ASSETS = ['./index.html', './manifest.json']
 
-// Install event - cache static assets
 self.addEventListener('install', event => {
-	event.waitUntil(
-		caches
-			.open(CACHE_NAME)
-			.then(cache => {
-				console.log('Service Worker: Caching static assets');
-				return cache.addAll(STATIC_ASSETS);
-			})
-			.then(() => {
-				console.log('Service Worker: Skip waiting');
-				self.skipWaiting();
-			})
-	);
-});
+  event.waitUntil(
+    caches
+      .open(CACHE_NAME)
+      .then(cache => {
+        console.log('Service Worker: Caching static assets')
+        return cache.addAll(STATIC_ASSETS)
+      })
+      .then(() => {
+        console.log('Service Worker: Skip waiting')
+        self.skipWaiting()
+      })
+  )
+})
 
-// Activate event - clean up old caches
 self.addEventListener('activate', event => {
-	event.waitUntil(
-		caches
-			.keys()
-			.then(cacheNames => {
-				return Promise.all(
-					cacheNames.map(cacheName => {
-						if (cacheName !== CACHE_NAME) {
-							console.log('Service Worker: Deleting old cache', cacheName);
-							return caches.delete(cacheName);
-						}
-					})
-				);
-			})
-			.then(() => {
-				console.log('Service Worker: Claiming clients');
-				self.clients.claim();
-			})
-	);
-});
+  event.waitUntil(
+    caches
+      .keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== CACHE_NAME) {
+              console.log('Service Worker: Deleting old cache', cacheName)
+              return caches.delete(cacheName)
+            }
+            return null
+          })
+        )
+      })
+      .then(() => {
+        console.log('Service Worker: Claiming clients')
+        return self.clients.claim()
+      })
+  )
+})
 
-// Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', event => {
-	// Only handle GET requests
-	if (event.request.method !== 'GET') return;
+  if (event.request.method !== 'GET') return
+  if (!event.request.url.startsWith(self.location.origin)) return
 
-	// Skip cross-origin requests
-	if (!event.request.url.startsWith(self.location.origin)) return;
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return (
+        response ||
+                fetch(event.request)
+                  .then(fetchResponse => {
+                    if (fetchResponse.status === 200) {
+                      const responseToCache = fetchResponse.clone()
+                      caches.open(CACHE_NAME).then(cache => {
+                        cache.put(event.request, responseToCache)
+                      })
+                    }
+                    return fetchResponse
+                  })
+                  .catch(() => {
+                    if (event.request.destination === 'document') {
+                      return caches.match('./index.html')
+                    }
+                    return null
+                  })
+      )
+    })
+  )
+})
 
-	event.respondWith(
-		caches.match(event.request).then(response => {
-			// Return cached version or fetch from network
-			return (
-				response ||
-				fetch(event.request)
-					.then(fetchResponse => {
-						// Cache successful responses
-						if (fetchResponse.status === 200) {
-							const responseToCache = fetchResponse.clone();
-							caches.open(CACHE_NAME).then(cache => {
-								cache.put(event.request, responseToCache);
-							});
-						}
-						return fetchResponse;
-					})
-					.catch(() => {
-						// Fallback for offline mode
-						if (event.request.destination === 'document') {
-							return caches.match('./index.html');
-						}
-					})
-			);
-		})
-	);
-});
-
-// Background sync for data persistence
 self.addEventListener('sync', event => {
-	console.log('Service Worker: Background sync triggered');
+  console.log('Service Worker: Background sync triggered')
 
-	if (event.tag === 'background-sync-tasks') {
-		event.waitUntil(
-			// Sync tasks or settings if needed
-			Promise.resolve()
-		);
-	}
-});
+  if (event.tag === 'background-sync-tasks') {
+    event.waitUntil(syncTasks())
+  }
+})
 
-// Push notifications for timer completion
-self.addEventListener('push', event => {
-	if (event.data) {
-		const data = event.data.json();
-		const options = {
-			body: data.body,
-			icon: 'data:image/svg+xml,%3Csvg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="96" cy="96" r="84" fill="%230f172a" stroke="%233b82f6" stroke-width="12"/%3E%3Cpath d="M96 54V96L126 114" stroke="%233b82f6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E',
-			badge:
-				'data:image/svg+xml,%3Csvg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="36" cy="36" r="30" fill="%233b82f6"/%3E%3Cpath d="M36 18V36L48 42" stroke="white" stroke-width="4" stroke-linecap="round"/%3E%3C/svg%3E',
-			vibrate: [200, 100, 200],
-			tag: 'timer-notification',
-			requireInteraction: true,
-			actions: [
-				{
-					action: 'start-break',
-					title: 'Start Break',
-				},
-				{
-					action: 'dismiss',
-					title: 'Dismiss',
-				},
-			],
-		};
+async function syncTasks () {
+  try {
+    const clients = await self.clients.matchAll()
+    clients.forEach(client => {
+      client.postMessage({
+        type: 'SYNC_TASKS',
+        data: 'Background sync completed'
+      })
+    })
+  } catch (error) {
+    console.error('Background sync failed:', error)
+  }
+}
 
-		event.waitUntil(self.registration.showNotification(data.title, options));
-	}
-});
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting()
+  }
 
-// Handle notification clicks
+  if (event.data && event.data.type === 'GET_VERSION') {
+    event.ports[0].postMessage({
+      type: 'VERSION',
+      version: CACHE_NAME
+    })
+  }
+})
+
 self.addEventListener('notificationclick', event => {
-	event.notification.close();
+  event.notification.close()
 
-	if (event.action === 'start-break') {
-		event.waitUntil(clients.openWindow('./index.html#timer'));
-	} else if (event.action === 'dismiss') {
-		// Just close the notification
-	} else {
-		// Default action - open app
-		event.waitUntil(clients.openWindow('./index.html'));
-	}
-});
+  event.waitUntil(
+    self.clients.matchAll().then(clients => {
+      if (clients.length) {
+        return clients[0].focus()
+      }
+      return self.clients.openWindow('/')
+    })
+  )
+})
+
+self.addEventListener('notificationclose', event => {
+  console.log('Notification closed:', event.notification.tag)
+})
