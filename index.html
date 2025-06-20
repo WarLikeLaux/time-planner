@@ -8,42 +8,92 @@
     <title data-i18n="title">Планировщик времени программиста</title>
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' r='28' fill='%230f172a' stroke='%233b82f6' stroke-width='4'/%3E%3Cpath d='M32 18V32L42 38' stroke='%233b82f6' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="TimePlanner">
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,%3Csvg width='192' height='192' viewBox='0 0 192 192' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='96' cy='96' r='84' fill='%230f172a' stroke='%233b82f6' stroke-width='12'/%3E%3Cpath d='M96 54V96L126 114' stroke='%233b82f6' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <style>
         :root {
             --primary-color: #3b82f6;
             --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
             --success-color: #059669;
+            --success-light: #10b981;
             --warning-color: #d97706;
+            --warning-light: #f59e0b;
             --danger-color: #dc2626;
+            --danger-light: #ef4444;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --text-muted: #94a3b8;
+            --text-inverse: #f8fafc;
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
             --bg-tertiary: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-overlay: rgba(15, 23, 42, 0.1);
             --border-color: #e2e8f0;
             --border-light: #f1f5f9;
+            --border-focus: #3b82f6;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
             --radius-sm: 6px;
             --radius-md: 8px;
             --radius-lg: 12px;
+            --radius-xl: 16px;
             --transition: all 0.15s ease;
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            --gradient-warning: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
         }
 
         [data-theme='dark'] {
             --text-primary: #f8fafc;
             --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
+            --text-inverse: #1e293b;
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
             --bg-tertiary: #334155;
+            --bg-card: #1e293b;
+            --bg-overlay: rgba(248, 250, 252, 0.1);
             --border-color: #334155;
             --border-light: #475569;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            --gradient-warning: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+        }
+
+        /* Auto dark theme based on system preference */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme='light']) {
+                --text-primary: #f8fafc;
+                --text-secondary: #cbd5e1;
+                --text-muted: #94a3b8;
+                --text-inverse: #1e293b;
+                --bg-primary: #0f172a;
+                --bg-secondary: #1e293b;
+                --bg-tertiary: #334155;
+                --bg-card: #1e293b;
+                --bg-overlay: rgba(248, 250, 252, 0.1);
+                --border-color: #334155;
+                --border-light: #475569;
+                --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+                --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+                --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+                --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+            }
         }
 
         * {
@@ -108,11 +158,73 @@
             justify-content: center;
         }
 
+        .install-pwa-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: var(--radius-md);
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: var(--transition);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .install-pwa-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
         .theme-toggle:hover,
         .lang-toggle:hover {
             border-color: var(--primary-color);
             color: var(--primary-color);
             transform: scale(1.05);
+        }
+
+        .theme-toggle:focus,
+        .lang-toggle:focus,
+        .install-pwa-btn:focus,
+        button:focus,
+        input:focus,
+        select:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Enhanced focus indicators for accessibility */
+        .tab-btn:focus,
+        .control-btn:focus,
+        .data-btn:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+                --text-secondary: #000000;
+            }
+
+            [data-theme='dark'] {
+                --border-color: #ffffff;
+                --text-secondary: #ffffff;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
         .container {
@@ -399,7 +511,7 @@
         }
 
         .content-card {
-            background: var(--bg-primary);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
             overflow: hidden;
@@ -408,6 +520,29 @@
             flex-direction: column;
             box-shadow: var(--shadow-md);
             min-height: 0;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .content-card:hover::before {
+            opacity: 1;
         }
 
         .schedule-tabs {
@@ -1020,6 +1155,22 @@
             font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .efficiency-excellent {
+            color: var(--success-color) !important;
+            text-shadow: 0 0 10px rgba(5, 150, 105, 0.3);
+        }
+
+        .efficiency-good {
+            color: var(--primary-color) !important;
+            text-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .efficiency-needs-improvement {
+            color: var(--warning-color) !important;
+            text-shadow: 0 0 8px rgba(217, 119, 6, 0.3);
         }
 
         .score-details {
@@ -1097,6 +1248,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -1336,26 +1488,70 @@
             }
         }
 
-        .clear-data-section {
+        .data-management-section {
             padding: 20px;
             border-top: 1px solid var(--border-light);
             text-align: center;
         }
 
+        .data-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .data-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .export-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .export-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .import-btn {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .import-btn:hover {
+            background: var(--success-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
         .clear-data-btn {
-            padding: 10px 20px;
+            padding: 10px 16px;
             background: var(--danger-color);
             color: white;
             border: none;
             border-radius: var(--radius-md);
             cursor: pointer;
             font-size: 14px;
+            font-weight: 500;
             transition: var(--transition);
         }
 
         .clear-data-btn:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
+            background: var(--danger-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
         @media (max-width: 600px) {
@@ -1661,8 +1857,10 @@
                     </svg>
                 </span>⏰ Планировщик времени программиста</h1>
             <div class="header-controls">
-                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
-                <button class="lang-toggle" onclick="toggleLanguage()" aria-label="Toggle language">EN</button>
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light theme"
+                    title="Toggle theme">🌙</button>
+                <button class="lang-toggle" onclick="toggleLanguage()" aria-label="Switch language"
+                    title="Switch language">EN</button>
             </div>
         </div>
     </div>
@@ -1861,9 +2059,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="clear-data-section">
-                    <button class="clear-data-btn" onclick="clearAllData()" data-i18n="clearData">🗑️ Очистить все
-                        данные</button>
+                <div class="data-management-section">
+                    <div class="data-buttons">
+                        <button class="data-btn export-btn" onclick="exportData()" data-i18n="exportData">📤 Экспорт
+                            данных</button>
+                        <button class="data-btn import-btn" onclick="importData()" data-i18n="importData">📥 Импорт
+                            данных</button>
+                        <input type="file" id="importFile" accept=".json" style="display: none;"
+                            onchange="handleFileImport(event)">
+                        <button class="clear-data-btn" onclick="clearAllData()" data-i18n="clearData">🗑️ Очистить все
+                            данные</button>
+                    </div>
                 </div>
             </div>
 
@@ -2231,6 +2437,9 @@
                 planTip3: 'MIT (Most Important Tasks): 3 главные задачи дня',
                 planTip4: 'Планирование на завтра с вечера',
                 clearData: '🗑️ Очистить все данные',
+                exportData: '📤 Экспорт данных',
+                importData: '📥 Импорт данных',
+                showMore: 'Показать еще',
             },
             en: {
                 title: '⏰ Programmer Time Planner',
@@ -2336,6 +2545,9 @@
                 planTip3: 'MIT (Most Important Tasks): 3 main tasks of the day',
                 planTip4: 'Plan tomorrow in the evening',
                 clearData: '🗑️ Clear all data',
+                exportData: '📤 Export data',
+                importData: '📥 Import data',
+                showMore: 'Show more',
             },
         };
 
@@ -2463,13 +2675,19 @@
             saveAndCalculate();
         }
 
+        let calculationDebounceTimer = null;
         function saveAndCalculate() {
             saveSettings();
             calculateSleep();
-            calculateTasks();
-            if (tasks.length > 0) {
-                saveTasks();
-            }
+
+            // Debounce expensive calculations
+            clearTimeout(calculationDebounceTimer);
+            calculationDebounceTimer = setTimeout(() => {
+                calculateTasks();
+                if (tasks.length > 0) {
+                    saveTasks();
+                }
+            }, 100);
         }
 
         function switchTab(tabName) {
@@ -2503,85 +2721,98 @@
         }
 
         function calculateTasks() {
-            const work = parseFloat(document.getElementById('work').value) || 0;
-            const breaks = parseFloat(document.getElementById('breaks').value) || 0;
-            const food = parseFloat(document.getElementById('food').value) || 0;
-            const sport = parseFloat(document.getElementById('sport').value) || 0;
-            const sleep = calculateSleep();
-            const morning = parseFloat(document.getElementById('morning').value) || 0;
-            const evening = parseFloat(document.getElementById('evening').value) || 0;
-            const weeklyTasksCount = parseFloat(document.getElementById('weeklyTasks').value) || 0;
-            const duration = parseFloat(document.getElementById('duration').value) || 0;
-            const maxWeekdayTasks = parseFloat(document.getElementById('maxWeekdayTasks').value) || 0;
+            try {
+                const work = parseFloat(document.getElementById('work').value) || 0;
+                const breaks = parseFloat(document.getElementById('breaks').value) || 0;
+                const food = parseFloat(document.getElementById('food').value) || 0;
+                const sport = parseFloat(document.getElementById('sport').value) || 0;
+                const sleep = calculateSleep();
+                const morning = parseFloat(document.getElementById('morning').value) || 0;
+                const evening = parseFloat(document.getElementById('evening').value) || 0;
+                const weeklyTasksCount = parseFloat(document.getElementById('weeklyTasks').value) || 0;
+                const duration = parseFloat(document.getElementById('duration').value) || 0;
+                const maxWeekdayTasks = parseFloat(document.getElementById('maxWeekdayTasks').value) || 0;
 
-            const totalWeekHours = 168;
-            const sleepWeek = sleep * 7;
-            const morningWeek = morning * 7;
-            const eveningWeek = evening * 7;
+                const totalWeekHours = 168;
+                const sleepWeek = sleep * 7;
+                const morningWeek = morning * 7;
+                const eveningWeek = evening * 7;
 
-            const usedHours = work + breaks + food + sport + sleepWeek + morningWeek + eveningWeek;
-            const availableHours = totalWeekHours - usedHours;
+                const usedHours = work + breaks + food + sport + sleepWeek + morningWeek + eveningWeek;
+                const availableHours = totalWeekHours - usedHours;
 
-            const totalNeeded = weeklyTasksCount * duration;
-            const restHours = availableHours - totalNeeded;
+                const totalNeeded = weeklyTasksCount * duration;
+                const restHours = availableHours - totalNeeded;
 
-            const weekdayTasksPerDay = Math.min(maxWeekdayTasks, Math.floor(weeklyTasksCount / 7));
-            const totalWeekdayTasks = weekdayTasksPerDay * 5;
-            const remainingTasks = Math.max(0, weeklyTasksCount - totalWeekdayTasks);
-            const weekendTasksPerDay = Math.ceil(remainingTasks / 2);
+                const weekdayTasksPerDay = Math.min(maxWeekdayTasks, Math.floor(weeklyTasksCount / 7));
+                const totalWeekdayTasks = weekdayTasksPerDay * 5;
+                const remainingTasks = Math.max(0, weeklyTasksCount - totalWeekdayTasks);
+                const weekendTasksPerDay = Math.ceil(remainingTasks / 2);
 
-            const avgTasksPerDay = (weeklyTasksCount / 7).toFixed(1);
+                const avgTasksPerDay = (weeklyTasksCount / 7).toFixed(1);
 
-            document.getElementById('availableHours').textContent = availableHours.toFixed(1);
-            document.getElementById('totalNeeded').textContent = totalNeeded.toFixed(1);
-            document.getElementById('tasksPerDay').textContent = avgTasksPerDay;
-            document.getElementById('restHours').textContent = restHours.toFixed(1);
+                document.getElementById('availableHours').textContent = availableHours.toFixed(1);
+                document.getElementById('totalNeeded').textContent = totalNeeded.toFixed(1);
+                document.getElementById('tasksPerDay').textContent = avgTasksPerDay;
+                document.getElementById('restHours').textContent = restHours.toFixed(1);
 
-            let planStatus = '';
-            let statusClass = '';
-            let sleepQualityText = '';
-            let sleepQualityClass = '';
+                let planStatus = '';
+                let statusClass = '';
+                let sleepQualityText = '';
+                let sleepQualityClass = '';
 
-            if (sleep < 6) {
-                sleepQualityText = '😴 ' + (currentLang === 'ru' ? 'Критично мало' : 'Critically low');
-                sleepQualityClass = 'status-danger';
-            } else if (sleep < 7) {
-                sleepQualityText = '😪 ' + (currentLang === 'ru' ? 'Недостаточно' : 'Insufficient');
-                sleepQualityClass = 'status-warning';
-            } else if (sleep <= 9) {
-                sleepQualityText = '😊 ' + (currentLang === 'ru' ? 'Отлично' : 'Excellent');
-                sleepQualityClass = 'status-good';
-            } else {
-                sleepQualityText = '😴 ' + (currentLang === 'ru' ? 'Слишком много' : 'Too much');
-                sleepQualityClass = 'status-warning';
+                if (sleep < 6) {
+                    sleepQualityText = '😴 ' + (currentLang === 'ru' ? 'Критично мало' : 'Critically low');
+                    sleepQualityClass = 'status-danger';
+                } else if (sleep < 7) {
+                    sleepQualityText = '😪 ' + (currentLang === 'ru' ? 'Недостаточно' : 'Insufficient');
+                    sleepQualityClass = 'status-warning';
+                } else if (sleep <= 9) {
+                    sleepQualityText = '😊 ' + (currentLang === 'ru' ? 'Отлично' : 'Excellent');
+                    sleepQualityClass = 'status-good';
+                } else {
+                    sleepQualityText = '😴 ' + (currentLang === 'ru' ? 'Слишком много' : 'Too much');
+                    sleepQualityClass = 'status-warning';
+                }
+
+                if (availableHours < 0) {
+                    planStatus = '❌ ' + (currentLang === 'ru' ? 'Невозможно' : 'Impossible');
+                    statusClass = 'status-danger';
+                } else if (totalNeeded > availableHours) {
+                    planStatus = '🔥 ' + (currentLang === 'ru' ? 'Не хватает времени' : 'Not enough time');
+                    statusClass = 'status-danger';
+                } else if (restHours < 5) {
+                    planStatus = '⚠️ ' + (currentLang === 'ru' ? 'Очень напряженно' : 'Very intense');
+                    statusClass = 'status-warning';
+                } else if (restHours < 10) {
+                    planStatus = '💪 ' + (currentLang === 'ru' ? 'Напряженно' : 'Intense');
+                    statusClass = 'status-warning';
+                } else if (restHours < 20) {
+                    planStatus = '✅ ' + (currentLang === 'ru' ? 'Хорошо' : 'Good');
+                    statusClass = 'status-good';
+                } else {
+                    planStatus = '😎 ' + (currentLang === 'ru' ? 'Много времени' : 'Plenty of time');
+                    statusClass = 'status-good';
+                }
+
+                showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay);
+                generateSchedules();
+                updateAnalytics(work, totalNeeded, restHours, sleep);
+            } catch (error) {
+                console.error('Calculate tasks error:', error);
+                showAlert('⚠️ ' + (currentLang === 'ru' ? 'Ошибка расчета задач' : 'Task calculation error'), 'error');
             }
-
-            if (availableHours < 0) {
-                planStatus = '❌ ' + (currentLang === 'ru' ? 'Невозможно' : 'Impossible');
-                statusClass = 'status-danger';
-            } else if (totalNeeded > availableHours) {
-                planStatus = '🔥 ' + (currentLang === 'ru' ? 'Не хватает времени' : 'Not enough time');
-                statusClass = 'status-danger';
-            } else if (restHours < 5) {
-                planStatus = '⚠️ ' + (currentLang === 'ru' ? 'Очень напряженно' : 'Very intense');
-                statusClass = 'status-warning';
-            } else if (restHours < 10) {
-                planStatus = '💪 ' + (currentLang === 'ru' ? 'Напряженно' : 'Intense');
-                statusClass = 'status-warning';
-            } else if (restHours < 20) {
-                planStatus = '✅ ' + (currentLang === 'ru' ? 'Хорошо' : 'Good');
-                statusClass = 'status-good';
-            } else {
-                planStatus = '😎 ' + (currentLang === 'ru' ? 'Много времени' : 'Plenty of time');
-                statusClass = 'status-good';
-            }
-
-            showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay);
-            generateSchedules();
-            updateAnalytics(work, totalNeeded, restHours, sleep);
         }
 
         function updateAnalytics(work, tasksTime, restTime, sleepHours) {
+            // If no parameters provided, get current values from the form
+            if (arguments.length === 0) {
+                work = parseFloat(document.getElementById('work').value) || 0;
+                tasksTime = parseFloat(document.getElementById('weeklyTasks').value) * parseFloat(document.getElementById('duration').value) || 0;
+                restTime = calculateCurrentRestTime();
+                sleepHours = calculateSleep();
+            }
+
             const totalWeekHours = 168;
             const workPercent = Math.round((work / totalWeekHours) * 100);
             const tasksPercent = Math.round((tasksTime / totalWeekHours) * 100);
@@ -2593,15 +2824,94 @@
             document.getElementById('restPercent').textContent = `${restPercent}%`;
             document.getElementById('sleepPercent').textContent = `${sleepPercent}%`;
 
+            // Calculate task completion metrics
             const completedTasks = tasks.filter(t => t.completed).length;
-            const totalTasks = tasks.length || 10;
+            const totalTasks = Math.max(tasks.length, 1);
             const progressPercent = Math.round((completedTasks / totalTasks) * 100);
 
-            document.getElementById('weeklyProgress').style.width = `${progressPercent}%`;
-            document.getElementById('weeklyProgressText').textContent = `${completedTasks}/${totalTasks} ${getTranslation('tasks').toLowerCase()}`;
+            const progressBar = document.getElementById('weeklyProgress');
+            const progressText = document.getElementById('weeklyProgressText');
 
-            const efficiency = Math.min(95, Math.max(0, 85 + (restTime - 10) * 2));
-            document.getElementById('efficiencyPercent').textContent = `${Math.round(efficiency)}%`;
+            if (progressBar) {
+                progressBar.style.width = `${progressPercent}%`;
+                progressBar.style.background = progressPercent >= 80
+                    ? 'var(--gradient-success)'
+                    : progressPercent >= 50
+                        ? 'var(--gradient-warning)'
+                        : 'var(--gradient-primary)';
+            }
+
+            if (progressText) {
+                progressText.textContent = `${completedTasks}/${totalTasks} ${getTranslation('tasks').toLowerCase()}`;
+            }
+
+            // Enhanced efficiency calculation
+            const workLifeBalance = calculateWorkLifeBalance(work, restTime, sleepHours);
+            const availableTime = 168 - work - (sleepHours * 7); // Calculate available hours in week
+            const taskLoad = Math.min(100, (tasksTime / Math.max(availableTime, 1)) * 100);
+            const sleepQuality = sleepHours >= 7 && sleepHours <= 9 ? 100 : Math.max(0, 100 - Math.abs(sleepHours - 8) * 15);
+
+            const efficiency = Math.round((workLifeBalance + (100 - taskLoad) + sleepQuality + progressPercent) / 4);
+
+            const efficiencyElement = document.getElementById('efficiencyPercent');
+            if (efficiencyElement) {
+                efficiencyElement.textContent = `${efficiency}%`;
+                efficiencyElement.className = efficiency >= 80 ? 'efficiency-excellent' :
+                    efficiency >= 60 ? 'efficiency-good' : 'efficiency-needs-improvement';
+            }
+
+            // Store analytics for trends
+            const today = new Date().toISOString().split('T')[0];
+            const analyticsHistory = JSON.parse(localStorage.getItem('planner_analytics_history') || '{}');
+            analyticsHistory[today] = {
+                efficiency,
+                workLifeBalance,
+                taskCompletion: progressPercent,
+                sleepQuality
+            };
+
+            // Keep only last 30 days
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            Object.keys(analyticsHistory).forEach(date => {
+                if (new Date(date) < thirtyDaysAgo) {
+                    delete analyticsHistory[date];
+                }
+            });
+
+            localStorage.setItem('planner_analytics_history', JSON.stringify(analyticsHistory));
+        } function calculateWorkLifeBalance(workHours, restHours, sleepHours) {
+            const idealWork = 40;
+            const idealRest = 20;
+            const idealSleep = 8;
+
+            const workScore = Math.max(0, 100 - Math.abs(workHours - idealWork) * 2);
+            const restScore = Math.max(0, 100 - Math.abs(restHours - idealRest) * 3);
+            const sleepScore = Math.max(0, 100 - Math.abs(sleepHours - idealSleep) * 10);
+
+            return Math.round((workScore + restScore + sleepScore) / 3);
+        }
+
+        function calculateCurrentRestTime() {
+            const work = parseFloat(document.getElementById('work').value) || 0;
+            const breaks = parseFloat(document.getElementById('breaks').value) || 0;
+            const food = parseFloat(document.getElementById('food').value) || 0;
+            const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const sleep = calculateSleep();
+            const morning = parseFloat(document.getElementById('morning').value) || 0;
+            const evening = parseFloat(document.getElementById('evening').value) || 0;
+            const weeklyTasksCount = parseFloat(document.getElementById('weeklyTasks').value) || 0;
+            const duration = parseFloat(document.getElementById('duration').value) || 0;
+
+            const totalWeekHours = 168;
+            const sleepWeek = sleep * 7;
+            const morningWeek = morning * 7;
+            const eveningWeek = evening * 7;
+            const usedHours = work + breaks + food + sport + sleepWeek + morningWeek + eveningWeek;
+            const availableHours = totalWeekHours - usedHours;
+            const totalNeeded = weeklyTasksCount * duration;
+
+            return Math.max(0, availableHours - totalNeeded);
         }
 
         function showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay) {
@@ -2640,7 +2950,7 @@
             alertElement.className = `alert alert-${type}`;
             alertElement.innerHTML = message;
             alertsDiv.appendChild(alertElement);
-            
+
             // Auto-close after 5 seconds
             setTimeout(() => {
                 const alertToRemove = document.getElementById(alertId);
@@ -2649,7 +2959,7 @@
                     alertToRemove.style.opacity = '0';
                     alertToRemove.style.transform = 'translateY(20px)';
                     alertToRemove.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                    
+
                     // Remove from DOM after animation completes
                     setTimeout(() => {
                         if (alertToRemove.parentNode) {
@@ -3229,6 +3539,18 @@
         function completeTimer() {
             pauseTimer();
 
+            // Show completion notification
+            const isBreak = timerState.mode !== 'focus';
+            const title = isBreak
+                ? (currentLang === 'ru' ? 'Перерыв завершен!' : 'Break Complete!')
+                : (currentLang === 'ru' ? 'Фокус завершен!' : 'Focus Complete!');
+
+            const body = isBreak
+                ? (currentLang === 'ru' ? 'Время вернуться к работе' : 'Time to get back to work')
+                : (currentLang === 'ru' ? 'Время для перерыва' : 'Time for a break');
+
+            showTimerNotification(title, body);
+
             if (timerState.mode === 'focus') {
                 timerState.completedPomodoros++;
                 localStorage.setItem('planner_pomodoros', timerState.completedPomodoros.toString());
@@ -3245,13 +3567,28 @@
 
             initTimer();
             updatePomodoroStats();
+        }
 
+        function showTimerNotification(title, body) {
+            // Browser notification
             if ('Notification' in window && Notification.permission === 'granted') {
-                const message = timerState.mode === 'focus'
-                    ? currentLang === 'ru' ? 'Время работать!' : 'Time to work!'
-                    : currentLang === 'ru' ? 'Время отдохнуть!' : 'Time for a break!';
-                new Notification('Pomodoro Timer', { body: message });
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: 'data:image/svg+xml,%3Csvg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="32" cy="32" r="28" fill="%230f172a" stroke="%233b82f6" stroke-width="4"/%3E%3Cpath d="M32 18V32L42 38" stroke="%233b82f6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E',
+                    badge: 'data:image/svg+xml,%3Csvg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="12" cy="12" r="10" fill="%233b82f6"/%3E%3Cpath d="M12 6V12L16 14" stroke="white" stroke-width="2" stroke-linecap="round"/%3E%3C/svg%3E',
+                    tag: 'timer-notification',
+                    requireInteraction: false,
+                    vibrate: [200, 100, 200]
+                });
+
+                // Auto-close after 5 seconds
+                setTimeout(() => {
+                    notification.close();
+                }, 5000);
             }
+
+            // Visual alert
+            showAlert(`${title} ${body}`, 'success');
         }
 
         function updateTimerDisplay() {
@@ -3285,28 +3622,202 @@
             }
         }
 
+        function exportData() {
+            try {
+                const data = {
+                    version: '2.0.0',
+                    timestamp: new Date().toISOString(),
+                    settings: {},
+                    tasks: tasks,
+                    timerStats: {
+                        completedPomodoros: timerState.completedPomodoros
+                    }
+                };
+
+                // Export all settings
+                const settingsKeys = ['work', 'breaks', 'food', 'sport', 'sportDays', 'morning', 'evening',
+                    'weeklyTasks', 'duration', 'maxWeekdayTasks', 'wakeTime', 'sleepTime',
+                    'planner_lang', 'planner_theme'];
+
+                settingsKeys.forEach(key => {
+                    const value = localStorage.getItem(key.startsWith('planner_') ? key : `planner_${key}`);
+                    if (value !== null) {
+                        data.settings[key] = value;
+                    }
+                });
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `timeplanner-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showAlert('✅ ' + (currentLang === 'ru' ? 'Данные успешно экспортированы' : 'Data exported successfully'), 'success');
+            } catch (error) {
+                console.error('Export error:', error);
+                showAlert('❌ ' + (currentLang === 'ru' ? 'Ошибка экспорта данных' : 'Export error'), 'error');
+            }
+        }
+
+        function importData() {
+            document.getElementById('importFile').click();
+        }
+
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    if (!data.version || !data.settings) {
+                        throw new Error('Invalid backup file format');
+                    }
+
+                    // Confirm import
+                    const confirmMessage = currentLang === 'ru'
+                        ? 'Это действие заменит все текущие данные. Продолжить?'
+                        : 'This will replace all current data. Continue?';
+
+                    if (!confirm(confirmMessage)) return;
+
+                    // Import settings
+                    Object.entries(data.settings).forEach(([key, value]) => {
+                        const storageKey = key.startsWith('planner_') ? key : `planner_${key}`;
+                        localStorage.setItem(storageKey, value);
+                    });
+
+                    // Import tasks
+                    if (data.tasks && Array.isArray(data.tasks)) {
+                        tasks = data.tasks;
+                        saveTasks();
+                    }
+
+                    // Import timer stats
+                    if (data.timerStats && data.timerStats.completedPomodoros) {
+                        timerState.completedPomodoros = data.timerStats.completedPomodoros;
+                        localStorage.setItem('planner_pomodoros', timerState.completedPomodoros.toString());
+                    }
+
+                    showAlert('✅ ' + (currentLang === 'ru' ? 'Данные успешно импортированы' : 'Data imported successfully'), 'success');
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+
+                } catch (error) {
+                    console.error('Import error:', error);
+                    showAlert('❌ ' + (currentLang === 'ru' ? 'Ошибка импорта данных. Проверьте формат файла.' : 'Import error. Check file format.'), 'error');
+                }
+            };
+
+            reader.readAsText(file);
+            // Reset file input
+            event.target.value = '';
+        }
+
         function clearAllData() {
-            localStorage.clear();
-            location.reload();
+            const confirmMessage = currentLang === 'ru'
+                ? 'Это действие удалит все данные без возможности восстановления. Продолжить?'
+                : 'This will permanently delete all data. Continue?';
+
+            if (confirm(confirmMessage)) {
+                localStorage.clear();
+                location.reload();
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            initTheme();
-            document.querySelector('.lang-toggle').textContent = currentLang === 'ru' ? 'EN' : 'RU';
-            loadSettings();
-            loadTasks();
-            calculateTasks();
-            initTimer();
-            updatePomodoroStats();
-            updateTexts();
-            requestNotificationPermission();
+            try {
+                initTheme();
+                document.querySelector('.lang-toggle').textContent = currentLang === 'ru' ? 'EN' : 'RU';
+                loadSettings();
+                loadTasks();
+                calculateTasks();
+                initTimer();
+                updatePomodoroStats();
+                updateTexts();
+                requestNotificationPermission();
+                registerServiceWorker();
+                initPWA();
 
-            setInterval(() => {
-                if (tasks.length > 0) {
-                    saveTasks();
-                }
-            }, 30000);
+                setInterval(() => {
+                    if (tasks.length > 0) {
+                        saveTasks();
+                    }
+                }, 30000);
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showAlert('⚠️ ' + (currentLang === 'ru' ? 'Ошибка инициализации приложения' : 'Application initialization error'), 'error');
+            }
         });
+
+        // Service Worker Registration
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            }
+        }
+
+        // PWA Installation
+        let deferredPrompt;
+        function initPWA() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                showInstallButton();
+            });
+
+            window.addEventListener('appinstalled', () => {
+                console.log('PWA was installed');
+                hideInstallButton();
+                showAlert('✅ ' + (currentLang === 'ru' ? 'Приложение установлено!' : 'App installed successfully!'), 'success');
+            });
+        }
+
+        function showInstallButton() {
+            const installBtn = document.createElement('button');
+            installBtn.className = 'install-pwa-btn';
+            installBtn.innerHTML = '📱 ' + (currentLang === 'ru' ? 'Установить приложение' : 'Install App');
+            installBtn.onclick = installPWA;
+
+            const header = document.querySelector('.header-controls');
+            if (header && !document.querySelector('.install-pwa-btn')) {
+                header.appendChild(installBtn);
+            }
+        }
+
+        function hideInstallButton() {
+            const installBtn = document.querySelector('.install-pwa-btn');
+            if (installBtn) {
+                installBtn.remove();
+            }
+        }
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    hideInstallButton();
+                });
+            }
+        }
     </script>
 </body>
 
