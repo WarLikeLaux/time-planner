@@ -1,16 +1,21 @@
 const CACHE_NAME = 'timeplanner-v2.0.0'
 const STATIC_ASSETS = ['./index.html', './manifest.json']
+const DEBUG = false
+
+const log = (...args) => {
+  if (DEBUG) console.log(...args)
+}
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
       .then(cache => {
-        console.log('Service Worker: Caching static assets')
+        log('Service Worker: Caching static assets')
         return cache.addAll(STATIC_ASSETS)
       })
       .then(() => {
-        console.log('Service Worker: Skip waiting')
+        log('Service Worker: Skip waiting')
         self.skipWaiting()
       })
   )
@@ -24,7 +29,7 @@ self.addEventListener('activate', event => {
         return Promise.all(
           cacheNames.map(cacheName => {
             if (cacheName !== CACHE_NAME) {
-              console.log('Service Worker: Deleting old cache', cacheName)
+              log('Service Worker: Deleting old cache', cacheName)
               return caches.delete(cacheName)
             }
             return null
@@ -32,7 +37,7 @@ self.addEventListener('activate', event => {
         )
       })
       .then(() => {
-        console.log('Service Worker: Claiming clients')
+        log('Service Worker: Claiming clients')
         return self.clients.claim()
       })
   )
@@ -68,7 +73,7 @@ self.addEventListener('fetch', event => {
 })
 
 self.addEventListener('sync', event => {
-  console.log('Service Worker: Background sync triggered')
+  log('Service Worker: Background sync triggered')
 
   if (event.tag === 'background-sync-tasks') {
     event.waitUntil(syncTasks())
@@ -116,5 +121,5 @@ self.addEventListener('notificationclick', event => {
 })
 
 self.addEventListener('notificationclose', event => {
-  console.log('Notification closed:', event.notification.tag)
+  log('Notification closed:', event.notification.tag)
 })

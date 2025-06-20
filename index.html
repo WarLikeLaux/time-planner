@@ -2586,7 +2586,9 @@
         function toggleLanguage() {
             currentLang = currentLang === 'ru' ? 'en' : 'ru';
             localStorage.setItem('planner_lang', currentLang);
-            document.querySelector('.lang-toggle').textContent = currentLang === 'ru' ? 'EN' : 'RU';
+            const langToggle = document.querySelector('.lang-toggle');
+            langToggle.textContent = currentLang === 'ru' ? 'EN' : 'RU';
+            langToggle.blur(); 
             updateTexts();
 
             updateInstallButtonText();
@@ -2615,6 +2617,7 @@
 
             const themeToggle = document.querySelector('.theme-toggle');
             themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            themeToggle.blur(); 
         }
 
         function initTheme() {
@@ -3778,10 +3781,10 @@
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
                     .then((registration) => {
-                        console.log('Service Worker registered successfully:', registration);
+
                     })
                     .catch((error) => {
-                        console.log('Service Worker registration failed:', error);
+
                     });
             }
         }
@@ -3792,35 +3795,30 @@
 
         function initPWA() {
 
-            const isYandex = navigator.userAgent.includes('YaBrowser');
+            const isYandex = /YaBrowser|Yandex/i.test(navigator.userAgent) ||
+                navigator.userAgent.includes('YaBrowser') ||
+                window.yandex !== undefined;
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-
             if (isStandalone) {
-                console.log('App is already installed');
                 return;
             }
-
 
             if (isYandex) {
                 setTimeout(() => {
                     if (!document.querySelector('.install-pwa-btn')) {
-                        console.log('Showing manual install button for Yandex Browser');
                         showManualInstallButton();
                     }
                 }, 1000);
             } else {
-
                 setTimeout(() => {
                     if (!document.querySelector('.install-pwa-btn') && !deferredPrompt) {
-                        console.log('Showing manual install button (no beforeinstallprompt)');
                         showManualInstallButton();
                     }
                 }, 3000);
             }
 
             window.addEventListener('beforeinstallprompt', (e) => {
-                console.log('beforeinstallprompt event fired');
                 e.preventDefault();
                 deferredPrompt = e;
                 hideManualInstallButton();
@@ -3828,7 +3826,6 @@
             });
 
             window.addEventListener('appinstalled', () => {
-                console.log('PWA was installed');
                 hideInstallButton();
                 hideManualInstallButton();
                 showAlert('✅ ' + (currentLang === 'ru' ? 'Приложение установлено!' : 'App installed successfully!'), 'success');
@@ -3882,8 +3879,11 @@
         }
 
         function showInstallInstructions() {
-            const isYandex = navigator.userAgent.includes('YaBrowser');
-            const isChrome = navigator.userAgent.includes('Chrome') && !navigator.userAgent.includes('YaBrowser');
+
+            const isYandex = /YaBrowser|Yandex/i.test(navigator.userAgent) ||
+                navigator.userAgent.includes('YaBrowser') ||
+                window.yandex !== undefined;
+            const isChrome = navigator.userAgent.includes('Chrome') && !isYandex;
             const isFirefox = navigator.userAgent.includes('Firefox');
             const isSafari = navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome');
 
@@ -3952,9 +3952,6 @@
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    }
                     deferredPrompt = null;
                     hideInstallButton();
                 });
