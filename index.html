@@ -180,6 +180,17 @@
             box-shadow: var(--shadow-md);
         }
 
+        .install-pwa-btn.manual-install {
+            background: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+
+        .install-pwa-btn.manual-install:hover {
+            background: var(--warning-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
         .theme-toggle:hover,
         .lang-toggle:hover {
             border-color: var(--primary-color);
@@ -197,12 +208,14 @@
             outline-offset: 2px;
         }
 
-        /* Enhanced focus indicators for accessibility */
-        .tab-btn:focus,
         .control-btn:focus,
         .data-btn:focus {
             outline: 2px solid var(--primary-color);
             outline-offset: 2px;
+        }
+
+        .tab-btn:focus {
+            outline: none;
         }
 
         /* High contrast mode support */
@@ -524,20 +537,7 @@
             position: relative;
         }
 
-        .content-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--gradient-primary);
-            opacity: 0;
-            transition: var(--transition);
-        }
-
         .content-card:hover {
-            transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
 
@@ -2440,6 +2440,7 @@
                 exportData: '📤 Экспорт данных',
                 importData: '📥 Импорт данных',
                 showMore: 'Показать еще',
+                installApp: 'Установить приложение',
             },
             en: {
                 title: '⏰ Programmer Time Planner',
@@ -2548,6 +2549,7 @@
                 exportData: '📤 Export data',
                 importData: '📥 Import data',
                 showMore: 'Show more',
+                installApp: 'Install App',
             },
         };
 
@@ -2578,6 +2580,9 @@
                 }
             });
 
+            // Update install button if it exists
+            updateInstallButtonText();
+
             if (document.getElementById('scheduleCard').style.display !== 'none') {
                 calculateTasks();
             }
@@ -2588,6 +2593,23 @@
             localStorage.setItem('planner_lang', currentLang);
             document.querySelector('.lang-toggle').textContent = currentLang === 'ru' ? 'EN' : 'RU';
             updateTexts();
+
+            // Update install button text if it exists
+            updateInstallButtonText();
+        }
+
+        function updateInstallButtonText() {
+            const installBtn = document.querySelector('.install-pwa-btn');
+            if (installBtn) {
+                installBtn.innerHTML = '📱 ' + getTranslation('installApp');
+                installBtn.title = currentLang === 'ru' ?
+                    (installBtn.classList.contains('manual-install') ?
+                        'Посмотреть инструкции по установке' :
+                        'Установить как приложение') :
+                    (installBtn.classList.contains('manual-install') ?
+                        'View installation instructions' :
+                        'Install as app');
+            }
         }
 
         function toggleTheme() {
@@ -3773,16 +3795,49 @@
 
         // PWA Installation
         let deferredPrompt;
+        let manualInstallButton = null;
+
         function initPWA() {
+            // Check for Yandex browser or other browsers that may not support beforeinstallprompt
+            const isYandex = navigator.userAgent.includes('YaBrowser');
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+            // Don't show install button if already installed
+            if (isStandalone) {
+                console.log('App is already installed');
+                return;
+            }
+
+            // Show install button for Yandex and other browsers after delay
+            if (isYandex) {
+                setTimeout(() => {
+                    if (!document.querySelector('.install-pwa-btn')) {
+                        console.log('Showing manual install button for Yandex Browser');
+                        showManualInstallButton();
+                    }
+                }, 1000);
+            } else {
+                // For other browsers, wait a bit longer to see if beforeinstallprompt fires
+                setTimeout(() => {
+                    if (!document.querySelector('.install-pwa-btn') && !deferredPrompt) {
+                        console.log('Showing manual install button (no beforeinstallprompt)');
+                        showManualInstallButton();
+                    }
+                }, 3000);
+            }
+
             window.addEventListener('beforeinstallprompt', (e) => {
+                console.log('beforeinstallprompt event fired');
                 e.preventDefault();
                 deferredPrompt = e;
+                hideManualInstallButton();
                 showInstallButton();
             });
 
             window.addEventListener('appinstalled', () => {
                 console.log('PWA was installed');
                 hideInstallButton();
+                hideManualInstallButton();
                 showAlert('✅ ' + (currentLang === 'ru' ? 'Приложение установлено!' : 'App installed successfully!'), 'success');
             });
         }
@@ -3790,8 +3845,10 @@
         function showInstallButton() {
             const installBtn = document.createElement('button');
             installBtn.className = 'install-pwa-btn';
+            installBtn.setAttribute('data-i18n-text', 'installApp');
             installBtn.innerHTML = '📱 ' + (currentLang === 'ru' ? 'Установить приложение' : 'Install App');
             installBtn.onclick = installPWA;
+            installBtn.title = currentLang === 'ru' ? 'Установить как приложение' : 'Install as app';
 
             const header = document.querySelector('.header-controls');
             if (header && !document.querySelector('.install-pwa-btn')) {
@@ -3799,11 +3856,103 @@
             }
         }
 
+        function showManualInstallButton() {
+            if (manualInstallButton) return; // Already shown
+
+            manualInstallButton = document.createElement('button');
+            manualInstallButton.className = 'install-pwa-btn manual-install';
+            manualInstallButton.setAttribute('data-i18n-text', 'installApp');
+            manualInstallButton.innerHTML = '📱 ' + (currentLang === 'ru' ? 'Установить приложение' : 'Install App');
+            manualInstallButton.onclick = showInstallInstructions;
+            manualInstallButton.title = currentLang === 'ru' ?
+                'Посмотреть инструкции по установке' :
+                'View installation instructions';
+
+            const header = document.querySelector('.header-controls');
+            if (header && !document.querySelector('.install-pwa-btn')) {
+                header.appendChild(manualInstallButton);
+            }
+        }
+
         function hideInstallButton() {
-            const installBtn = document.querySelector('.install-pwa-btn');
+            const installBtn = document.querySelector('.install-pwa-btn:not(.manual-install)');
             if (installBtn) {
                 installBtn.remove();
             }
+        }
+
+        function hideManualInstallButton() {
+            if (manualInstallButton) {
+                manualInstallButton.remove();
+                manualInstallButton = null;
+            }
+        }
+
+        function showInstallInstructions() {
+            const isYandex = navigator.userAgent.includes('YaBrowser');
+            const isChrome = navigator.userAgent.includes('Chrome') && !navigator.userAgent.includes('YaBrowser');
+            const isFirefox = navigator.userAgent.includes('Firefox');
+            const isSafari = navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome');
+
+            let instructions = '';
+
+            if (currentLang === 'ru') {
+                if (isYandex) {
+                    instructions = `🔧 Инструкция для Яндекс.Браузера:
+1. Нажмите кнопку меню (три полоски)
+2. Выберите "Добавить на главный экран"
+3. Подтвердите установку`;
+                } else if (isChrome) {
+                    instructions = `🔧 Инструкция для Chrome:
+1. Нажмите кнопку меню (три точки)
+2. Выберите "Установить TimePlanner..."
+3. Нажмите "Установить"`;
+                } else if (isFirefox) {
+                    instructions = `🔧 Инструкция для Firefox:
+1. Нажмите кнопку меню (три полоски)
+2. Выберите "Установить это приложение"
+3. Подтвердите установку`;
+                } else if (isSafari) {
+                    instructions = `🔧 Инструкция для Safari:
+1. Нажмите кнопку "Поделиться"
+2. Выберите "На экран 'Домой'"
+3. Нажмите "Добавить"`;
+                } else {
+                    instructions = `🔧 Общая инструкция:
+1. Найдите в меню браузера опцию "Установить приложение"
+2. Или добавьте сайт на главный экран
+3. Приложение будет работать как нативное`;
+                }
+            } else {
+                if (isYandex) {
+                    instructions = `🔧 Instructions for Yandex Browser:
+1. Click the menu button (three lines)
+2. Select "Add to Home screen"
+3. Confirm installation`;
+                } else if (isChrome) {
+                    instructions = `🔧 Instructions for Chrome:
+1. Click the menu button (three dots)
+2. Select "Install TimePlanner..."
+3. Click "Install"`;
+                } else if (isFirefox) {
+                    instructions = `🔧 Instructions for Firefox:
+1. Click the menu button (three lines)
+2. Select "Install this app"
+3. Confirm installation`;
+                } else if (isSafari) {
+                    instructions = `🔧 Instructions for Safari:
+1. Click the "Share" button
+2. Select "Add to Home Screen"
+3. Tap "Add"`;
+                } else {
+                    instructions = `🔧 General instructions:
+1. Look for "Install app" option in browser menu
+2. Or add site to home screen
+3. App will work like a native app`;
+                }
+            }
+
+            alert(instructions);
         }
 
         function installPWA() {
