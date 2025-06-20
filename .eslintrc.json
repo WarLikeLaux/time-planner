@@ -17,7 +17,7 @@
 		"no-console": "off",
 		"indent": [
 			"error",
-			2
+			4
 		],
 		"quotes": [
 			"error",
@@ -25,7 +25,9 @@
 		],
 		"semi": [
 			"error",
-			"never"
-		]
+			"always"
+		],
+		"space-before-function-paren": "off",
+		"comma-dangle": "off"
 	}
 }

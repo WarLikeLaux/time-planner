@@ -2588,7 +2588,7 @@
             localStorage.setItem('planner_lang', currentLang);
             const langToggle = document.querySelector('.lang-toggle');
             langToggle.textContent = currentLang === 'ru' ? 'EN' : 'RU';
-            langToggle.blur(); 
+            langToggle.blur();
             updateTexts();
 
             updateInstallButtonText();
@@ -2617,7 +2617,7 @@
 
             const themeToggle = document.querySelector('.theme-toggle');
             themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-            themeToggle.blur(); 
+            themeToggle.blur();
         }
 
         function initTheme() {
@@ -3805,18 +3805,14 @@
             }
 
             if (isYandex) {
-                setTimeout(() => {
-                    if (!document.querySelector('.install-pwa-btn')) {
-                        showManualInstallButton();
-                    }
-                }, 1000);
-            } else {
-                setTimeout(() => {
-                    if (!document.querySelector('.install-pwa-btn') && !deferredPrompt) {
-                        showManualInstallButton();
-                    }
-                }, 3000);
+                return;
             }
+
+            setTimeout(() => {
+                if (!document.querySelector('.install-pwa-btn') && !deferredPrompt) {
+                    showManualInstallButton();
+                }
+            }, 3000);
 
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
