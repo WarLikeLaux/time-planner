@@ -11,13 +11,15 @@
 > **Интеллектуальный планировщик времени для разработчиков**  
 > Научно обоснованная система тайм-менеджмента с математическими расчетами work-life баланса
 
-🇷🇺 [Русский](#-русская-версия) | 🇬🇧 [English](#-english-version)
+🇷🇺 [Русский](#-русская-версия) | 🇬🇧 [English](README_EN.md)
 
 </div>
 
 ---
 
-## � Содержание
+# 🇷🇺 Русская версия
+
+## 📋 Содержание
 
 - [🎯 Для пользователей](#-для-пользователей)
   - [Что это такое?](#что-это-такое)
@@ -25,23 +27,24 @@
   - [Быстрый старт](#-быстрый-старт)
   - [Как пользоваться](#-как-пользоваться)
 - [👨‍💻 Для разработчиков](#-для-разработчиков)
-  - [Технические особенности](#-технические-особенности)
+  - [Технический стек](#-технический-стек)
+  - [Быстрый старт разработки](#-быстрый-старт-разработки)
   - [Система сборки](#-система-сборки)
-  - [Инструменты качества кода](#-инструменты-качества-кода)
+  - [Инструменты качества](#-инструменты-качества)
   - [Структура проекта](#-структура-проекта)
   - [Рабочий процесс](#-рабочий-процесс)
-- [🌍 English Version](#-english-version)
 - [📄 Лицензия](#-лицензия)
+- [🤝 Участие в разработке](#-участие-в-разработке)
 
 ---
-
-# 🇷🇺 Русская версия
 
 ## 🎯 Для пользователей
 
 ### Что это такое?
 
 **TimePlanner** — профессиональный инструмент для оптимизации личного времени программистов. Основан на исследованиях продуктивности, принципах GTD и научных данных о циркадных ритмах.
+
+[⬆️ К содержанию](#-содержание)
 
 ### 🔥 Ключевые особенности
 
@@ -52,6 +55,8 @@
 - **📊 Аналитика нагрузки** — предупреждения о переработке и выгорании
 - **🏃 Интеграция спорта** — учет физической активности в планах
 - **📱 PWA** — устанавливается как приложение на телефон
+
+[⬆️ К содержанию](#-содержание)
 
 ### 🚀 Быстрый старт
 
@@ -67,6 +72,8 @@
 3. Или через меню браузера: "Установить TimePlanner"
 4. Пользуйтесь как обычным приложением!
 
+[⬆️ К содержанию](#-содержание)
+
 ### 📖 Как пользоваться
 
 1. **Настройка графика** — укажите рабочие часы, сон, спорт
@@ -75,11 +82,13 @@
 4. **Анализ нагрузки** — следите за балансом work-life
 5. **Экспорт данных** — сохраняйте прогресс в JSON
 
+[⬆️ К содержанию](#-содержание)
+
 ---
 
 ## 👨‍💻 Для разработчиков
 
-### 🛠️ Технические особенности
+### 🛠️ Технический стек
 
 - **Vanilla JavaScript** — без фреймворков, максимальная производительность
 - **Modern CSS** — Grid, Flexbox, CSS Custom Properties
@@ -88,219 +97,47 @@
 - **Notification API** — системные уведомления
 - **Responsive Design** — Mobile-first подход
 
-### 🚀 Система сборки
+[⬆️ К содержанию](#-содержание)
+
+### 🚀 Быстрый старт разработки
 
 ```bash
 # Установка зависимостей
 make install
 
-# Запуск сервера разработки
+# Запуск dev-сервера
 make dev
 
-# Если видите старую версию (очистка кеша)
-make dev-fresh
-
-# Автоматическая пересборка при изменениях
+# Авто-пересборка при изменениях
 make watch
-
-# Полная сборка
-make build
-
-# Запуск тестов
-make test
-
-# Проверка качества кода
-make lint
 ```
 
-### 🔧 Инструменты качества кода
+[⬆️ К содержанию](#-содержание)
 
-#### Линтинг
-- **HTMLHint** — проверка HTML структуры
-- **ESLint** — JavaScript код-стайл (Standard)
-- **Автоисправление** — `make lint-fix`
+### 🔧 Система сборки
 
-#### Тестирование  
-- **Jest** — фреймворк тестирования с JSDOM
-- **9 тестов** — DOM, темы, хранилище, вычисления, уведомления, PWA
-- **Покрытие кода** — отчёты в `coverage/`
-
-#### CI/CD
-- **GitHub Actions** — автоматическая проверка при push
-- **Pre-commit хуки** — блокировка плохих коммитов
-
-### 📁 Структура проекта
-
-```
-├── index.html              # Основное приложение (Single Page App)
-├── manifest.json           # PWA манифест  
-├── sw.js                   # Service Worker для оффлайн работы
-├── package.json            # Зависимости и скрипты
-├── Makefile               # Команды сборки
-├── build.sh               # Скрипт сборки с watch режимом
-├── jest.config.js         # Конфигурация тестов
-├── .eslintrc.json         # Настройки ESLint
-├── .github/workflows/     # GitHub Actions CI/CD
-├── tests/                 # Тесты функциональности
-└── scripts/               # Вспомогательные скрипты
-```
-
-### 🔄 Рабочий процесс
-
-#### Разработка
+#### Основные команды
 ```bash
-make dev        # Сервер разработки
-make watch      # В другом терминале — авто-сборка
+make dev        # Сервер разработки (http://localhost:3000)
+make dev-fresh  # Сервер с очисткой кеша браузера
+make build      # Полная сборка (линтинг + тесты + минификация)
+make watch      # Авто-пересборка при изменении файлов
+make test       # Запуск тестов
+make lint       # Проверка качества кода
+make lint-fix   # Автоисправление ошибок кода
+make clean      # Очистка артефактов сборки
 ```
 
-#### Pre-commit проверки
-При каждом `git commit` автоматически:
-1. 🔍 Проверяется качество кода (линтинг)
-2. 🧪 Запускаются тесты
-3. ✅ Если всё ОК → коммит проходит
-4. ❌ Если ошибки → коммит блокируется
-
----
-
-# 🌍 English Version
-
-## 🎯 For Users
-
-### What is TimePlanner?
-
-**TimePlanner** is a professional time optimization tool for developers. Based on productivity research, GTD principles, and scientific data about circadian rhythms.
-
-### 🔥 Key Features
-
-- **🧮 Mathematical precision** — algorithms for calculating time limits
-- **⚡ Zero dependencies** — pure JavaScript, instant loading
-- **🎨 Modern UI/UX** — responsive design with micro-animations  
-- **💾 Offline-first** — works without internet, LocalStorage data
-- **📊 Load analytics** — warnings about overwork and burnout
-- **🏃 Sports integration** — physical activity accounting in plans
-- **📱 PWA** — installs as native app
-
-### 🚀 Quick Start
-
-#### Online Usage
-1. Open `index.html` file in browser
-2. Allow notifications for timer
-3. Configure your work schedule
-4. Start planning tasks!
-
-#### PWA Installation
-1. Open site in Chrome/Safari/Yandex Browser
-2. Click "📱 Install App" button
-3. Or via browser menu: "Install TimePlanner"
-4. Use as regular application!
-
-### 📖 How to Use
-
-1. **Schedule Setup** — set work hours, sleep, sports
-2. **Adding Tasks** — create prioritized tasks
-3. **Pomodoro Timer** — work focused 25/5 minutes
-4. **Load Analysis** — monitor work-life balance
-5. **Data Export** — save progress to JSON
-
----
-
-## 👨‍💻 For Developers
-
-### 🛠️ Technical Stack
-
-- **Vanilla JavaScript** — no frameworks, maximum performance
-- **Modern CSS** — Grid, Flexbox, CSS Custom Properties
-- **Progressive Web App** — Service Worker, Web Manifest
-- **LocalStorage API** — client-side data storage
-- **Notification API** — system notifications
-- **Responsive Design** — Mobile-first approach
-
-### 🚀 Build System
-
+#### Если видите старую версию в браузере
 ```bash
-# Install dependencies
-make install
-
-# Start development server
-make dev
-
-# If you see old version (cache clearing)
+# В браузере: Ctrl + Shift + R
+# Или перезапуск сервера:
 make dev-fresh
-
-# Auto-rebuild on changes
-make watch
-
-# Full build
-make build
-
-# Run tests
-make test
-
-# Code quality check
-make lint
 ```
 
-### 🔧 Code Quality Tools
+[⬆️ К содержанию](#-содержание)
 
-#### Linting
-- **HTMLHint** — HTML structure validation
-- **ESLint** — JavaScript code style (Standard)
-- **Auto-fixing** — `make lint-fix`
-
-#### Testing
-- **Jest** — testing framework with JSDOM
-- **9 tests** — DOM, themes, storage, calculations, notifications, PWA
-- **Code coverage** — reports in `coverage/`
-
-#### CI/CD
-- **GitHub Actions** — automatic checks on push
-- **Pre-commit hooks** — blocks bad commits
-
-### 🔄 Workflow
-
-#### Development Process
-```bash
-make dev        # Development server
-make watch      # In another terminal — auto-build
-```
-
-#### Pre-commit Checks
-On every `git commit` automatically:
-1. 🔍 Code quality check (linting)
-2. 🧪 Tests execution  
-3. ✅ If OK → commit passes
-4. ❌ If errors → commit blocked
-
----
-
-## 📄 Лицензия
-
-MIT License - используйте свободно в личных и коммерческих проектах.
-
----
-
-## 🤝 Участие в разработке
-
-1. Fork проекта
-2. Создайте feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit изменения (`git commit -m 'Add amazing feature'`)
-4. Push в branch (`git push origin feature/amazing-feature`)
-5. Откройте Pull Request
-
----
-
-<div align="center">
-
-**⭐ Поставьте звезду, если проект был полезен!**
-
-Made with ❤️ for developers productivity
-
-[⬆️ Наверх](#-timeplanner)
-
-</div>
-```
-
-### 🔧 Инструменты качества кода
+### 🔧 Инструменты качества
 
 #### Линтинг
 - **HTMLHint** — проверка HTML структуры
@@ -317,90 +154,50 @@ Made with ❤️ for developers productivity
 - **Pre-commit хуки** — блокировка плохих коммитов
 - **Мультиверсионность** — тесты на Node.js 16, 18, 20
 
+[⬆️ К содержанию](#-содержание)
+
 ### 📁 Структура проекта
 
 ```
-├── index.html              # Основное приложение
+├── index.html              # Основное приложение (SPA)
 ├── manifest.json           # PWA манифест  
-├── sw.js                   # Service Worker
+├── sw.js                   # Service Worker для оффлайн
 ├── package.json            # Зависимости и скрипты
 ├── Makefile               # Команды сборки
-├── build.sh               # Скрипт сборки с watch режимом
+├── build.sh               # Скрипт сборки с watch
 ├── jest.config.js         # Конфигурация тестов
 ├── .eslintrc.json         # Настройки ESLint
-├── .htmlhintrc            # Настройки HTMLHint
-├── .stylelintrc.json      # Настройки Stylelint
-├── live-server.json       # Конфигурация dev-сервера
 ├── .github/workflows/     # GitHub Actions CI/CD
-│   └── ci.yml            # Автоматическая проверка кода
-├── .git/hooks/            # Git хуки
-│   └── pre-commit        # Проверка перед коммитом
-├── .vscode/               # Настройки VS Code
-│   └── tasks.json        # Задачи для разработки
-├── scripts/               # Вспомогательные скрипты
-│   └── safe-remove-comments.sh  # Безопасное удаление комментариев
-├── tests/                 # Тесты
-│   ├── setup.js          # Настройка тестовой среды
-│   └── planner.test.js   # Основные тесты
-├── dist/                  # Собранные файлы (создаётся автоматически)
-├── node_modules/          # Зависимости (создаётся автоматически)
-├── coverage/              # Отчёты покрытия тестами (создаётся автоматически)
-├── LICENSE                # Лицензия MIT
-├── CONTRIBUTING.md        # Руководство для контрибьюторов
-└── README.md              # Этот файл
+├── tests/                 # Тесты функциональности
+└── scripts/               # Вспомогательные скрипты
 ```
 
-#### Назначение ключевых файлов
+#### Ключевые файлы для разработчиков
 
-**🎯 Основные файлы:**
-- `index.html` — Single Page Application, содержит всю логику
+**🎯 Основные:**
+- `index.html` — Single Page Application, вся логика
 - `manifest.json` — настройки PWA (иконки, название, тема)
-- `sw.js` — Service Worker для оффлайн работы и кеширования
+- `sw.js` — Service Worker для оффлайн и кеширования
 
-**⚙️ Конфигурация сборки:**
-- `package.json` — зависимости для разработки и скрипты
-- `Makefile` — удобные команды (`make dev`, `make build`, etc.)
-- `build.sh` — скрипт с watch режимом для автоматической пересборки
+**⚙️ Сборка:**
+- `Makefile` — удобные команды (`make dev`, `make build`)
+- `build.sh` — скрипт с watch для автопересборки
+- `package.json` — dev-зависимости и скрипты
 
-**🧪 Тестирование и качество:**
-- `jest.config.js` — настройки Jest тестирования
-- `.eslintrc.json` — правила для JavaScript кода
-- `.htmlhintrc` — проверка HTML структуры
-- `tests/` — тесты функциональности
+**🧪 Качество:**
+- `jest.config.js` — настройки Jest
+- `.eslintrc.json` — правила JavaScript
+- `tests/` — автотесты функциональности
 
-**🤖 Автоматизация:**
-- `.github/workflows/ci.yml` — CI/CD pipeline в GitHub Actions
-- `.git/hooks/pre-commit` — блокирует плохие коммиты
-- `.vscode/tasks.json` — интеграция с VS Code
-
-**📦 Генерируемые папки:**
-- `dist/` — минифицированные файлы для продакшена
-- `node_modules/` — зависимости npm
-- `coverage/` — отчёты о покрытии тестами
-```
+[⬆️ К содержанию](#-содержание)
 
 ### 🔄 Рабочий процесс
 
 #### Разработка
-1. **Запуск окружения:**
-   ```bash
-   make dev        # Сервер разработки
-   make watch      # В другом терминале — авто-сборка
-   ```
-
-2. **Написание кода:**
-   - Редактируете файлы
-   - Сохраняете → автоматическая пересборка
-   - Проверяете в браузере
-
-3. **Если старая версия в браузере:**
-   ```bash
-   # В браузере
-   Ctrl + Shift + R  # принудительное обновление
-   
-   # Или перезапуск сервера
-   make dev-fresh
-   ```
+```bash
+make dev        # Сервер разработки
+make watch      # В другом терминале — авто-сборка
+```
 
 #### Pre-commit проверки
 При каждом `git commit` автоматически:
@@ -409,13 +206,6 @@ Made with ❤️ for developers productivity
 3. ✅ Если всё ОК → коммит проходит
 4. ❌ Если ошибки → коммит блокируется
 
-```bash
-git add .
-git commit -m "Добавил новую функцию"
-# → Автоматически запустится линтинг и тесты
-# → Коммит пройдёт только при успешных проверках
-```
-
 #### GitHub CI/CD
 При `git push` автоматически запускается:
 - Тестирование на Node.js 16, 18, 20
@@ -423,171 +213,19 @@ git commit -m "Добавил новую функцию"
 - Сборка проекта
 - Отчёты о покрытии тестами
 
-### 🐛 Решение проблем
-
-| Проблема | Решение |
-|----------|---------|
-| Старая версия в браузере | `Ctrl+Shift+R` или `make dev-fresh` |
-| Коммит заблокирован | `make lint-fix` → исправить ошибки → попробовать снова |
-| Тесты не проходят | `make test` → посмотреть ошибки → исправить |
-| Сборка не работает | `make clean` → `make install` → `make build` |
-
-### 📊 Статистика проекта
-
-- **~4000 строк кода** — компактное, но функциональное решение
-- **9 автотестов** — покрытие основного функционала
-- **0 зависимостей** — только dev-зависимости для сборки
-- **PWA готово** — может работать оффлайн
-- **Мультиязычность** — русский/английский
+[⬆️ К содержанию](#-содержание)
 
 ---
 
-## 🌍 For English Users
-
-### 🎯 What is TimePlanner?
-
-**TimePlanner** is a professional time optimization tool for developers. Based on productivity research, GTD principles, and scientific data about circadian rhythms.
-
-### 🔥 Key Features
-
-- **🧮 Mathematical precision** — algorithms for calculating time limits
-- **⚡ Zero dependencies** — pure JavaScript, instant loading
-- **🎨 Modern UI/UX** — responsive design with micro-animations  
-- **💾 Offline-first** — works without internet, LocalStorage data
-- **📊 Load analytics** — warnings about overwork and burnout
-- **🏃 Sports integration** — physical activity accounting in plans
-- **📱 PWA** — installs as native app
-
-### 🚀 Quick Start
-
-#### Online Usage
-1. Open `index.html` file in browser
-2. Allow notifications for timer
-3. Configure your work schedule
-4. Start planning tasks!
-
-#### PWA Installation
-1. Open site in Chrome/Safari
-2. Click "Install App" button
-3. Or via browser menu: "Install TimePlanner"
-4. Use as regular application!
-
-### 📖 How to Use
-
-1. **Schedule Setup** — set work hours, sleep, sports
-2. **Adding Tasks** — create prioritized tasks
-3. **Pomodoro Timer** — work focused 25/5 minutes
-4. **Load Analysis** — monitor work-life balance
-5. **Data Export** — save progress to JSON
-
----
-
-## 👨‍💻 For Developers (English)
-
-### 🛠️ Technical Stack
-
-- **Vanilla JavaScript** — no frameworks, maximum performance
-- **Modern CSS** — Grid, Flexbox, CSS Custom Properties
-- **Progressive Web App** — Service Worker, Web Manifest
-- **LocalStorage API** — client-side data storage
-- **Notification API** — system notifications
-- **Responsive Design** — Mobile-first approach
-
-### 🚀 Build System
-
-Modern build system with automated code quality:
-
-#### Development Quick Start
-```bash
-# Install dependencies
-make install
-
-# Start development server
-make dev
-
-# If you see old version (cache clearing)
-make dev-fresh
-
-# Auto-rebuild on changes
-make watch
-```
-
-#### Main Commands
-```bash
-make dev        # Development server (http://localhost:3000)
-make dev-fresh  # Server with browser cache clearing
-make build      # Full build (linting + tests + minification)
-make watch      # Auto-rebuild on file changes
-make test       # Run tests
-make test-watch # Tests in watch mode
-make lint       # Code quality check
-make lint-fix   # Auto-fix code issues
-make clean      # Clean build artifacts
-```
-
-### 🔧 Code Quality Tools
-
-#### Linting
-- **HTMLHint** — HTML structure validation
-- **ESLint** — JavaScript code style (Standard)
-- **Auto-fixing** — `make lint-fix`
-
-#### Testing
-- **Jest** — testing framework with JSDOM
-- **9 tests** — DOM, themes, storage, calculations, notifications, PWA
-- **Code coverage** — reports in `coverage/`
-
-#### CI/CD
-- **GitHub Actions** — automatic checks on push
-- **Pre-commit hooks** — blocks bad commits
-- **Multi-version** — tests on Node.js 16, 18, 20
-
-### 🔄 Workflow
-
-#### Development Process
-1. **Start environment:**
-   ```bash
-   make dev        # Development server
-   make watch      # In another terminal — auto-build
-   ```
-
-2. **Write code:**
-   - Edit files
-   - Save → automatic rebuild
-   - Check in browser
-
-3. **If browser shows old version:**
-   ```bash
-   # In browser
-   Ctrl + Shift + R  # force refresh
-   
-   # Or restart server
-   make dev-fresh
-   ```
-
-#### Pre-commit Checks
-On every `git commit` automatically:
-1. 🔍 Code quality check (linting)
-2. 🧪 Tests execution  
-3. ✅ If OK → commit passes
-4. ❌ If errors → commit blocked
-
-#### GitHub CI/CD
-On `git push` automatically runs:
-- Testing on Node.js 16, 18, 20
-- Code quality verification
-- Project build
-- Test coverage reports
-
----
-
-## 📄 Лицензия / License
+## 📄 Лицензия
 
 MIT License - используйте свободно в личных и коммерческих проектах.
 
+[⬆️ К содержанию](#-содержание)
+
 ---
 
-## 🤝 Участие в разработке / Contributing
+## 🤝 Участие в разработке
 
 1. Fork проекта
 2. Создайте feature branch (`git checkout -b feature/amazing-feature`)
@@ -597,12 +235,7 @@ MIT License - используйте свободно в личных и ком�
 
 **Перед коммитом автоматически запустятся проверки качества кода!**
 
----
-
-## ✨ Авторы / Authors
-
-- **Разработчик:** [@WarLikeLaux](https://github.com/WarLikeLaux)
-- **Система сборки:** автоматизированная разработка
+[⬆️ К содержанию](#-содержание)
 
 ---
 
@@ -611,5 +244,7 @@ MIT License - используйте свободно в личных и ком�
 **⭐ Поставьте звезду, если проект был полезен!**
 
 Made with ❤️ for developers productivity
+
+[⬆️ Наверх](#-timeplanner)
 
 </div>
