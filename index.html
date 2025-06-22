@@ -110,6 +110,12 @@
             transition: var(--transition);
         }
 
+        @media (min-width: 1025px) {
+            body {
+                overflow: hidden;
+            }
+        }
+
         .header {
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-color);
@@ -255,7 +261,6 @@
             background: var(--bg-primary);
             border-radius: var(--radius-lg);
             border: 1px solid var(--border-color);
-            overflow-y: auto;
             height: 100%;
             box-shadow: var(--shadow-md);
         }
@@ -311,7 +316,7 @@
         }
 
         .input-label {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             color: var(--text-primary);
             display: flex;
@@ -322,7 +327,7 @@
         .input-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
             height: 40px;
         }
 
@@ -401,15 +406,116 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .priority-section {
+        .day-activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .day-activity-input {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .day-activity-input .time-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+            text-align: center;
+        }
+
+        .day-activity-input .time-input {
+            height: 32px;
+            padding: 0 8px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
             padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .priority-section {
+            padding: 10px;
             background: var(--bg-tertiary);
             border-radius: var(--radius-md);
         }
 
         .priority-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
         }
 
@@ -653,17 +759,15 @@
         }
 
         .day-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 16px 8px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 12px 6px;
             text-align: center;
             transition: var(--transition);
         }
 
         .day-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            border-color: var(--border-color);
         }
 
         .day-name {
@@ -679,15 +783,7 @@
             color: var(--text-primary);
         }
 
-        .weekend {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-color: #fbbf24;
-        }
 
-        [data-theme='dark'] .weekend {
-            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
-            border-color: #92400e;
-        }
 
         .task-management {
             margin-bottom: 20px;
@@ -835,46 +931,24 @@
         }
 
         .day-schedule {
-            margin-bottom: 24px;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            border-radius: var(--radius-md);
             transition: var(--transition);
         }
 
         .day-schedule:hover {
-            box-shadow: var(--shadow-md);
+            border-color: var(--border-color);
         }
 
         .day-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .day-schedule.weekend {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-color: #fbbf24;
-        }
-
-        .day-schedule.sport-day {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-color: #3b82f6;
-        }
-
-        [data-theme='dark'] .day-schedule.weekend {
-            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
-            border-color: #92400e;
-        }
-
-        [data-theme='dark'] .day-schedule.sport-day {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-            border-color: #3b82f6;
+            padding-left: 3px;
         }
 
         .tips-grid {
@@ -1290,7 +1364,7 @@
             }
 
             .priority-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -1309,6 +1383,7 @@
             .controls-panel {
                 height: auto;
                 order: 2;
+                overflow-y: auto;
             }
 
             .results-area {
@@ -1376,7 +1451,7 @@
             }
 
             .priority-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
             }
 
             .stats-grid {
@@ -1597,12 +1672,12 @@
 
             .controls-row,
             .controls-row-2 {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
                 gap: 6px;
             }
 
             .priority-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
                 gap: 6px;
             }
 
@@ -1672,7 +1747,7 @@
                 white-space: nowrap;
                 display: flex;
                 flex-wrap: nowrap;
-                padding: 0 4vw;
+                padding: 0 2vw;
                 gap: 2px;
                 justify-content: flex-start;
                 background: var(--bg-tertiary);
@@ -1684,14 +1759,14 @@
             }
 
             .tab-btn {
-                padding: 0 12px;
+                padding: 0 8px;
                 font-size: 11px;
                 flex-shrink: 0;
                 height: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                min-width: auto;
+                min-width: 32px;
                 border-radius: 0;
                 border-bottom: 2px solid transparent;
             }
@@ -1701,14 +1776,25 @@
                 border-bottom: 2px solid var(--primary-color);
             }
 
+            .day-activities-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .day-activity-input .time-input {
+                height: 28px;
+                padding: 0 6px;
+                font-size: 11px;
+            }
+
             .tab-content {
-                padding: 6px 4vw;
+                padding: 6px 2vw;
             }
 
             .stats-grid,
             .tips-grid,
             .analytics-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 gap: 6px;
             }
 
@@ -1818,6 +1904,11 @@
                 padding: 4px 8px;
                 font-size: 12px;
             }
+
+            .controls-row,
+            .priority-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 375px) {
@@ -1836,6 +1927,11 @@
 
             .timer-time {
                 font-size: 14px;
+            }
+
+            .controls-row,
+            .priority-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -1871,7 +1967,7 @@
                 <div class="controls-grid">
                     <div class="controls-row">
                         <div class="input-group">
-                            <label class="input-label" data-i18n="workHours">💼 Работа (ч/нед)</label>
+                            <label class="input-label" data-i18n="workHours">💼 Работа ч/н</label>
                             <div class="input-controls">
                                 <button class="control-btn" onclick="changeValue('work', -1)"
                                     aria-label="Decrease">−</button>
@@ -1883,7 +1979,7 @@
                         </div>
 
                         <div class="input-group">
-                            <label class="input-label" data-i18n="breakHours">☕ Перерывы (ч/нед)</label>
+                            <label class="input-label" data-i18n="breakHours">☕ Перерывы ч/н</label>
                             <div class="input-controls">
                                 <button class="control-btn" onclick="changeValue('breaks', -1)"
                                     aria-label="Decrease">−</button>
@@ -1895,7 +1991,7 @@
                         </div>
 
                         <div class="input-group">
-                            <label class="input-label" data-i18n="foodHours">🍽️ Еда дома (ч/нед)</label>
+                            <label class="input-label" data-i18n="foodHours">🍽️ Еда дома ч/н</label>
                             <div class="input-controls">
                                 <button class="control-btn" onclick="changeValue('food', -1)"
                                     aria-label="Decrease">−</button>
@@ -1905,11 +2001,8 @@
                                     aria-label="Increase">+</button>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="controls-row">
                         <div class="input-group">
-                            <label class="input-label" data-i18n="sportHours">🏃 Спорт (ч/нед)</label>
+                            <label class="input-label" data-i18n="sportHours">🏃 Спорт ч/н</label>
                             <div class="input-controls">
                                 <button class="control-btn" onclick="changeValue('sport', -1)"
                                     aria-label="Decrease">−</button>
@@ -1921,7 +2014,7 @@
                         </div>
 
                         <div class="input-group">
-                            <label class="input-label" data-i18n="sportDays">📅 Дней спорта в неделю</label>
+                            <label class="input-label" data-i18n="sportDays">📅 Дней спорта</label>
                             <div class="input-controls">
                                 <button class="control-btn" onclick="changeValue('sportDays', -1)"
                                     aria-label="Decrease">−</button>
@@ -1933,7 +2026,7 @@
                         </div>
 
                         <div class="input-group">
-                            <label class="input-label" data-i18n="morningRitual">🌅 Утренний ритуал (ч/день)</label>
+                            <label class="input-label" data-i18n="morningRitual">🌅 Утр. ритуал ч/д</label>
                             <div class="input-controls">
                                 <button class="control-btn" onclick="changeValue('morning', -0.5)"
                                     aria-label="Decrease">−</button>
@@ -1943,11 +2036,32 @@
                                     aria-label="Increase">+</button>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="controls-row-2">
                         <div class="input-group">
-                            <label class="input-label" data-i18n="eveningRitual">🌙 Вечерний ритуал (ч/день)</label>
+                            <label class="input-label" data-i18n="selfDevHours">📚 Самообр. ч/нед</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('selfDev', -1)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="selfDev" value="7" min="0" max="35"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('selfDev', 1)"
+                                    aria-label="Increase">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="selfDevDays">📖 Дней/нед</label>
+                            <div class="input-controls">
+                                <button class="control-btn" onclick="changeValue('selfDevDays', -1)"
+                                    aria-label="Decrease">−</button>
+                                <input type="number" class="value-input" id="selfDevDays" value="5" min="1" max="7"
+                                    oninput="saveAndCalculate()">
+                                <button class="control-btn" onclick="changeValue('selfDevDays', 1)"
+                                    aria-label="Increase">+</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" data-i18n="eveningRitual">🌙 Веч. ритуал ч/д</label>
                             <div class="input-controls">
                                 <button class="control-btn" onclick="changeValue('evening', -0.5)"
                                     aria-label="Decrease">−</button>
@@ -1957,15 +2071,18 @@
                                     aria-label="Increase">+</button>
                             </div>
                         </div>
-
-                        <div class="input-group hidden">
-                            <label class="input-label" data-i18n="sleepHours">😴 Сон (ч/день)</label>
-                            <div class="sleep-value" id="sleepDisplay">8.0</div>
-                        </div>
                     </div>
 
                     <div class="input-group full-width">
-                        <label class="input-label" data-i18n="dailySchedule">⏰ Режим дня</label>
+                        <label class="input-label" data-i18n="dayActivityLabels">🏷️ Названия активностей по
+                            дням</label>
+                        <button class="data-btn export-btn" onclick="openActivityModal()"
+                            data-i18n="configureActivities">⚙️ Настроить активности</button>
+                    </div>
+
+
+
+                    <div class="input-group full-width">
                         <div class="time-inputs">
                             <div>
                                 <label class="time-label" data-i18n="bedTime">Сон</label>
@@ -2015,8 +2132,7 @@
                     <div class="priority-section">
                         <div class="priority-grid">
                             <div class="input-group">
-                                <label class="input-label priority-label" data-i18n="weeklyTasks">🎯 Задач в
-                                    неделю</label>
+                                <label class="input-label priority-label" data-i18n="weeklyTasks">🎯 Задач/нед</label>
                                 <div class="input-controls">
                                     <button class="control-btn" onclick="changeValue('weeklyTasks', -1)"
                                         aria-label="Decrease">−</button>
@@ -2028,8 +2144,7 @@
                             </div>
 
                             <div class="input-group">
-                                <label class="input-label priority-label" data-i18n="taskDuration">⏱️ Часов на
-                                    задачу</label>
+                                <label class="input-label priority-label" data-i18n="taskDuration">⏱️ Ч/задачу</label>
                                 <div class="input-controls">
                                     <button class="control-btn" onclick="changeValue('duration', -0.5)"
                                         aria-label="Decrease">−</button>
@@ -2041,8 +2156,8 @@
                             </div>
 
                             <div class="input-group">
-                                <label class="input-label priority-label" data-i18n="maxWeekdayTasks">📝 Макс задач/день
-                                    (будни)</label>
+                                <label class="input-label priority-label" data-i18n="maxWeekdayTasks">📝
+                                    Макс/день</label>
                                 <div class="input-controls">
                                     <button class="control-btn" onclick="changeValue('maxWeekdayTasks', -1)"
                                         aria-label="Decrease">−</button>
@@ -2098,31 +2213,44 @@
 
                 <div class="content-card" id="scheduleCard" style="display: none;">
                     <div class="schedule-tabs" id="scheduleTabs">
-                        <button class="tab-btn active" onclick="switchTab('weekday')"
-                            data-i18n="weekdays">Будни</button>
-                        <button class="tab-btn" onclick="switchTab('weekend')" data-i18n="weekends">Выходные</button>
+                        <button class="tab-btn active" onclick="switchTab('monday')" data-i18n="monday">Пн</button>
+                        <button class="tab-btn" onclick="switchTab('tuesday')" data-i18n="tuesday">Вт</button>
+                        <button class="tab-btn" onclick="switchTab('wednesday')" data-i18n="wednesday">Ср</button>
+                        <button class="tab-btn" onclick="switchTab('thursday')" data-i18n="thursday">Чт</button>
+                        <button class="tab-btn" onclick="switchTab('friday')" data-i18n="friday">Пт</button>
+                        <button class="tab-btn" onclick="switchTab('saturday')" data-i18n="saturday">Сб</button>
+                        <button class="tab-btn" onclick="switchTab('sunday')" data-i18n="sunday">Вс</button>
                         <button class="tab-btn" onclick="switchTab('weekly')" data-i18n="weekly">Неделя</button>
                         <button class="tab-btn" onclick="switchTab('tasks')" data-i18n="tasks">Задачи</button>
-                        <button class="tab-btn" onclick="switchTab('timer')" data-i18n="timer">Таймер</button>
-                        <button class="tab-btn" onclick="switchTab('analytics')"
-                            data-i18n="analytics">Аналитика</button>
                         <button class="tab-btn" onclick="switchTab('tips')" data-i18n="tips">Советы</button>
                     </div>
 
-                    <div id="weekdayTab" class="tab-content active">
-                        <div id="weekdaySchedule"></div>
+                    <div id="mondayTab" class="tab-content active">
+                        <div id="mondaySchedule"></div>
                     </div>
 
-                    <div id="sportDayTab" class="tab-content">
-                        <div id="sportDaySchedule"></div>
+                    <div id="tuesdayTab" class="tab-content">
+                        <div id="tuesdaySchedule"></div>
                     </div>
 
-                    <div id="regularDayTab" class="tab-content">
-                        <div id="regularDaySchedule"></div>
+                    <div id="wednesdayTab" class="tab-content">
+                        <div id="wednesdaySchedule"></div>
                     </div>
 
-                    <div id="weekendTab" class="tab-content">
-                        <div id="weekendSchedule"></div>
+                    <div id="thursdayTab" class="tab-content">
+                        <div id="thursdaySchedule"></div>
+                    </div>
+
+                    <div id="fridayTab" class="tab-content">
+                        <div id="fridaySchedule"></div>
+                    </div>
+
+                    <div id="saturdayTab" class="tab-content">
+                        <div id="saturdaySchedule"></div>
+                    </div>
+
+                    <div id="sundayTab" class="tab-content">
+                        <div id="sundaySchedule"></div>
                     </div>
 
                     <div id="weeklyTab" class="tab-content">
@@ -2148,112 +2276,7 @@
                         <div id="tasksList"></div>
                     </div>
 
-                    <div id="timerTab" class="tab-content">
-                        <div class="timer-container">
-                            <div class="pomodoro-timer">
-                                <div class="timer-display">
-                                    <div class="timer-circle">
-                                        <svg class="timer-svg" viewBox="0 0 100 100">
-                                            <circle cx="50" cy="50" r="45" class="timer-bg"></circle>
-                                            <circle cx="50" cy="50" r="45" class="timer-progress" id="timerProgress">
-                                            </circle>
-                                        </svg>
-                                        <div class="timer-text">
-                                            <div class="timer-time" id="timerTime">25:00</div>
-                                            <div class="timer-label" id="timerLabel" data-i18n="focusTime">Фокус</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="timer-controls">
-                                    <button class="timer-btn primary" id="timerStartBtn" onclick="toggleTimer()"
-                                        data-i18n="start">Старт</button>
-                                    <button class="timer-btn" onclick="resetTimer()" data-i18n="reset">Сброс</button>
-                                    <button class="timer-btn" onclick="skipTimer()" data-i18n="skip">Пропустить</button>
-                                </div>
-                                <div class="timer-settings">
-                                    <div class="setting-group">
-                                        <label data-i18n="focusDuration">Работа (мин)</label>
-                                        <input type="number" id="focusTime" value="25" min="1" max="60"
-                                            onchange="updateTimerSettings()">
-                                    </div>
-                                    <div class="setting-group">
-                                        <label data-i18n="shortBreak">Короткий перерыв (мин)</label>
-                                        <input type="number" id="shortBreak" value="5" min="1" max="30"
-                                            onchange="updateTimerSettings()">
-                                    </div>
-                                    <div class="setting-group">
-                                        <label data-i18n="longBreak">Длинный перерыв (мин)</label>
-                                        <input type="number" id="longBreak" value="15" min="1" max="60"
-                                            onchange="updateTimerSettings()">
-                                    </div>
-                                </div>
-                                <div class="pomodoro-stats">
-                                    <div class="stat-item">
-                                        <span data-i18n="completedPomodoros">Завершено сегодня:</span>
-                                        <span id="pomodoroCount">0</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span data-i18n="currentCycle">Текущий цикл:</span>
-                                        <span id="currentCycle">1/4</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div id="analyticsTab" class="tab-content">
-                        <div class="analytics-container">
-                            <div class="analytics-grid">
-                                <div class="analytics-card">
-                                    <h3 data-i18n="weeklyProgress">Прогресс недели</h3>
-                                    <div class="progress-chart">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" id="weeklyProgress" style="width: 0%"></div>
-                                        </div>
-                                        <div class="progress-text">
-                                            <span id="weeklyProgressText">0/10 задач</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="analytics-card">
-                                    <h3 data-i18n="efficiencyScore">Эффективность</h3>
-                                    <div class="efficiency-score">
-                                        <div class="score-circle">
-                                            <span id="efficiencyPercent">85%</span>
-                                        </div>
-                                        <div class="score-details">
-                                            <div data-i18n="excellentPace">Отличный темп!</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="analytics-card">
-                                    <h3 data-i18n="timeDistribution">Распределение времени</h3>
-                                    <div class="time-breakdown">
-                                        <div class="breakdown-item">
-                                            <span class="breakdown-color work"></span>
-                                            <span data-i18n="work">Работа</span>
-                                            <span id="workPercent">40%</span>
-                                        </div>
-                                        <div class="breakdown-item">
-                                            <span class="breakdown-color tasks"></span>
-                                            <span data-i18n="houseTasks">Дом. задачи</span>
-                                            <span id="tasksPercent">15%</span>
-                                        </div>
-                                        <div class="breakdown-item">
-                                            <span class="breakdown-color rest"></span>
-                                            <span data-i18n="rest">Отдых</span>
-                                            <span id="restPercent">25%</span>
-                                        </div>
-                                        <div class="breakdown-item">
-                                            <span class="breakdown-color sleep"></span>
-                                            <span data-i18n="sleep">Сон</span>
-                                            <span id="sleepPercent">20%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div id="tipsTab" class="tab-content">
                         <div class="tips-grid">
@@ -2327,39 +2350,113 @@
 
     <div class="alert-container" id="alerts"></div>
 
+    <div class="modal-overlay" id="activityModal" onclick="closeActivityModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 data-i18n="dayActivityLabels">🏷️ Названия активностей по дням</h3>
+                <button class="modal-close" onclick="closeActivityModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <label class="input-label" data-i18n="selfDevLabel">🏷️ Общее название</label>
+                    <input type="text" class="time-input" id="selfDevLabel" value="Самообразование"
+                        data-i18n-placeholder="selfDevLabelPlaceholder" oninput="saveAndCalculate()"
+                        style="width: 100%; height: 32px;">
+                </div>
+                <div class="day-activities-grid">
+                    <div class="day-activity-input">
+                        <label class="time-label" data-i18n="monday">Пн</label>
+                        <input type="text" class="time-input" id="mondayLabel" data-i18n-placeholder="mondayPlaceholder"
+                            oninput="saveAndCalculate()">
+                    </div>
+                    <div class="day-activity-input">
+                        <label class="time-label" data-i18n="tuesday">Вт</label>
+                        <input type="text" class="time-input" id="tuesdayLabel"
+                            data-i18n-placeholder="tuesdayPlaceholder" oninput="saveAndCalculate()">
+                    </div>
+                    <div class="day-activity-input">
+                        <label class="time-label" data-i18n="wednesday">Ср</label>
+                        <input type="text" class="time-input" id="wednesdayLabel"
+                            data-i18n-placeholder="wednesdayPlaceholder" oninput="saveAndCalculate()">
+                    </div>
+                    <div class="day-activity-input">
+                        <label class="time-label" data-i18n="thursday">Чт</label>
+                        <input type="text" class="time-input" id="thursdayLabel"
+                            data-i18n-placeholder="thursdayPlaceholder" oninput="saveAndCalculate()">
+                    </div>
+                    <div class="day-activity-input">
+                        <label class="time-label" data-i18n="friday">Пт</label>
+                        <input type="text" class="time-input" id="fridayLabel" data-i18n-placeholder="fridayPlaceholder"
+                            oninput="saveAndCalculate()">
+                    </div>
+                    <div class="day-activity-input">
+                        <label class="time-label" data-i18n="saturday">Сб</label>
+                        <input type="text" class="time-input" id="saturdayLabel"
+                            data-i18n-placeholder="saturdayPlaceholder" oninput="saveAndCalculate()">
+                    </div>
+                    <div class="day-activity-input">
+                        <label class="time-label" data-i18n="sunday">Вс</label>
+                        <input type="text" class="time-input" id="sundayLabel" data-i18n-placeholder="sundayPlaceholder"
+                            oninput="saveAndCalculate()">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="data-btn export-btn" onclick="closeActivityModal()" data-i18n="save">💾
+                    Сохранить</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const translations = {
             ru: {
                 title: '⏰ Планировщик времени программиста',
                 planningParams: 'Параметры планирования',
-                workHours: '💼 Работа (ч/нед)',
-                breakHours: '☕ Перерывы (ч/нед)',
-                foodHours: '🍽️ Еда дома (ч/нед)',
-                sportHours: '🏃 Спорт (ч/нед)',
-                sportDays: '📅 Дней спорта в неделю',
-                sleepHours: '😴 Сон',
-                morningRitual: '🌅 Утренний ритуал (ч/д)',
+                workHours: '💼 Работа ч/н',
+                breakHours: '☕ Перерывы ч/н',
+                foodHours: '🍽️ Еда дома ч/н',
+                sportHours: '🏃 Спорт ч/н',
+                sportDays: '🏃 Дней спорта',
+                selfDevHours: '📚 Самообразование ч/н',
+                selfDevDays: '📚 Дней самообразования',
+                selfDevLabel: '🏷️ Общее название',
+                selfDevLabelPlaceholder: 'Самообразование',
+                dayActivityLabels: '🏷️ Названия активностей по дням',
+                sleepHours: '😴 Сон ч/д',
+                morningRitual: '🌅 Утренний ритуал ч/д',
                 morningRitualSchedule: '🌅 Утренний ритуал',
-                eveningRitual: '🌙 Вечерний ритуал (ч/д)',
+                eveningRitual: '🌙 Вечерний ритуал ч/д',
                 eveningRitualSchedule: '🌙 Вечерний ритуал',
-                dailySchedule: '⏰ Режим дня',
+                monday: 'Пн',
+                tuesday: 'Вт',
+                wednesday: 'Ср',
+                thursday: 'Чт',
+                friday: 'Пт',
+                saturday: 'Сб',
+                sunday: 'Вс',
+                mondayPlaceholder: 'Понедельник',
+                tuesdayPlaceholder: 'Вторник',
+                wednesdayPlaceholder: 'Среда',
+                thursdayPlaceholder: 'Четверг',
+                fridayPlaceholder: 'Пятница',
+                saturdayPlaceholder: 'Суббота',
+                sundayPlaceholder: 'Воскресенье',
+                configureActivities: '⚙️ Настроить активности',
+                save: '💾 Сохранить',
                 wakeUp: 'Подъем',
                 bedTime: 'Сон',
                 weeklyTasks: '🎯 Задач в неделю',
                 taskDuration: '⏱️ Часов на задачу',
-                maxWeekdayTasks: '📝 Макс задач/день (будни)',
+                maxWeekdayTasks: '📝 Макс. задач в раб. день',
                 freeHoursWeek: 'Свободных часов в неделю',
                 totalNeeded: 'Нужно на все задачи',
                 tasksPerDay: 'Задач в день',
                 restHours: 'Останется на отдых',
                 planStatus: 'Статус плана',
                 sleepQuality: 'Качество сна',
-                weekdays: 'Будни',
-                weekends: 'Выходные',
                 weekly: 'Неделя',
                 tasks: 'Задачи',
-                timer: 'Таймер',
-                analytics: 'Аналитика',
                 tips: 'Советы',
                 addNewTask: 'Добавить новую задачу...',
                 add: 'Добавить',
@@ -2441,34 +2538,50 @@
             en: {
                 title: '⏰ Programmer Time Planner',
                 planningParams: 'Planning Parameters',
-                workHours: '💼 Work (h/week)',
-                breakHours: '☕ Breaks (h/week)',
-                foodHours: '🍽️ Home meals (h/week)',
-                sportHours: '🏃 Sport (h/week)',
-                sportDays: '📅 Sport days per week',
-                sleepHours: '😴 Sleep (h/day)',
-                morningRitual: '🌅 Morning ritual (h/day)',
+                workHours: '💼 Work h/w',
+                breakHours: '☕ Breaks h/w',
+                foodHours: '🍽️ Meals h/w',
+                sportHours: '🏃 Sport h/w',
+                sportDays: '🏃 Sport days',
+                selfDevHours: '📚 Self-dev h/w',
+                selfDevDays: '📚 Self-dev days',
+                selfDevLabel: '🏷️ General name',
+                selfDevLabelPlaceholder: 'Self-development',
+                dayActivityLabels: '🏷️ Daily activity names',
+                sleepHours: '😴 Sleep h/d',
+                morningRitual: '🌅 Morning ritual h/d',
                 morningRitualSchedule: '🌅 Morning ritual',
-                eveningRitual: '🌙 Evening ritual (h/day)',
+                eveningRitual: '🌙 Evening ritual h/d',
                 eveningRitualSchedule: '🌙 Evening ritual',
-                dailySchedule: '⏰ Daily schedule',
+                monday: 'Mon',
+                tuesday: 'Tue',
+                wednesday: 'Wed',
+                thursday: 'Thu',
+                friday: 'Fri',
+                saturday: 'Sat',
+                sunday: 'Sun',
+                mondayPlaceholder: 'Monday',
+                tuesdayPlaceholder: 'Tuesday',
+                wednesdayPlaceholder: 'Wednesday',
+                thursdayPlaceholder: 'Thursday',
+                fridayPlaceholder: 'Friday',
+                saturdayPlaceholder: 'Saturday',
+                sundayPlaceholder: 'Sunday',
+                configureActivities: '⚙️ Configure Activities',
+                save: '💾 Save',
                 wakeUp: 'Wake up',
                 bedTime: 'Bedtime',
                 weeklyTasks: '🎯 Tasks per week',
                 taskDuration: '⏱️ Hours per task',
-                maxWeekdayTasks: '📝 Max tasks/day (weekday)',
+                maxWeekdayTasks: '📝 Max tasks per work day',
                 freeHoursWeek: 'Free hours per week',
                 totalNeeded: 'Total needed for tasks',
                 tasksPerDay: 'Tasks per day',
                 restHours: 'Remaining for rest',
                 planStatus: 'Plan status',
                 sleepQuality: 'Sleep quality',
-                weekdays: 'Weekdays',
-                weekends: 'Weekends',
                 weekly: 'Weekly',
                 tasks: 'Tasks',
-                timer: 'Timer',
-                analytics: 'Analytics',
                 tips: 'Tips',
                 addNewTask: 'Add new task...',
                 add: 'Add',
@@ -2552,15 +2665,7 @@
         let currentLang = localStorage.getItem('planner_lang') || 'ru';
         let tasks = [];
         let currentFilter = 'all';
-        let timerState = {
-            isRunning: false,
-            currentTime: 1500,
-            totalTime: 1500,
-            mode: 'focus',
-            cycle: 1,
-            completedPomodoros: parseInt(localStorage.getItem('planner_pomodoros') || '0'),
-        };
-        let timerInterval = null;
+
 
         function getTranslation(key) {
             return translations[currentLang][key] || translations.ru[key] || key;
@@ -2574,6 +2679,11 @@
                 } else {
                     element.textContent = getTranslation(key);
                 }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                element.placeholder = getTranslation(key);
             });
 
             updateInstallButtonText();
@@ -2635,9 +2745,19 @@
                 food: 7,
                 sport: 3,
                 sportDays: 3,
+                selfDev: 3,
+                selfDevDays: 3,
+                selfDevLabel: currentLang === 'ru' ? 'Самообразование' : 'Self-development',
+                mondayLabel: '',
+                tuesdayLabel: '',
+                wednesdayLabel: '',
+                thursdayLabel: '',
+                fridayLabel: '',
+                saturdayLabel: '',
+                sundayLabel: '',
                 morning: 1,
                 evening: 1,
-                weeklyTasks: 10,
+                weeklyTasks: 9,
                 duration: 1,
                 maxWeekdayTasks: 1,
                 wakeTime: '07:00',
@@ -2657,7 +2777,7 @@
         }
 
         function saveSettings() {
-            const fields = ['work', 'breaks', 'food', 'sport', 'sportDays', 'morning', 'evening', 'weeklyTasks', 'duration', 'maxWeekdayTasks', 'wakeTime', 'sleepTime'];
+            const fields = ['work', 'breaks', 'food', 'sport', 'sportDays', 'selfDev', 'selfDevDays', 'selfDevLabel', 'mondayLabel', 'tuesdayLabel', 'wednesdayLabel', 'thursdayLabel', 'fridayLabel', 'saturdayLabel', 'sundayLabel', 'morning', 'evening', 'weeklyTasks', 'duration', 'maxWeekdayTasks', 'wakeTime', 'sleepTime'];
             fields.forEach(field => {
                 const element = document.getElementById(field);
                 if (element) {
@@ -2678,7 +2798,6 @@
             }
 
             const sleepHours = wake + 24 - sleep;
-            document.getElementById('sleepDisplay').textContent = sleepHours.toFixed(1);
 
             return sleepHours;
         }
@@ -2723,6 +2842,212 @@
             }
         }
 
+        function generateDailySchedules(wakeTime, sleepTime) {
+            const sportDays = getSportDays();
+            const selfDevDays = getSelfDevDays();
+            const dayNames = currentLang === 'ru' ?
+                ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] :
+                ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+            const dayIds = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+            for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+                const isWeekend = dayIndex === 0 || dayIndex === 6;
+                const hasSport = sportDays.includes(dayIndex);
+                const hasSelfDev = selfDevDays.includes(dayIndex);
+
+                const schedule = generateSingleDaySchedule(wakeTime, sleepTime, dayIndex, hasSport, hasSelfDev, isWeekend);
+
+                const html = `
+                    <div class="day-schedule">
+                        <div class="day-title">
+                            ${dayNames[dayIndex]}
+                            ${hasSport ? ' 🏃' : ''}
+                            ${hasSelfDev ? ' 📚' : ''}
+                        </div>
+                        ${generateScheduleHTML(schedule)}
+                    </div>
+                `;
+
+                const scheduleContainer = document.getElementById(dayIds[dayIndex] + 'Schedule');
+                if (scheduleContainer) {
+                    scheduleContainer.innerHTML = html;
+                }
+            }
+        }
+
+        function generateSingleDaySchedule(wakeTime, sleepTime, dayIndex, hasSport, hasSelfDev, isWeekend) {
+            let currentTime = timeToDecimal(wakeTime);
+            const schedule = [];
+            const morning = parseFloat(document.getElementById('morning').value) || 0;
+            const evening = parseFloat(document.getElementById('evening').value) || 0;
+            const food = parseFloat(document.getElementById('food').value) || 5;
+            const breaks = parseFloat(document.getElementById('breaks').value) || 7;
+            const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
+            const selfDev = parseFloat(document.getElementById('selfDev').value) || 0;
+            const selfDevDays = parseInt(document.getElementById('selfDevDays').value) || 0;
+            const selfDevLabel = document.getElementById('selfDevLabel').value || (currentLang === 'ru' ? 'Самообразование' : 'Self-development');
+            const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
+            const duration = parseFloat(document.getElementById('duration').value) || 1;
+            const work = parseFloat(document.getElementById('work').value) || 0;
+            const weeklyTasks = parseInt(document.getElementById('weeklyTasks').value) || 0;
+
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: getTranslation('morningRitualSchedule'),
+                duration: morning,
+            });
+            currentTime += morning;
+
+            if (hasSelfDev && selfDevDays > 0) {
+                const selfDevPerDay = selfDev / selfDevDays;
+                const dayLabels = ['sundayLabel', 'mondayLabel', 'tuesdayLabel', 'wednesdayLabel', 'thursdayLabel', 'fridayLabel', 'saturdayLabel'];
+                const customLabel = document.getElementById(dayLabels[dayIndex])?.value || '';
+                const activityName = customLabel || selfDevLabel;
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: `📚 ${activityName}`,
+                    duration: selfDevPerDay,
+                });
+                currentTime += selfDevPerDay;
+            }
+
+            const breakfastTime = food / 14;
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: getTranslation('breakfast'),
+                duration: breakfastTime,
+            });
+            currentTime += breakfastTime;
+
+            if (!isWeekend) {
+                const workHoursPerDay = work / 5;
+                const firstHalf = workHoursPerDay / 2;
+                const secondHalf = workHoursPerDay / 2;
+
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: getTranslation('workFirstHalf'),
+                    duration: firstHalf,
+                });
+                currentTime += firstHalf;
+
+                if (hasSport && sportDays > 0) {
+                    const sportPerDay = sport / sportDays;
+                    schedule.push({
+                        time: formatTime(currentTime),
+                        activity: getTranslation('sport'),
+                        duration: sportPerDay,
+                    });
+                    currentTime += sportPerDay;
+                }
+
+                const lunchBreakTime = breaks / 7;
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: getTranslation('lunchBreak'),
+                    duration: lunchBreakTime,
+                });
+                currentTime += lunchBreakTime;
+
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: getTranslation('workSecondHalf'),
+                    duration: secondHalf,
+                });
+                currentTime += secondHalf;
+
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: getTranslation('dinner'),
+                    duration: breakfastTime,
+                });
+                currentTime += breakfastTime;
+
+                const taskTime = maxWeekdayTasks * duration;
+                if (taskTime > 0) {
+                    schedule.push({
+                        time: formatTime(currentTime),
+                        activity: `${getTranslation('houseTasks')} (${maxWeekdayTasks} ${declension(maxWeekdayTasks, getTranslation('taskDeclensions').split(','))})`,
+                        duration: taskTime,
+                    });
+                    currentTime += taskTime;
+                }
+            } else {
+                if (hasSport && sportDays > 0) {
+                    const sportPerDay = sport / sportDays;
+                    schedule.push({
+                        time: formatTime(currentTime),
+                        activity: getTranslation('sportWalk'),
+                        duration: sportPerDay,
+                    });
+                    currentTime += sportPerDay;
+                }
+
+                const totalWeekdayTasks = maxWeekdayTasks * 5;
+                const remainingTasks = Math.max(0, weeklyTasks - totalWeekdayTasks);
+                const weekendTasks = Math.ceil(remainingTasks / 2);
+
+                const taskTime = weekendTasks * duration;
+                if (taskTime > 0) {
+                    schedule.push({
+                        time: formatTime(currentTime),
+                        activity: `${getTranslation('houseTasks')} (${weekendTasks} ${declension(weekendTasks, getTranslation('taskDeclensions').split(','))})`,
+                        duration: taskTime,
+                    });
+                    currentTime += taskTime;
+                }
+
+                const lunchBreakTime = breaks / 14;
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: getTranslation('lunchBreak'),
+                    duration: lunchBreakTime,
+                });
+                currentTime += lunchBreakTime;
+
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: getTranslation('freeTime'),
+                    duration: 2,
+                });
+                currentTime += 2;
+
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: getTranslation('dinner'),
+                    duration: breakfastTime,
+                });
+                currentTime += breakfastTime;
+            }
+
+            let bedTime = timeToDecimal(sleepTime);
+            if (bedTime <= currentTime) {
+                bedTime += 24;
+            }
+
+            const freeTimeEnd = bedTime - evening;
+            const freeTime = Math.max(0, freeTimeEnd - currentTime);
+
+            if (freeTime > 0) {
+                schedule.push({
+                    time: formatTime(currentTime),
+                    activity: getTranslation('freeTime'),
+                    duration: freeTime,
+                });
+                currentTime = freeTimeEnd;
+            }
+
+            schedule.push({
+                time: formatTime(currentTime),
+                activity: getTranslation('eveningRitualSchedule'),
+                duration: evening,
+            });
+
+            return schedule;
+        }
+
         function getSportDays() {
             const sportDays = parseInt(document.getElementById('sportDays').value) || 0;
             const days = [];
@@ -2738,12 +3063,53 @@
             return days;
         }
 
+        function getSelfDevDays() {
+            const selfDevDays = parseInt(document.getElementById('selfDevDays').value) || 0;
+            const sportDays = getSportDays();
+            const days = [];
+
+            // Приоритизируем дни без спорта для самообразования
+            const availableDays = [1, 2, 3, 4, 5, 6, 0]; // Пн-Вс (0 = воскресенье)
+            const nonSportDays = availableDays.filter(day => !sportDays.includes(day));
+            const weekdayNonSport = nonSportDays.filter(day => day >= 1 && day <= 5);
+            const weekendNonSport = nonSportDays.filter(day => day === 0 || day === 6);
+
+            // Добавляем один день из выходных, если возможно
+            if (selfDevDays >= 1 && weekendNonSport.length > 0) {
+                days.push(weekendNonSport[0]);
+            } else if (selfDevDays >= 1 && nonSportDays.includes(6)) {
+                days.push(6); // Суббота как запасной вариант
+            } else if (selfDevDays >= 1 && nonSportDays.includes(0)) {
+                days.push(0); // Воскресенье как запасной вариант
+            }
+
+            // Остальные дни распределяем по будням
+            const remainingDays = selfDevDays - days.length;
+            for (let i = 0; i < remainingDays && i < weekdayNonSport.length; i++) {
+                days.push(weekdayNonSport[i]);
+            }
+
+            // Если не хватает дней без спорта, добавляем дни со спортом
+            if (days.length < selfDevDays) {
+                const remaining = selfDevDays - days.length;
+                const sportWeekdays = sportDays.filter(day => day >= 1 && day <= 5);
+                for (let i = 0; i < remaining && i < sportWeekdays.length; i++) {
+                    if (!days.includes(sportWeekdays[i])) {
+                        days.push(sportWeekdays[i]);
+                    }
+                }
+            }
+
+            return days.sort((a, b) => a - b);
+        }
+
         function calculateTasks() {
             try {
                 const work = parseFloat(document.getElementById('work').value) || 0;
                 const breaks = parseFloat(document.getElementById('breaks').value) || 0;
                 const food = parseFloat(document.getElementById('food').value) || 0;
                 const sport = parseFloat(document.getElementById('sport').value) || 0;
+                const selfDev = parseFloat(document.getElementById('selfDev').value) || 0;
                 const sleep = calculateSleep();
                 const morning = parseFloat(document.getElementById('morning').value) || 0;
                 const evening = parseFloat(document.getElementById('evening').value) || 0;
@@ -2756,7 +3122,7 @@
                 const morningWeek = morning * 7;
                 const eveningWeek = evening * 7;
 
-                const usedHours = work + breaks + food + sport + sleepWeek + morningWeek + eveningWeek;
+                const usedHours = work + breaks + food + sport + selfDev + sleepWeek + morningWeek + eveningWeek;
                 const availableHours = totalWeekHours - usedHours;
 
                 const totalNeeded = weeklyTasksCount * duration;
@@ -2813,126 +3179,17 @@
                     statusClass = 'status-good';
                 }
 
-                showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay);
+                showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, selfDev);
                 generateSchedules();
-                updateAnalytics(work, totalNeeded, restHours, sleep);
             } catch (error) {
                 console.error('Calculate tasks error:', error);
                 showAlert('⚠️ ' + (currentLang === 'ru' ? 'Ошибка расчета задач' : 'Task calculation error'), 'error');
             }
         }
 
-        function updateAnalytics(work, tasksTime, restTime, sleepHours) {
-
-            if (arguments.length === 0) {
-                work = parseFloat(document.getElementById('work').value) || 0;
-                tasksTime = parseFloat(document.getElementById('weeklyTasks').value) * parseFloat(document.getElementById('duration').value) || 0;
-                restTime = calculateCurrentRestTime();
-                sleepHours = calculateSleep();
-            }
-
-            const totalWeekHours = 168;
-            const workPercent = Math.round((work / totalWeekHours) * 100);
-            const tasksPercent = Math.round((tasksTime / totalWeekHours) * 100);
-            const restPercent = Math.round((restTime / totalWeekHours) * 100);
-            const sleepPercent = Math.round(((sleepHours * 7) / totalWeekHours) * 100);
-
-            document.getElementById('workPercent').textContent = `${workPercent}%`;
-            document.getElementById('tasksPercent').textContent = `${tasksPercent}%`;
-            document.getElementById('restPercent').textContent = `${restPercent}%`;
-            document.getElementById('sleepPercent').textContent = `${sleepPercent}%`;
 
 
-            const completedTasks = tasks.filter(t => t.completed).length;
-            const totalTasks = Math.max(tasks.length, 1);
-            const progressPercent = Math.round((completedTasks / totalTasks) * 100);
-
-            const progressBar = document.getElementById('weeklyProgress');
-            const progressText = document.getElementById('weeklyProgressText');
-
-            if (progressBar) {
-                progressBar.style.width = `${progressPercent}%`;
-                progressBar.style.background = progressPercent >= 80
-                    ? 'var(--gradient-success)'
-                    : progressPercent >= 50
-                        ? 'var(--gradient-warning)'
-                        : 'var(--gradient-primary)';
-            }
-
-            if (progressText) {
-                progressText.textContent = `${completedTasks}/${totalTasks} ${getTranslation('tasks').toLowerCase()}`;
-            }
-
-
-            const workLifeBalance = calculateWorkLifeBalance(work, restTime, sleepHours);
-            const availableTime = 168 - work - (sleepHours * 7);
-            const taskLoad = Math.min(100, (tasksTime / Math.max(availableTime, 1)) * 100);
-            const sleepQuality = sleepHours >= 7 && sleepHours <= 9 ? 100 : Math.max(0, 100 - Math.abs(sleepHours - 8) * 15);
-
-            const efficiency = Math.round((workLifeBalance + (100 - taskLoad) + sleepQuality + progressPercent) / 4);
-
-            const efficiencyElement = document.getElementById('efficiencyPercent');
-            if (efficiencyElement) {
-                efficiencyElement.textContent = `${efficiency}%`;
-                efficiencyElement.className = efficiency >= 80 ? 'efficiency-excellent' :
-                    efficiency >= 60 ? 'efficiency-good' : 'efficiency-needs-improvement';
-            }
-
-
-            const today = new Date().toISOString().split('T')[0];
-            const analyticsHistory = JSON.parse(localStorage.getItem('planner_analytics_history') || '{}');
-            analyticsHistory[today] = {
-                efficiency,
-                workLifeBalance,
-                taskCompletion: progressPercent,
-                sleepQuality
-            };
-
-
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            Object.keys(analyticsHistory).forEach(date => {
-                if (new Date(date) < thirtyDaysAgo) {
-                    delete analyticsHistory[date];
-                }
-            });
-
-            localStorage.setItem('planner_analytics_history', JSON.stringify(analyticsHistory));
-        } function calculateWorkLifeBalance(workHours, restHours, sleepHours) {
-            const idealWork = 40;
-            const idealRest = 20;
-            const idealSleep = 8;
-
-            const workScore = Math.max(0, 100 - Math.abs(workHours - idealWork) * 2);
-            const restScore = Math.max(0, 100 - Math.abs(restHours - idealRest) * 3);
-            const sleepScore = Math.max(0, 100 - Math.abs(sleepHours - idealSleep) * 10);
-
-            return Math.round((workScore + restScore + sleepScore) / 3);
-        }
-
-        function calculateCurrentRestTime() {
-            const work = parseFloat(document.getElementById('work').value) || 0;
-            const breaks = parseFloat(document.getElementById('breaks').value) || 0;
-            const food = parseFloat(document.getElementById('food').value) || 0;
-            const sport = parseFloat(document.getElementById('sport').value) || 0;
-            const sleep = calculateSleep();
-            const morning = parseFloat(document.getElementById('morning').value) || 0;
-            const evening = parseFloat(document.getElementById('evening').value) || 0;
-            const weeklyTasksCount = parseFloat(document.getElementById('weeklyTasks').value) || 0;
-            const duration = parseFloat(document.getElementById('duration').value) || 0;
-
-            const totalWeekHours = 168;
-            const sleepWeek = sleep * 7;
-            const morningWeek = morning * 7;
-            const eveningWeek = evening * 7;
-            const usedHours = work + breaks + food + sport + sleepWeek + morningWeek + eveningWeek;
-            const availableHours = totalWeekHours - usedHours;
-            const totalNeeded = weeklyTasksCount * duration;
-
-            return Math.max(0, availableHours - totalNeeded);
-        }
-
-        function showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, weekdayTasksPerDay, weekendTasksPerDay) {
+        function showAlerts(totalNeeded, availableHours, restHours, duration, weeklyTasksCount, maxWeekdayTasks, selfDev) {
             const alertsDiv = document.getElementById('alerts');
             alertsDiv.innerHTML = '';
 
@@ -2946,10 +3203,10 @@
                     ? `⚠️ Критически мало времени на отдых (${restHours.toFixed(1)} ч). Высокий риск выгорания!`
                     : `⚠️ Critically low rest time (${restHours.toFixed(1)}h). High burnout risk!`;
                 showAlert(msg, 'warning');
-            } else if (weekendTasksPerDay > 4) {
+            } else if (selfDev > 15) {
                 const msg = currentLang === 'ru'
-                    ? `⚠️ Слишком много задач на выходные (${weekendTasksPerDay}/день). Увеличь максимум задач в будни.`
-                    : `⚠️ Too many weekend tasks (${weekendTasksPerDay}/day). Increase weekday task limit.`;
+                    ? `⚠️ Слишком много времени на самообразование (${selfDev.toFixed(1)} ч/нед). Рекомендуется не более 15 часов.`
+                    : `⚠️ Too much time for self-development (${selfDev.toFixed(1)}h/week). Recommended max 15 hours.`;
                 showAlert(msg, 'warning');
             } else if (restHours > 25) {
                 const msg = currentLang === 'ru'
@@ -2991,200 +3248,23 @@
         function generateSchedules() {
             const wakeTime = document.getElementById('wakeTime').value;
             const sleepTime = document.getElementById('sleepTime').value;
-            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
 
-            updateScheduleTabs(sportDays);
-
-            if (sportDays < 7) {
-                generateSportDaySchedule(wakeTime, sleepTime);
-                generateRegularDaySchedule(wakeTime, sleepTime);
-            } else {
-                generateWeekdaySchedule(wakeTime, sleepTime);
-            }
-
-            generateWeekendSchedule(wakeTime, sleepTime);
+            generateDailySchedules(wakeTime, sleepTime);
             generateWeeklyDistribution();
 
             document.getElementById('scheduleCard').style.display = 'flex';
         }
 
-        function updateScheduleTabs(sportDays) {
-            const scheduleTabs = document.getElementById('scheduleTabs');
-            const weekdayTab = scheduleTabs.querySelector('[onclick="switchTab(\'weekday\')"]');
-            let sportDayTab = scheduleTabs.querySelector('[onclick="switchTab(\'sportDay\')"]');
-            let regularDayTab = scheduleTabs.querySelector('[onclick="switchTab(\'regularDay\')"]');
 
-            if (sportDays < 7) {
-                if (weekdayTab) weekdayTab.style.display = 'none';
 
-                if (!sportDayTab) {
-                    sportDayTab = document.createElement('button');
-                    sportDayTab.className = 'tab-btn active';
-                    sportDayTab.setAttribute('onclick', "switchTab('sportDay')");
-                    sportDayTab.setAttribute('data-i18n', 'sportDayTab');
-                    sportDayTab.textContent = getTranslation('sportDayTab');
-                    scheduleTabs.insertBefore(sportDayTab, scheduleTabs.children[1]);
-                } else {
-                    sportDayTab.style.display = 'block';
-                    sportDayTab.classList.add('active');
-                }
 
-                if (!regularDayTab) {
-                    regularDayTab = document.createElement('button');
-                    regularDayTab.className = 'tab-btn';
-                    regularDayTab.setAttribute('onclick', "switchTab('regularDay')");
-                    regularDayTab.setAttribute('data-i18n', 'regularDayTab');
-                    regularDayTab.textContent = getTranslation('regularDayTab');
-                    scheduleTabs.insertBefore(regularDayTab, scheduleTabs.children[2]);
-                } else {
-                    regularDayTab.style.display = 'block';
-                }
-
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                if (sportDayTab) sportDayTab.classList.add('active');
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                document.getElementById('sportDayTab').classList.add('active');
-            } else {
-                if (weekdayTab) {
-                    weekdayTab.style.display = 'block';
-                    weekdayTab.classList.add('active');
-                }
-                if (sportDayTab) sportDayTab.style.display = 'none';
-                if (regularDayTab) regularDayTab.style.display = 'none';
-
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                if (weekdayTab) weekdayTab.classList.add('active');
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                document.getElementById('weekdayTab').classList.add('active');
-            }
-        }
-
-        function generateSportDaySchedule(wakeTime, sleepTime) {
-            const schedule = generateSingleWeekdayScheduleArray(wakeTime, sleepTime, true);
-            document.getElementById('sportDaySchedule').innerHTML = generateScheduleHTML(schedule);
-        }
-
-        function generateRegularDaySchedule(wakeTime, sleepTime) {
-            const schedule = generateSingleWeekdayScheduleArray(wakeTime, sleepTime, false);
-            document.getElementById('regularDaySchedule').innerHTML = generateScheduleHTML(schedule);
-        }
-
-        function generateSingleWeekdayScheduleArray(wakeTime, sleepTime, isSportDay) {
-            let currentTime = timeToDecimal(wakeTime);
-            const schedule = [];
-            const morning = parseFloat(document.getElementById('morning').value) || 0;
-            const evening = parseFloat(document.getElementById('evening').value) || 0;
-            const food = parseFloat(document.getElementById('food').value) || 5;
-            const breaks = parseFloat(document.getElementById('breaks').value) || 7;
-            const sport = parseFloat(document.getElementById('sport').value) || 0;
-            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
-            const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
-            const duration = parseFloat(document.getElementById('duration').value) || 1;
-            const work = parseFloat(document.getElementById('work').value) || 0;
-
-            const workHoursPerDay = work / 5;
-            const firstHalf = workHoursPerDay / 2;
-            const secondHalf = workHoursPerDay / 2;
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('morningRitualSchedule'),
-                duration: morning,
-            });
-            currentTime += morning;
-
-            const breakfastTime = food / 14;
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('breakfast'),
-                duration: breakfastTime,
-            });
-            currentTime += breakfastTime;
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('workFirstHalf'),
-                duration: firstHalf,
-            });
-            currentTime += firstHalf;
-
-            if (sport > 0 && isSportDay) {
-                const sportPerDay = sport / sportDays;
-                schedule.push({
-                    time: formatTime(currentTime),
-                    activity: getTranslation('sport'),
-                    duration: sportPerDay,
-                });
-                currentTime += sportPerDay;
-            }
-
-            const lunchBreakTime = breaks / 7;
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('lunchBreak'),
-                duration: lunchBreakTime,
-            });
-            currentTime += lunchBreakTime;
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('workSecondHalf'),
-                duration: secondHalf,
-            });
-            currentTime += secondHalf;
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('dinner'),
-                duration: breakfastTime,
-            });
-            currentTime += breakfastTime;
-
-            const taskTime = maxWeekdayTasks * duration;
-            if (taskTime > 0) {
-                schedule.push({
-                    time: formatTime(currentTime),
-                    activity: `${getTranslation('houseTasks')} (${maxWeekdayTasks} ${declension(maxWeekdayTasks, getTranslation('taskDeclensions').split(','))})`,
-                    duration: taskTime,
-                });
-                currentTime += taskTime;
-            }
-
-            let bedTime = timeToDecimal(sleepTime);
-            if (bedTime <= currentTime) {
-                bedTime += 24;
-            }
-
-            const freeTimeEnd = bedTime - evening;
-            const freeTime = freeTimeEnd - currentTime;
-
-            if (freeTime > 0) {
-                schedule.push({
-                    time: formatTime(currentTime),
-                    activity: getTranslation('freeTime'),
-                    duration: freeTime,
-                });
-                currentTime = freeTimeEnd;
-            }
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('eveningRitualSchedule'),
-                duration: evening,
-            });
-
-            return schedule;
-        }
 
         function timeToDecimal(time) {
             const [hours, minutes] = time.split(':').map(Number);
             return hours + minutes / 60;
         }
 
-        function generateWeekdaySchedule(wakeTime, sleepTime) {
-            const schedule = generateSingleWeekdayScheduleArray(wakeTime, sleepTime, true);
-            document.getElementById('weekdaySchedule').innerHTML = generateScheduleHTML(schedule);
-        }
+
 
         function declension(n, forms) {
             if (currentLang === 'en') return n === 1 ? forms[0] : forms[1];
@@ -3197,111 +3277,16 @@
             return forms[2];
         }
 
-        function generateWeekendSchedule(wakeTime, sleepTime) {
-            let currentTime = timeToDecimal(wakeTime);
-            const schedule = [];
-            const morning = parseFloat(document.getElementById('morning').value) || 0;
-            const evening = parseFloat(document.getElementById('evening').value) || 0;
-            const food = parseFloat(document.getElementById('food').value) || 5;
-            const breaks = parseFloat(document.getElementById('breaks').value) || 7;
-            const sport = parseFloat(document.getElementById('sport').value) || 0;
-            const sportDays = parseInt(document.getElementById('sportDays').value) || 3;
-            const weeklyTasks = parseInt(document.getElementById('weeklyTasks').value) || 0;
-            const duration = parseFloat(document.getElementById('duration').value) || 1;
-            const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
 
-            const totalWeekdayTasks = maxWeekdayTasks * 5;
-            const remainingTasks = Math.max(0, weeklyTasks - totalWeekdayTasks);
-            const weekendTasks = Math.ceil(remainingTasks / 2);
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('morningRitualSchedule'),
-                duration: morning,
-            });
-            currentTime += morning;
-
-            const breakfastTime = food / 14;
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('breakfast'),
-                duration: breakfastTime,
-            });
-            currentTime += breakfastTime;
-
-            if (sport > 0 && sportDays > 5) {
-                const sportPerDay = sport / sportDays;
-                schedule.push({
-                    time: formatTime(currentTime),
-                    activity: getTranslation('sportWalk'),
-                    duration: sportPerDay,
-                });
-                currentTime += sportPerDay;
-            }
-
-            const taskTime = weekendTasks * duration;
-            if (taskTime > 0) {
-                schedule.push({
-                    time: formatTime(currentTime),
-                    activity: `${getTranslation('houseTasks')} (${weekendTasks} ${declension(weekendTasks, getTranslation('taskDeclensions').split(','))})`,
-                    duration: taskTime,
-                });
-                currentTime += taskTime;
-            }
-
-            const lunchBreakTime = breaks / 14;
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('lunchBreak'),
-                duration: lunchBreakTime,
-            });
-            currentTime += lunchBreakTime;
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('freeTime'),
-                duration: 2,
-            });
-            currentTime += 2;
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('dinner'),
-                duration: breakfastTime,
-            });
-            currentTime += breakfastTime;
-
-            let bedTime = timeToDecimal(sleepTime);
-            if (bedTime <= currentTime) {
-                bedTime += 24;
-            }
-
-            const freeTimeEnd = bedTime - evening;
-            const freeTime = Math.max(0, freeTimeEnd - currentTime);
-
-            if (freeTime > 0) {
-                schedule.push({
-                    time: formatTime(currentTime),
-                    activity: getTranslation('freeTime'),
-                    duration: freeTime,
-                });
-                currentTime = freeTimeEnd;
-            }
-
-            schedule.push({
-                time: formatTime(currentTime),
-                activity: getTranslation('eveningRitualSchedule'),
-                duration: evening,
-            });
-
-            document.getElementById('weekendSchedule').innerHTML = generateScheduleHTML(schedule);
-        }
 
         function generateWeeklyDistribution() {
-            const weekdays = currentLang === 'ru' ? ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const weekdays = currentLang === 'ru' ? ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'] : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
             const sportDays = parseInt(document.getElementById('sportDays').value) || 0;
             const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const selfDev = parseFloat(document.getElementById('selfDev').value) || 0;
+            const selfDevDays = parseInt(document.getElementById('selfDevDays').value) || 0;
+            const selfDevLabel = document.getElementById('selfDevLabel').value || (currentLang === 'ru' ? 'Самообразование' : 'Self-development');
             const duration = parseFloat(document.getElementById('duration').value) || 1;
             const weeklyTasks = parseInt(document.getElementById('weeklyTasks').value) || 0;
             const maxWeekdayTasks = parseInt(document.getElementById('maxWeekdayTasks').value) || 0;
@@ -3310,17 +3295,25 @@
             const remainingTasks = Math.max(0, weeklyTasks - totalWeekdayTasks);
             const weekendTasksPerDay = Math.ceil(remainingTasks / 2);
 
+            const sportScheduleDays = getSportDays();
+            const selfDevScheduleDays = getSelfDevDays();
+
             let html = '<div class="weekly-distribution">';
 
             for (let i = 0; i < 7; i++) {
-                const isWeekend = i >= 5;
+                const isWeekend = i === 0 || i === 6; // Воскресенье или суббота
                 const dayTasks = isWeekend ? weekendTasksPerDay : maxWeekdayTasks;
-                const cardClass = isWeekend ? 'day-card weekend' : 'day-card';
+                const hasSport = sportScheduleDays.includes(i);
+                const hasSelfDev = selfDevScheduleDays.includes(i);
+
+                let dayLabel = `${dayTasks}`;
+                if (hasSport) dayLabel += ' 🏃';
+                if (hasSelfDev) dayLabel += ' 📚';
 
                 html += `
-                    <div class="${cardClass}">
+                    <div class="day-card">
                         <div class="day-name">${weekdays[i]}</div>
-                        <div class="day-tasks">${dayTasks}</div>
+                        <div class="day-tasks">${dayLabel}</div>
                     </div>
                 `;
             }
@@ -3329,7 +3322,6 @@
 
             if (sport > 0) {
                 const sportPerDay = sport / sportDays;
-                const sportScheduleDays = getSportDays();
                 const sportDayNames = sportScheduleDays.map(dayIndex => weekdays[dayIndex]).join(', ');
 
                 html += `
@@ -3337,6 +3329,20 @@
                         <div style="font-size: 13px; font-weight: 600; color: var(--primary-color); margin-bottom: 6px;">🏃 ${getTranslation('sport')}:</div>
                         <div style="font-size: 12px; color: var(--text-secondary);">
                             ${sportDayNames}: ${currentLang === 'ru' ? 'по' : 'per'} ${sportPerDay.toFixed(1)} ${currentLang === 'ru' ? 'часа' : 'hours'}
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (selfDev > 0) {
+                const selfDevPerDay = selfDev / selfDevDays;
+                const selfDevDayNames = selfDevScheduleDays.map(dayIndex => weekdays[dayIndex]).join(', ');
+
+                html += `
+                    <div style="margin-top: 16px; padding: 12px; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 13px; font-weight: 600; color: var(--success-color); margin-bottom: 6px;">📚 ${selfDevLabel}:</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">
+                            ${selfDevDayNames}: ${currentLang === 'ru' ? 'по' : 'per'} ${selfDevPerDay.toFixed(1)} ${currentLang === 'ru' ? 'часа' : 'hours'}
                         </div>
                     </div>
                 `;
@@ -3433,7 +3439,6 @@
                 saveTasks();
                 renderTasks();
                 input.value = '';
-                updateAnalytics();
             }
         }
 
@@ -3449,7 +3454,6 @@
                 task.completed = !task.completed;
                 saveTasks();
                 renderTasks();
-                updateAnalytics();
             }
         }
 
@@ -3457,7 +3461,6 @@
             tasks = tasks.filter(t => t.id !== id);
             saveTasks();
             renderTasks();
-            updateAnalytics();
         }
 
         function filterTasks(filter) {
@@ -3500,145 +3503,7 @@
             container.innerHTML = html;
         }
 
-        function initTimer() {
-            const focusTime = parseInt(document.getElementById('focusTime').value) || 25;
-            const shortBreak = parseInt(document.getElementById('shortBreak').value) || 5;
-            const longBreak = parseInt(document.getElementById('longBreak').value) || 15;
 
-            if (timerState.mode === 'focus') {
-                timerState.totalTime = focusTime * 60;
-            } else if (timerState.mode === 'shortBreak') {
-                timerState.totalTime = shortBreak * 60;
-            } else {
-                timerState.totalTime = longBreak * 60;
-            }
-
-            timerState.currentTime = timerState.totalTime;
-            updateTimerDisplay();
-        }
-
-        function toggleTimer() {
-            if (timerState.isRunning) {
-                pauseTimer();
-            } else {
-                startTimer();
-            }
-        }
-
-        function startTimer() {
-            timerState.isRunning = true;
-            document.getElementById('timerStartBtn').textContent = getTranslation('pause');
-
-            timerInterval = setInterval(() => {
-                timerState.currentTime--;
-                updateTimerDisplay();
-
-                if (timerState.currentTime <= 0) {
-                    completeTimer();
-                }
-            }, 1000);
-        }
-
-        function pauseTimer() {
-            timerState.isRunning = false;
-            document.getElementById('timerStartBtn').textContent = getTranslation('start');
-            clearInterval(timerInterval);
-        }
-
-        function resetTimer() {
-            pauseTimer();
-            initTimer();
-        }
-
-        function skipTimer() {
-            completeTimer();
-        }
-
-        function completeTimer() {
-            pauseTimer();
-
-
-            const isBreak = timerState.mode !== 'focus';
-            const title = isBreak
-                ? (currentLang === 'ru' ? 'Перерыв завершен!' : 'Break Complete!')
-                : (currentLang === 'ru' ? 'Фокус завершен!' : 'Focus Complete!');
-
-            const body = isBreak
-                ? (currentLang === 'ru' ? 'Время вернуться к работе' : 'Time to get back to work')
-                : (currentLang === 'ru' ? 'Время для перерыва' : 'Time for a break');
-
-            showTimerNotification(title, body);
-
-            if (timerState.mode === 'focus') {
-                timerState.completedPomodoros++;
-                localStorage.setItem('planner_pomodoros', timerState.completedPomodoros.toString());
-
-                if (timerState.cycle % 4 === 0) {
-                    timerState.mode = 'longBreak';
-                } else {
-                    timerState.mode = 'shortBreak';
-                }
-                timerState.cycle++;
-            } else {
-                timerState.mode = 'focus';
-            }
-
-            initTimer();
-            updatePomodoroStats();
-        }
-
-        function showTimerNotification(title, body) {
-
-            if ('Notification' in window && Notification.permission === 'granted') {
-                const notification = new Notification(title, {
-                    body: body,
-                    icon: 'data:image/svg+xml,%3Csvg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="32" cy="32" r="28" fill="%230f172a" stroke="%233b82f6" stroke-width="4"/%3E%3Cpath d="M32 18V32L42 38" stroke="%233b82f6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E',
-                    badge: 'data:image/svg+xml,%3Csvg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="12" cy="12" r="10" fill="%233b82f6"/%3E%3Cpath d="M12 6V12L16 14" stroke="white" stroke-width="2" stroke-linecap="round"/%3E%3C/svg%3E',
-                    tag: 'timer-notification',
-                    requireInteraction: false,
-                    vibrate: [200, 100, 200]
-                });
-
-
-                setTimeout(() => {
-                    notification.close();
-                }, 5000);
-            }
-
-
-            showAlert(`${title} ${body}`, 'success');
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timerState.currentTime / 60);
-            const seconds = timerState.currentTime % 60;
-            const timeText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-            document.getElementById('timerTime').textContent = timeText;
-
-            const label = timerState.mode === 'focus' ? getTranslation('focusTime') : getTranslation('breakTime');
-            document.getElementById('timerLabel').textContent = label;
-
-            const progress = ((timerState.totalTime - timerState.currentTime) / timerState.totalTime) * 283;
-            document.getElementById('timerProgress').style.strokeDasharray = `${progress} 283`;
-        }
-
-        function updateTimerSettings() {
-            if (!timerState.isRunning) {
-                initTimer();
-            }
-        }
-
-        function updatePomodoroStats() {
-            document.getElementById('pomodoroCount').textContent = timerState.completedPomodoros;
-            document.getElementById('currentCycle').textContent = `${((timerState.cycle - 1) % 4) + 1}/4`;
-        }
-
-        function requestNotificationPermission() {
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission();
-            }
-        }
 
         function exportData() {
             try {
@@ -3646,14 +3511,11 @@
                     version: '2.0.0',
                     timestamp: new Date().toISOString(),
                     settings: {},
-                    tasks: tasks,
-                    timerStats: {
-                        completedPomodoros: timerState.completedPomodoros
-                    }
+                    tasks: tasks
                 };
 
 
-                const settingsKeys = ['work', 'breaks', 'food', 'sport', 'sportDays', 'morning', 'evening',
+                const settingsKeys = ['work', 'breaks', 'food', 'sport', 'sportDays', 'selfDev', 'selfDevDays', 'selfDevLabel', 'mondayLabel', 'tuesdayLabel', 'wednesdayLabel', 'thursdayLabel', 'fridayLabel', 'saturdayLabel', 'sundayLabel', 'morning', 'evening',
                     'weeklyTasks', 'duration', 'maxWeekdayTasks', 'wakeTime', 'sleepTime',
                     'planner_lang', 'planner_theme'];
 
@@ -3711,17 +3573,13 @@
                         localStorage.setItem(storageKey, value);
                     });
 
-
                     if (data.tasks && Array.isArray(data.tasks)) {
                         tasks = data.tasks;
                         saveTasks();
                     }
 
 
-                    if (data.timerStats && data.timerStats.completedPomodoros) {
-                        timerState.completedPomodoros = data.timerStats.completedPomodoros;
-                        localStorage.setItem('planner_pomodoros', timerState.completedPomodoros.toString());
-                    }
+
 
                     showAlert('✅ ' + (currentLang === 'ru' ? 'Данные успешно импортированы' : 'Data imported successfully'), 'success');
 
@@ -3758,10 +3616,7 @@
                 loadSettings();
                 loadTasks();
                 calculateTasks();
-                initTimer();
-                updatePomodoroStats();
                 updateTexts();
-                requestNotificationPermission();
                 registerServiceWorker();
                 initPWA();
 
@@ -3953,6 +3808,20 @@
                 });
             }
         }
+
+        function openActivityModal() {
+            document.getElementById('activityModal').classList.add('active');
+        }
+
+        function closeActivityModal() {
+            document.getElementById('activityModal').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeActivityModal();
+            }
+        });
     </script>
 </body>
 
